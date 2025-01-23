@@ -407,7 +407,16 @@ export const JoinForm = () => {
                     </FormControl>
                     <div className="space-y-1 leading-none">
                       <FormLabel>
-                        En cochant la case, vous avez pris connaissance des règles de la communauté et vous vous engagez à les respecter. *
+                        En cochant la case, vous avez pris connaissance des{" "}
+                        <a 
+                          href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          règles de la communauté
+                        </a>{" "}
+                        et vous vous engagez à les respecter. *
                       </FormLabel>
                       <FormMessage />
                     </div>
