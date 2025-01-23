@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Link } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -22,6 +23,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   sponsor: z.string().min(1, "Le parrain est requis"),
@@ -55,6 +57,7 @@ const regions = [
 ];
 
 export const JoinForm = () => {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -80,8 +83,54 @@ export const JoinForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { data, error } = await supabase
+        .from('form_submissions')
+        .insert([
+          {
+            sponsor: values.sponsor,
+            full_name: values.fullName,
+            phone: values.phone,
+            email: values.email,
+            linkedin: values.linkedin,
+            company_status: values.companyStatus,
+            employee_count: values.employeeCount,
+            company_name: values.companyName,
+            instagram: values.instagram,
+            website: values.website,
+            region: values.region,
+            company_description: values.companyDescription,
+            discovery_source: values.discoverySource,
+            join_reason: values.joinReason,
+            other_platform_is_member: values.otherPlatform.isMember,
+            other_platform_name: values.otherPlatform.platformName,
+            terms_accepted: values.termsAccepted,
+          }
+        ]);
+
+      if (error) {
+        console.error('Error submitting form:', error);
+        toast({
+          variant: "destructive",
+          title: "Erreur",
+          description: "Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer.",
+        });
+      } else {
+        toast({
+          title: "Succès",
+          description: "Votre candidature a été envoyée avec succès !",
+        });
+        form.reset();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer.",
+      });
+    }
   };
 
   return (
@@ -432,5 +481,4 @@ export const JoinForm = () => {
         </Form>
       </div>
     </section>
-  );
 };

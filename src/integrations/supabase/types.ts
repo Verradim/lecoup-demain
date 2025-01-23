@@ -9,7 +9,72 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      form_submissions: {
+        Row: {
+          company_description: string
+          company_name: string
+          company_status: string
+          created_at: string
+          discovery_source: string
+          email: string
+          employee_count: string
+          full_name: string
+          id: string
+          instagram: string | null
+          join_reason: string
+          linkedin: string | null
+          other_platform_is_member: string
+          other_platform_name: string | null
+          phone: string
+          region: string
+          sponsor: string
+          terms_accepted: boolean
+          website: string | null
+        }
+        Insert: {
+          company_description: string
+          company_name: string
+          company_status: string
+          created_at?: string
+          discovery_source: string
+          email: string
+          employee_count: string
+          full_name: string
+          id?: string
+          instagram?: string | null
+          join_reason: string
+          linkedin?: string | null
+          other_platform_is_member: string
+          other_platform_name?: string | null
+          phone: string
+          region: string
+          sponsor: string
+          terms_accepted: boolean
+          website?: string | null
+        }
+        Update: {
+          company_description?: string
+          company_name?: string
+          company_status?: string
+          created_at?: string
+          discovery_source?: string
+          email?: string
+          employee_count?: string
+          full_name?: string
+          id?: string
+          instagram?: string | null
+          join_reason?: string
+          linkedin?: string | null
+          other_platform_is_member?: string
+          other_platform_name?: string | null
+          phone?: string
+          region?: string
+          sponsor?: string
+          terms_accepted?: boolean
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
