@@ -7,7 +7,7 @@ export const Hero = () => {
       <div className="container max-w-6xl mx-auto text-center animate-fade-up">
         <div className="w-32 h-32 mx-auto mb-8 rounded-full bg-white p-4 flex items-center justify-center">
           <img 
-            src="/lovable-uploads/e85d39bf-e67c-461f-924f-bc5580a4ad96.png" 
+            src="/lovable-uploads/logo-white.svg" 
             alt="Le coup de main"
             className="w-24 h-24 object-contain"
           />
