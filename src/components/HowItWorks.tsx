@@ -1,17 +1,18 @@
 import { CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const steps = [
   {
-    title: "Sign Up",
-    description: "Complete our simple form or schedule a call for non-referred members",
+    title: "Inscription",
+    description: "Remplissez notre formulaire ou prenez rendez-vous si vous n'êtes pas parrainé",
   },
   {
-    title: "Get Access",
-    description: "Join the private WhatsApp group of verified professionals",
+    title: "Accès",
+    description: "Rejoignez le groupe WhatsApp privé des professionnels vérifiés",
   },
   {
-    title: "Start Collaborating",
-    description: "Begin sharing, learning, and finding opportunities immediately",
+    title: "Collaboration",
+    description: "Commencez à partager, apprendre et trouver des opportunités immédiatement",
   },
 ];
 
@@ -19,7 +20,9 @@ export const HowItWorks = () => {
   return (
     <section className="py-20 px-4 bg-secondary text-white">
       <div className="container max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">How It Works</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+          La communauté privée des artisans indépendants et des entreprises bâtiment
+        </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, index) => (
             <div key={index} className="text-center">
@@ -28,6 +31,14 @@ export const HowItWorks = () => {
               </div>
               <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
               <p className="text-gray-300">{step.description}</p>
+              {index === 0 && (
+                <a 
+                  href="#not-recommended" 
+                  className="text-primary hover:text-primary/90 underline mt-2 inline-block"
+                >
+                  Cliquez-ici pour savoir comment rejoindre
+                </a>
+              )}
             </div>
           ))}
         </div>
