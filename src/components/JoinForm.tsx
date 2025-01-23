@@ -481,4 +481,5 @@ export const JoinForm = () => {
         </Form>
       </div>
     </section>
+  );
 };
