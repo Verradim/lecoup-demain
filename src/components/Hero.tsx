@@ -13,7 +13,7 @@ export const Hero = () => {
           />
         </div>
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-          Rejoignez la communauté privée des artisans indépendants et entreprise bâtiment
+          La communauté privée des artisans indépendants et des entreprises de bâtiment
         </h1>
         <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
           Rejoignez une communauté privée d'artisans et d'entreprises du bâtiment engagés, 
