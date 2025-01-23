@@ -85,7 +85,7 @@ export const JoinForm = () => {
   };
 
   return (
-    <section className="py-20 px-4 bg-background">
+    <section id="join-form" className="py-20 px-4 bg-background">
       <div className="container max-w-3xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-secondary mb-16">
           Rejoindre la communauté

@@ -21,7 +21,13 @@ export const Hero = () => {
           pour construire ensemble le bâtiment de demain
         </p>
         <div className="text-5xl mb-12">🤝</div>
-        <Button size="lg" className="bg-white hover:bg-white/90 text-primary">
+        <Button 
+          size="lg" 
+          className="bg-white hover:bg-white/90 text-primary"
+          onClick={() => {
+            document.getElementById('join-form')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
           Rejoindre la communauté <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </div>
