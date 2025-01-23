@@ -9,7 +9,6 @@ const steps = [
   {
     title: "Accès",
     description: "Vous êtes invité à rejoindre la communauté privée sur Whatsapp",
-    icon: <MessageCircle className="h-8 w-8 text-[#25D366]" />
   },
   {
     title: "Collaboration",
