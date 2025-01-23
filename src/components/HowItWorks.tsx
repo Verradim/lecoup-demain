@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const steps = [
@@ -8,7 +8,8 @@ const steps = [
   },
   {
     title: "Accès",
-    description: "Rejoignez le groupe WhatsApp privé des professionnels vérifiés",
+    description: "Vous êtes invité à rejoindre la communauté privée sur Whatsapp",
+    icon: <MessageCircle className="h-8 w-8 text-[#25D366]" />
   },
   {
     title: "Collaboration",
@@ -27,7 +28,7 @@ export const HowItWorks = () => {
           {steps.map((step, index) => (
             <div key={index} className="text-center">
               <div className="mb-6 flex justify-center">
-                <CheckCircle2 className="h-12 w-12 text-primary" />
+                {step.icon || <CheckCircle2 className="h-12 w-12 text-primary" />}
               </div>
               <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
               <p className="text-gray-300">{step.description}</p>
