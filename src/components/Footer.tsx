@@ -6,7 +6,7 @@ export const Footer = () => {
       <div className="container max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
-            <h3 className="font-semibold text-lg mb-4">BuildingPro Community</h3>
+            <h3 className="font-semibold text-lg mb-4">Lecoup-demain.com</h3>
             <p className="text-gray-600">
               Connecting construction professionals for a stronger industry.
             </p>
@@ -41,7 +41,7 @@ export const Footer = () => {
           </div>
         </div>
         <div className="mt-12 pt-8 border-t text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} BuildingPro Community. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Lecoup-demain.com. All rights reserved.</p>
         </div>
       </div>
     </footer>
