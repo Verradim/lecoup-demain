@@ -107,9 +107,9 @@ export const JoinForm = () => {
                     </FormControl>
                     <p className="text-sm text-muted-foreground">
                       Si vous n'êtes pas recommandé par une personne de la communauté : {" "}
-                      <Link to="#how-to-join" className="text-primary underline">
+                      <a href="#not-recommended" className="text-primary underline">
                         cliquez-ici pour savoir comment rejoindre
-                      </Link>
+                      </a>
                     </p>
                     <FormMessage />
                   </FormItem>
