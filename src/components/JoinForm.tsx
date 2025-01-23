@@ -101,9 +101,9 @@ export const JoinForm = () => {
                 name="sponsor"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Je suis parrainé par</FormLabel>
+                    <FormLabel>Je suis parrainé par *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Kylian Mbappé" {...field} />
+                      <Input placeholder="Kylian Mbappé" className="bg-white" {...field} />
                     </FormControl>
                     <p className="text-sm text-muted-foreground">
                       Si vous n'êtes pas recommandé par une personne de la communauté : {" "}
@@ -125,9 +125,9 @@ export const JoinForm = () => {
                 name="fullName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nom et prénom</FormLabel>
+                    <FormLabel>Nom et prénom *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Didier Deschamps" {...field} />
+                      <Input placeholder="Didier Deschamps" className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -138,9 +138,9 @@ export const JoinForm = () => {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Numéro de téléphone</FormLabel>
+                    <FormLabel>Numéro de téléphone *</FormLabel>
                     <FormControl>
-                      <Input placeholder="0600102030" {...field} />
+                      <Input placeholder="0600102030" className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -151,9 +151,9 @@ export const JoinForm = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Adresse e-mail</FormLabel>
+                    <FormLabel>Adresse e-mail *</FormLabel>
                     <FormControl>
-                      <Input placeholder="didierdeschamps@gmail.com" {...field} />
+                      <Input placeholder="didierdeschamps@gmail.com" className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -164,9 +164,9 @@ export const JoinForm = () => {
                 name="linkedin"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lien LinkedIn (facultatif)</FormLabel>
+                    <FormLabel>Lien LinkedIn</FormLabel>
                     <FormControl>
-                      <Input placeholder="Copiez-collez le lien suivant" {...field} />
+                      <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -182,14 +182,14 @@ export const JoinForm = () => {
                 name="companyStatus"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Statut de l'entreprise</FormLabel>
+                    <FormLabel>Statut de l'entreprise *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-white">
                           <SelectValue placeholder="Sélectionnez votre statut" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-white z-50">
                         <SelectItem value="independent">Artisan Indépendant</SelectItem>
                         <SelectItem value="small">Entreprise (moins de 5 salariés)</SelectItem>
                         <SelectItem value="medium">Entreprise (5-10 salariés)</SelectItem>
@@ -205,14 +205,14 @@ export const JoinForm = () => {
                 name="employeeCount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Combien de salariés avez-vous</FormLabel>
+                    <FormLabel>Combien de salariés avez-vous *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-white">
                           <SelectValue placeholder="Sélectionnez le nombre de salariés" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-white z-50">
                         <SelectItem value="0">0</SelectItem>
                         <SelectItem value="1-3">Entre 1 et 3</SelectItem>
                         <SelectItem value="3-9">Entre 3 et 9</SelectItem>
@@ -228,9 +228,9 @@ export const JoinForm = () => {
                 name="companyName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nom de l'entreprise</FormLabel>
+                    <FormLabel>Nom de l'entreprise *</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,9 +241,9 @@ export const JoinForm = () => {
                 name="instagram"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lien Instagram (facultatif)</FormLabel>
+                    <FormLabel>Lien Instagram</FormLabel>
                     <FormControl>
-                      <Input placeholder="Copiez-collez le lien suivant" {...field} />
+                      <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -254,9 +254,9 @@ export const JoinForm = () => {
                 name="website"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Site internet (facultatif)</FormLabel>
+                    <FormLabel>Site internet</FormLabel>
                     <FormControl>
-                      <Input placeholder="Copiez-collez le lien suivant" {...field} />
+                      <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -267,14 +267,14 @@ export const JoinForm = () => {
                 name="region"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Région d'activité</FormLabel>
+                    <FormLabel>Région d'activité *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-white">
                           <SelectValue placeholder="Sélectionnez votre région" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-white z-50">
                         {regions.map((region) => (
                           <SelectItem key={region} value={region.toLowerCase()}>
                             {region}
@@ -291,9 +291,9 @@ export const JoinForm = () => {
                 name="companyDescription"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description de l'activité de l'entreprise</FormLabel>
+                    <FormLabel>Description de l'activité de l'entreprise *</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Travaux de plomberie" {...field} />
+                      <Textarea placeholder="Travaux de plomberie" className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -309,14 +309,14 @@ export const JoinForm = () => {
                 name="discoverySource"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Comment avez-vous connu notre existence ?</FormLabel>
+                    <FormLabel>Comment avez-vous connu notre existence ? *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-white">
                           <SelectValue placeholder="Sélectionnez une option" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-white z-50">
                         <SelectItem value="social">Réseaux sociaux</SelectItem>
                         <SelectItem value="search">Référencement (moteur de recherche)</SelectItem>
                         <SelectItem value="word">Bouche-à-oreille</SelectItem>
@@ -332,9 +332,9 @@ export const JoinForm = () => {
                 name="joinReason"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pourquoi souhaitez-vous rejoindre la communauté ?</FormLabel>
+                    <FormLabel>Pourquoi souhaitez-vous rejoindre la communauté ? *</FormLabel>
                     <FormControl>
-                      <Textarea {...field} />
+                      <Textarea className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -345,7 +345,7 @@ export const JoinForm = () => {
                 name="otherPlatform.isMember"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
-                    <FormLabel>Êtes-vous déjà membre d'une autre plateforme ?</FormLabel>
+                    <FormLabel>Êtes-vous déjà membre d'une autre plateforme ? *</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -380,9 +380,9 @@ export const JoinForm = () => {
                   name="otherPlatform.platformName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Précisez laquelle</FormLabel>
+                      <FormLabel>Précisez laquelle *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Yoojo, Travaux.com,..." {...field} />
+                        <Input placeholder="Yoojo, Travaux.com,..." className="bg-white" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -407,7 +407,7 @@ export const JoinForm = () => {
                     </FormControl>
                     <div className="space-y-1 leading-none">
                       <FormLabel>
-                        En cochant la case, vous avez pris connaissance des règles de la communauté et vous vous engagez à les respecter.
+                        En cochant la case, vous avez pris connaissance des règles de la communauté et vous vous engagez à les respecter. *
                       </FormLabel>
                       <FormMessage />
                     </div>
@@ -416,7 +416,7 @@ export const JoinForm = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full text-white">
               Envoyer ma candidature
             </Button>
           </form>
