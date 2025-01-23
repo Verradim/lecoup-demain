@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Hero } from "@/components/Hero";
 import { Benefits } from "@/components/Benefits";
+import { JoinForm } from "@/components/JoinForm";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
@@ -29,6 +30,7 @@ const Index = () => {
     <div className="min-h-screen bg-background font-sans">
       <Hero />
       <Benefits />
+      <JoinForm />
       <HowItWorks />
       <Testimonials />
       <Footer />
