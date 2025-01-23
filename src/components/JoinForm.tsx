@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
@@ -61,7 +60,7 @@ export const JoinForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      sponsor: "Kylian Mbappé",
+      sponsor: "",
       fullName: "",
       phone: "",
       email: "",
@@ -85,7 +84,7 @@ export const JoinForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('form_submissions')
         .insert([
           {
@@ -482,4 +481,3 @@ export const JoinForm = () => {
       </div>
     </section>
   );
-};
