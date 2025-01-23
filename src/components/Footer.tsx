@@ -6,9 +6,9 @@ export const Footer = () => {
       <div className="container max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
-            <h3 className="font-semibold text-lg mb-4">Lecoup-demain.com</h3>
+            <h3 className="font-semibold text-lg mb-4">Le coup de main.</h3>
             <p className="text-gray-600">
-              Connecting construction professionals for a stronger industry.
+              Connecter les professionnels pour construire le secteur du bâtiment de demain.
             </p>
           </div>
           <div>
