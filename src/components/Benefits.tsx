@@ -1,4 +1,4 @@
-import { Users, Briefcase, MessageSquare, Target, HandshakeIcon, TrendingUp, Share2, HelpingHand } from "lucide-react";
+import { Users, Briefcase, MessageSquare, Target, HandshakeIcon, TrendingUp, Share2, HelpingHand, Clock, UserPlus, Lightbulb } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 const benefits = [
@@ -38,11 +38,38 @@ const benefits = [
     ],
   },
   {
-    title: "For Small Companies",
+    title: "Pour les entreprises du bâtiment",
     items: [
-      { icon: Users, text: "Find qualified workers quickly for your projects" },
-      { icon: HandshakeIcon, text: "Build partnerships with trusted professionals" },
-      { icon: TrendingUp, text: "Save time and focus on growing your company" },
+      { 
+        icon: Users, 
+        title: "Échanger avec d'autres professionnels",
+        text: "Bénéficiez d'un espace pour discuter des meilleures pratiques, partager des ressources ou résoudre des problèmes ensemble." 
+      },
+      { 
+        icon: Clock, 
+        title: "Gagner du temps dans la recherche de partenaires",
+        text: "Plus besoin de passer des heures à chercher des contacts : notre communauté vous connecte directement à des indépendants compétents." 
+      },
+      { 
+        icon: UserPlus, 
+        title: "Trouver rapidement des renforts qualifiés",
+        text: "Accédez à un réseau d'artisans indépendants fiables pour combler un manque ponctuel de main-d'œuvre." 
+      },
+      { 
+        icon: Share2, 
+        title: "Augmenter votre visibilité",
+        text: "Partagez vos réalisations et vos contenus avec la communauté pour booster votre image et trouver plus de clients." 
+      },
+      { 
+        icon: Lightbulb, 
+        title: "Échanger avec des idées et bonnes pratiques avec pairs",
+        text: "Accéder à une communauté qui partage vos enjeux (problématiques, processus, solutions)" 
+      },
+      { 
+        icon: HandshakeIcon, 
+        title: "S'entraider pour réussir ensemble",
+        text: "Bénéficiez d'un réseau solidaire où chacun s'entraide pour avancer plus vite." 
+      },
     ],
   },
 ];
