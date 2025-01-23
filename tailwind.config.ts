@@ -18,8 +18,11 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Raleway', 'sans-serif'],
+      },
       colors: {
-        primary: "#C84B31",
+        primary: "#302CD7",
         secondary: "#2D4263",
         accent: "#ECDBBA",
         background: "#F5F5F5",
