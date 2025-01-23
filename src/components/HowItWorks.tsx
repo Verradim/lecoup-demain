@@ -1,7 +1,13 @@
 import { CheckCircle2, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const steps = [
+type Step = {
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+};
+
+const steps: Step[] = [
   {
     title: "Inscription",
     description: "Remplissez notre formulaire ou prenez rendez-vous si vous n'êtes pas parrainé",
