@@ -132,6 +132,8 @@ export const JoinForm = () => {
     }
   };
 
+  // ... keep existing code (form JSX)
+
   return (
     <section id="join-form" className="py-20 px-4 bg-background">
       <div className="container max-w-3xl mx-auto">
@@ -481,3 +483,6 @@ export const JoinForm = () => {
       </div>
     </section>
   );
+};
+
+export default JoinForm;
