@@ -1,1 +1,9 @@
 project_id = "zououhirrfjjqfspfviv"
+
+[api]
+enabled = true
+url = "https://zououhirrfjjqfspfviv.supabase.co"
+
+[functions]
+[functions.send-form-notification]
+verify_jwt = false
