@@ -45,7 +45,7 @@ export const Footer = () => {
                 href="mailto:contact@lecoup-demain.com"
                 className="text-primary hover:underline"
               >
-                contact@lecou-demain.com
+                contact@lecoup-demain.com
               </a>
             </p>
           </div>
