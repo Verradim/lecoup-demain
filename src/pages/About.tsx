@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="bg-background font-sans">
       {/* Hero Section */}
       <section className="py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
         <div className="container max-w-4xl mx-auto text-center">
@@ -68,7 +68,7 @@ const About = () => {
             </p>
             <div className="flex items-center gap-4">
               <img 
-                src="/lovable-uploads/eb896c7b-b343-45d7-a812-f67e4b59da23.png"
+                src="/lovable-uploads/c853df75-6c65-4b60-8a19-f9f2bf811c56.png"
                 alt="Dimitri Chauchoy" 
                 className="w-16 h-16 rounded-full object-cover"
               />

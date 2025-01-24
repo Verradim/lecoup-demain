@@ -1,11 +1,9 @@
 import { useEffect } from "react";
-import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Benefits } from "@/components/Benefits";
 import { JoinForm } from "@/components/JoinForm";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Testimonials } from "@/components/Testimonials";
-import { Footer } from "@/components/Footer";
 
 const Index = () => {
   useEffect(() => {
@@ -28,14 +26,12 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background font-sans">
-      <Header />
+    <div className="bg-background font-sans">
       <Hero />
       <Benefits />
       <JoinForm />
       <HowItWorks />
       <Testimonials />
-      <Footer />
     </div>
   );
 };

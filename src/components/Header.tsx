@@ -1,10 +1,29 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const scrollToForm = () => {
+    setIsOpen(false);
+    if (location.pathname !== "/") {
+      window.location.href = "/#join-form";
+      return;
+    }
+    const element = document.getElementById("join-form");
+    if (element) {
+      const headerOffset = 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -46,10 +65,7 @@ export const Header = () => {
         {/* CTA Button */}
         <div className="hidden md:flex md:items-center md:justify-end md:flex-1">
           <Button
-            onClick={() => {
-              const element = document.getElementById("join-form");
-              element?.scrollIntoView({ behavior: "smooth" });
-            }}
+            onClick={scrollToForm}
             className="bg-primary hover:bg-primary/90 text-white"
           >
             Rejoignez-nous
@@ -79,11 +95,7 @@ export const Header = () => {
                     <span className="ml-3 text-base font-medium text-gray-900">Règles de la communauté</span>
                   </a>
                   <Button
-                    onClick={() => {
-                      const element = document.getElementById("join-form");
-                      element?.scrollIntoView({ behavior: "smooth" });
-                      setIsOpen(false);
-                    }}
+                    onClick={scrollToForm}
                     className="w-full bg-primary hover:bg-primary/90 text-white"
                   >
                     Rejoignez-nous
