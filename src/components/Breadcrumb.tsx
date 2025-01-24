@@ -23,8 +23,8 @@ export const BreadcrumbNav = () => {
               <BreadcrumbPage>{item.label}</BreadcrumbPage>
             ) : (
               <>
-                <BreadcrumbLink as={Link} to={item.path}>
-                  {item.label}
+                <BreadcrumbLink asChild>
+                  <Link to={item.path}>{item.label}</Link>
                 </BreadcrumbLink>
                 <BreadcrumbSeparator />
               </>
