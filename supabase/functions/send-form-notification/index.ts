@@ -23,9 +23,17 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { record } = await req.json();
-    const submission: FormSubmission = record;
+    console.log("Starting form notification process...");
+    console.log("RESEND_API_KEY exists:", !!RESEND_API_KEY);
 
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
+    const { record } = await req.json();
+    console.log("Received form submission:", record);
+
+    const submission: FormSubmission = record;
     console.log("Processing submission for:", submission.full_name);
 
     // Email de notification pour l'administrateur
@@ -52,7 +60,7 @@ const handler = async (req: Request): Promise<Response> => {
       <p>L'équipe de la Communauté des Makers</p>
     `;
 
-    console.log("Sending admin notification email...");
+    console.log("Preparing to send admin notification email...");
     
     // Envoi de l'email à l'administrateur
     const adminRes = await fetch("https://api.resend.com/emails", {
@@ -62,23 +70,26 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: " <contact@email.lecoup-demain.com>",
+        from: "Le Coup de Main <contact@email.lecoup-demain.com>",
         to: ["dimitri.chauchoy@gmail.com"],
         subject: `Nouvelle candidature de ${submission.full_name}`,
         html: adminEmailHtml,
       }),
     });
 
+    console.log("Admin email API response status:", adminRes.status);
+    const adminResponseText = await adminRes.text();
+    console.log("Admin email API response:", adminResponseText);
+
     if (!adminRes.ok) {
-      const adminError = await adminRes.text();
-      console.error("Error sending admin email:", adminError);
-      throw new Error(`Failed to send admin email: ${adminError}`);
+      console.error("Error sending admin email:", adminResponseText);
+      throw new Error(`Failed to send admin email: ${adminResponseText}`);
     }
 
-    const adminData = await adminRes.json();
+    const adminData = JSON.parse(adminResponseText);
     console.log("Admin email sent successfully:", adminData);
 
-    console.log("Sending confirmation email to user...");
+    console.log("Preparing to send confirmation email to user...");
 
     // Envoi de l'email au candidat
     const userRes = await fetch("https://api.resend.com/emails", {
@@ -88,20 +99,23 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Communauté des Makers <contact@email.lecoup-demain.com>",
+        from: "Le Coup de Main <contact@email.lecoup-demain.com>",
         to: [submission.email],
-        subject: "Confirmation de votre candidature - Communauté des Makers",
+        subject: "Confirmation de votre candidature - Le Coup de Main",
         html: userEmailHtml,
       }),
     });
 
+    console.log("User email API response status:", userRes.status);
+    const userResponseText = await userRes.text();
+    console.log("User email API response:", userResponseText);
+
     if (!userRes.ok) {
-      const userError = await userRes.text();
-      console.error("Error sending user confirmation email:", userError);
-      throw new Error(`Failed to send user confirmation email: ${userError}`);
+      console.error("Error sending user confirmation email:", userResponseText);
+      throw new Error(`Failed to send user confirmation email: ${userResponseText}`);
     }
 
-    const userData = await userRes.json();
+    const userData = JSON.parse(userResponseText);
     console.log("User confirmation email sent successfully:", userData);
 
     return new Response(JSON.stringify({ 
