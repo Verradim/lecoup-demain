@@ -84,7 +84,8 @@ export const JoinForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { error } = await supabase
+      // Insertion dans Supabase
+      const { data, error } = await supabase
         .from('form_submissions')
         .insert([
           {
@@ -106,7 +107,8 @@ export const JoinForm = () => {
             other_platform_name: values.otherPlatform.platformName,
             terms_accepted: values.termsAccepted,
           }
-        ]);
+        ])
+        .select();
 
       if (error) {
         console.error('Error submitting form:', error);
@@ -115,13 +117,30 @@ export const JoinForm = () => {
           title: "Erreur",
           description: "Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer.",
         });
-      } else {
-        toast({
-          title: "Succès",
-          description: "Votre candidature a été envoyée avec succès !",
-        });
-        form.reset();
+        return;
       }
+
+      // Appel de la fonction Edge pour l'envoi des emails
+      const { error: functionError } = await supabase.functions.invoke('send-form-notification', {
+        body: { record: data[0] }
+      });
+
+      if (functionError) {
+        console.error('Error sending notification:', functionError);
+        toast({
+          variant: "destructive",
+          title: "Erreur",
+          description: "Votre candidature a été enregistrée mais nous n'avons pas pu vous envoyer l'email de confirmation.",
+        });
+        return;
+      }
+
+      toast({
+        title: "Succès",
+        description: "Votre candidature a été envoyée avec succès ! Vous allez recevoir un email de confirmation.",
+      });
+      form.reset();
+      
     } catch (error) {
       console.error('Error:', error);
       toast({
