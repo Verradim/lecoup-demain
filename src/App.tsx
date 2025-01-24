@@ -15,6 +15,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/about" element={<div className="min-h-screen bg-background font-sans">Page en construction</div>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

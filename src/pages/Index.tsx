@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Benefits } from "@/components/Benefits";
 import { JoinForm } from "@/components/JoinForm";
@@ -28,6 +29,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background font-sans">
+      <Header />
       <Hero />
       <Benefits />
       <JoinForm />
