@@ -26,6 +26,8 @@ const handler = async (req: Request): Promise<Response> => {
     const { record } = await req.json();
     const submission: FormSubmission = record;
 
+    console.log("Processing submission for:", submission.full_name);
+
     // Email de notification pour l'administrateur
     const adminEmailHtml = `
       <h2>Nouvelle candidature reçue</h2>
@@ -50,6 +52,8 @@ const handler = async (req: Request): Promise<Response> => {
       <p>L'équipe de la Communauté des Makers</p>
     `;
 
+    console.log("Sending admin notification email...");
+    
     // Envoi de l'email à l'administrateur
     const adminRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -64,6 +68,17 @@ const handler = async (req: Request): Promise<Response> => {
         html: adminEmailHtml,
       }),
     });
+
+    if (!adminRes.ok) {
+      const adminError = await adminRes.text();
+      console.error("Error sending admin email:", adminError);
+      throw new Error(`Failed to send admin email: ${adminError}`);
+    }
+
+    const adminData = await adminRes.json();
+    console.log("Admin email sent successfully:", adminData);
+
+    console.log("Sending confirmation email to user...");
 
     // Envoi de l'email au candidat
     const userRes = await fetch("https://api.resend.com/emails", {
@@ -80,19 +95,24 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     });
 
-    if (!adminRes.ok || !userRes.ok) {
-      const error = await adminRes.text();
-      console.error("Error sending emails:", error);
-      throw new Error(`Failed to send emails: ${error}`);
+    if (!userRes.ok) {
+      const userError = await userRes.text();
+      console.error("Error sending user confirmation email:", userError);
+      throw new Error(`Failed to send user confirmation email: ${userError}`);
     }
 
-    const data = await adminRes.json();
-    console.log("Emails sent successfully:", data);
+    const userData = await userRes.json();
+    console.log("User confirmation email sent successfully:", userData);
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ 
+      success: true,
+      adminEmail: adminData,
+      userEmail: userData
+    }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
+
   } catch (error) {
     console.error("Error in send-form-notification function:", error);
     return new Response(
