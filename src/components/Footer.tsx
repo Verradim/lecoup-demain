@@ -39,19 +39,19 @@ export const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <p className="text-gray-600">
-              Questions? Email us at:
+              Des questions? Contactez-nous à :
               <br />
               <a
-                href="mailto:contact@buildingpro.com"
+                href="mailto:contact@lecoup-demain.com"
                 className="text-primary hover:underline"
               >
-                contact@buildingpro.com
+                contact@lecou-demain.com
               </a>
             </p>
           </div>
         </div>
         <div className="mt-12 pt-8 border-t text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Lecoup-demain.com. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Lecoup-demain.com. Tous droits reservés.</p>
         </div>
       </div>
     </footer>
