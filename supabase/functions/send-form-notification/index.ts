@@ -44,6 +44,7 @@ const handler = async (req: Request): Promise<Response> => {
       <ul>
         <li>Nom: ${submission.full_name}</li>
         <li>Email: ${submission.email}</li>
+        <li>Téléphone: ${submission.phone}</li>
         <li>Entreprise: ${submission.company_name}</li>
         <li>Parrain: ${submission.sponsor}</li>
       </ul>
@@ -53,11 +54,11 @@ const handler = async (req: Request): Promise<Response> => {
     const userEmailHtml = `
       <h2>Confirmation de votre candidature</h2>
       <p>Bonjour ${submission.full_name},</p>
-      <p>Nous avons bien reçu votre candidature pour rejoindre la Communauté des Makers.</p>
+      <p>Nous avons bien reçu votre candidature pour rejoindre la communauté Le Coup de Main.</p>
       <p>Notre équipe va étudier votre dossier et reviendra vers vous dans les plus brefs délais.</p>
       <br/>
       <p>À très bientôt !</p>
-      <p>L'équipe de la Communauté des Makers</p>
+      <p>Dimitri - Le Coup de Main.</p>
     `;
 
     console.log("Preparing to send admin notification email...");
