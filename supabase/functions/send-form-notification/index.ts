@@ -55,7 +55,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending admin notification email...");
     
     // Envoi de l'email à l'administrateur
-    const adminRes = await fetch("https://api.resend.com/send-form-notification", {
+    const adminRes = await fetch("https://zououhirrfjjqfspfviv.supabase.co/functions/v1/send-form-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending confirmation email to user...");
 
     // Envoi de l'email au candidat
-    const userRes = await fetch("https://api.resend.com/send-form-notification", {
+    const userRes = await fetch("https://zououhirrfjjqfspfviv.supabase.co/functions/v1/send-form-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
