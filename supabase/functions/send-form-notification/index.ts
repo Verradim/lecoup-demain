@@ -59,6 +59,7 @@ const handler = async (req: Request): Promise<Response> => {
       <br/>
       <p>À très bientôt !</p>
       <p>Dimitri - Le Coup de Main.</p>
+      <p>PS : Pour nous contacter, veuillez envoyer un email à l'adresse suivante : contact@lecoup-demain.com</p>
     `;
 
     console.log("Preparing to send admin notification email...");
