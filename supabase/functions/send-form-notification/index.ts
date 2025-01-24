@@ -55,14 +55,14 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending admin notification email...");
     
     // Envoi de l'email à l'administrateur
-    const adminRes = await fetch("https://api.resend.com/emails", {
+    const adminRes = await fetch("https://api.resend.com/send-form-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Communauté des Makers <contact@email.lecoup-demain.com>",
+        from: " <contact@email.lecoup-demain.com>",
         to: ["dimitri.chauchoy@gmail.com"],
         subject: `Nouvelle candidature de ${submission.full_name}`,
         html: adminEmailHtml,
@@ -81,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending confirmation email to user...");
 
     // Envoi de l'email au candidat
-    const userRes = await fetch("https://api.resend.com/emails", {
+    const userRes = await fetch("https://api.resend.com/send-form-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
