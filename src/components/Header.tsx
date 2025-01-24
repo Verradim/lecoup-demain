@@ -11,7 +11,11 @@ export const Header = () => {
       <div className="container flex h-16 items-center">
         <div className="mr-4 hidden md:flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
-            <img src="/lovable-uploads/logo-white1.png" alt="Le Coup de Main" className="h-8 w-auto" />
+            <img 
+              src="/lovable-uploads/eb896c7b-b343-45d7-a812-f67e4b59da23.png" 
+              alt="Le Coup de Main" 
+              className="h-10 w-10 rounded-full object-cover"
+            />
           </Link>
         </div>
 
@@ -25,10 +29,7 @@ export const Header = () => {
         </button>
 
         {/* Desktop navigation */}
-        <nav className="hidden flex-1 items-center space-x-6 md:flex">
-          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-primary">
-            Accueil
-          </Link>
+        <nav className="hidden flex-1 items-center space-x-12 md:flex">
           <Link to="/about" className="text-sm font-medium text-gray-700 hover:text-primary">
             Qui sommes-nous ?
           </Link>
@@ -49,7 +50,7 @@ export const Header = () => {
               const element = document.getElementById("join-form");
               element?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-primary hover:bg-primary/90 text-white"
           >
             Rejoignez-nous
           </Button>
@@ -61,13 +62,6 @@ export const Header = () => {
             <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
               <div className="space-y-6 px-5 py-6">
                 <div className="grid gap-y-4">
-                  <Link
-                    to="/"
-                    className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className="ml-3 text-base font-medium text-gray-900">Accueil</span>
-                  </Link>
                   <Link
                     to="/about"
                     className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
@@ -90,7 +84,7 @@ export const Header = () => {
                       element?.scrollIntoView({ behavior: "smooth" });
                       setIsOpen(false);
                     }}
-                    className="w-full bg-primary hover:bg-primary/90"
+                    className="w-full bg-primary hover:bg-primary/90 text-white"
                   >
                     Rejoignez-nous
                   </Button>
