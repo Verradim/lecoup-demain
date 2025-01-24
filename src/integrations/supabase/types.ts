@@ -57,7 +57,7 @@ export type Database = {
           title: string
         }
         Insert: {
-          content: string
+          content?: string
           created_at?: string
           excerpt: string
           id?: string
