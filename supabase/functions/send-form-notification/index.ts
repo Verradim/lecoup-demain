@@ -1,9 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -29,9 +26,8 @@ const handler = async (req: Request): Promise<Response> => {
     const { record } = await req.json();
     const submission: FormSubmission = record;
 
-    console.log("Sending email for submission:", submission);
-
-    const emailHtml = `
+    // Email de notification pour l'administrateur
+    const adminEmailHtml = `
       <h2>Nouvelle candidature reçue</h2>
       <p>Une nouvelle candidature a été soumise par ${submission.full_name}.</p>
       <h3>Détails de la candidature:</h3>
@@ -43,7 +39,19 @@ const handler = async (req: Request): Promise<Response> => {
       </ul>
     `;
 
-    const res = await fetch("https://api.resend.com/emails", {
+    // Email de confirmation pour le candidat
+    const userEmailHtml = `
+      <h2>Confirmation de votre candidature</h2>
+      <p>Bonjour ${submission.full_name},</p>
+      <p>Nous avons bien reçu votre candidature pour rejoindre la Communauté des Makers.</p>
+      <p>Notre équipe va étudier votre dossier et reviendra vers vous dans les plus brefs délais.</p>
+      <br/>
+      <p>À très bientôt !</p>
+      <p>L'équipe de la Communauté des Makers</p>
+    `;
+
+    // Envoi de l'email à l'administrateur
+    const adminRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,18 +61,33 @@ const handler = async (req: Request): Promise<Response> => {
         from: "Communauté des Makers <contact@email.lecoup-demain.com>",
         to: ["dimitri.chauchoy@gmail.com"],
         subject: `Nouvelle candidature de ${submission.full_name}`,
-        html: emailHtml,
+        html: adminEmailHtml,
       }),
     });
 
-    if (!res.ok) {
-      const error = await res.text();
-      console.error("Error sending email:", error);
-      throw new Error(`Failed to send email: ${error}`);
+    // Envoi de l'email au candidat
+    const userRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "Communauté des Makers <contact@email.lecoup-demain.com>",
+        to: [submission.email],
+        subject: "Confirmation de votre candidature - Communauté des Makers",
+        html: userEmailHtml,
+      }),
+    });
+
+    if (!adminRes.ok || !userRes.ok) {
+      const error = await adminRes.text();
+      console.error("Error sending emails:", error);
+      throw new Error(`Failed to send emails: ${error}`);
     }
 
-    const data = await res.json();
-    console.log("Email sent successfully:", data);
+    const data = await adminRes.json();
+    console.log("Emails sent successfully:", data);
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
