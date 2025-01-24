@@ -6,7 +6,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -69,48 +68,53 @@ export const Header = () => {
           {isOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
         </button>
 
-        <nav className="hidden flex-1 items-center space-x-12 md:flex">
-          <Link to="/about" className="text-sm font-medium text-gray-700 hover:text-primary">
-            Qui sommes-nous ?
-          </Link>
-          
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Ressources</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="w-[400px] p-4">
-                    <Link
-                      to="/ressources"
-                      className="block mb-2 text-sm font-medium text-primary hover:underline"
-                    >
-                      Voir toutes les ressources →
-                    </Link>
-                    <div className="mt-4 space-y-2">
-                      {articles?.map((article) => (
-                        <Link
-                          key={article.slug}
-                          to={`/ressources/${article.slug}`}
-                          className="block text-sm text-gray-700 hover:text-primary"
-                        >
-                          {article.title}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+        <nav className="hidden flex-1 items-center md:flex">
+          <div className="flex space-x-8">
+            <Link 
+              to="/about" 
+              className="whitespace-nowrap text-sm font-medium text-gray-700 hover:text-primary px-3 py-2"
+            >
+              Qui sommes-nous ?
+            </Link>
+            
+            <a
+              href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="whitespace-nowrap text-sm font-medium text-gray-700 hover:text-primary px-3 py-2"
+            >
+              Règles de la communauté
+            </a>
 
-          <a
-            href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-medium text-gray-700 hover:text-primary"
-          >
-            Règles de la communauté
-          </a>
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-white">Ressources</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-[400px] p-4">
+                      <Link
+                        to="/ressources"
+                        className="block mb-2 text-sm font-medium text-primary hover:underline"
+                      >
+                        Voir toutes les ressources →
+                      </Link>
+                      <div className="mt-4 space-y-2">
+                        {articles?.map((article) => (
+                          <Link
+                            key={article.slug}
+                            to={`/ressources/${article.slug}`}
+                            className="block text-sm text-gray-700 hover:text-primary"
+                          >
+                            {article.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
         </nav>
 
         <div className="hidden md:flex md:items-center md:justify-end md:flex-1">
@@ -134,14 +138,6 @@ export const Header = () => {
                   >
                     <span className="ml-3 text-base font-medium text-gray-900">Qui sommes-nous ?</span>
                   </Link>
-                  
-                  <Link
-                    to="/ressources"
-                    className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className="ml-3 text-base font-medium text-gray-900">Ressources</span>
-                  </Link>
 
                   <a
                     href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
@@ -152,6 +148,14 @@ export const Header = () => {
                   >
                     <span className="ml-3 text-base font-medium text-gray-900">Règles de la communauté</span>
                   </a>
+                  
+                  <Link
+                    to="/ressources"
+                    className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span className="ml-3 text-base font-medium text-gray-900">Ressources</span>
+                  </Link>
 
                   <Button
                     onClick={scrollToForm}
