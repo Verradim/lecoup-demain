@@ -17,7 +17,7 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
         <div className="space-y-6 px-5 py-6">
           <div className="grid gap-y-4">
           <Link
-              to="/index"
+              to="/"
               className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
               onClick={() => setIsOpen(false)}
             >
