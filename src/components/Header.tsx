@@ -9,25 +9,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { articles } from "@/data/articles";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
-  const { data: articles } = useQuery({
-    queryKey: ['articles'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('articles')
-        .select('title, slug')
-        .order('published_at', { ascending: false });
-      
-      if (error) throw error;
-      return data;
-    }
-  });
 
   const scrollToForm = () => {
     setIsOpen(false);
@@ -99,7 +85,7 @@ export const Header = () => {
                         Voir toutes les ressources →
                       </Link>
                       <div className="mt-4 space-y-2">
-                        {articles?.map((article) => (
+                        {articles.map((article) => (
                           <Link
                             key={article.slug}
                             to={`/ressources/${article.slug}`}
