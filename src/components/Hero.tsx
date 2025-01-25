@@ -10,9 +10,10 @@ export const Hero = () => {
       <div className="container max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="text-center md:text-left md:max-w-[50%] animate-fade-up">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            La communauté privée des artisans du bâtiment
+            La communauté privée des artisans du bâtiment.
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-8">
+            Rejoignez une communauté privée d'artisans et d'entreprises du bâtiment :
             Un espace d'entraide et d'opportunités pour les professionnels du bâtiment, 
             où la collaboration permet de construire ensemble le bâtiment de demain.
           </p>
