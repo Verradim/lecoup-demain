@@ -87,7 +87,7 @@ export const Header = () => {
                       <div className="mt-4 space-y-2 hover:bg-white">
                         {articles.map((article) => (
                           <Link
-                            key={article.slug}
+                            key={article.id}
                             to={`/ressources/${article.id}`}
                             className="block text-sm text-gray-700 hover:text-primary"
                           >
