@@ -8,7 +8,7 @@ const articles = [
     id: "comment-augmenter-sa-visibilite",
     title: "Comment augmenter sa visibilité en tant qu'artisan indépendant dans le bâtiment",
     excerpt: "Découvrez les meilleures pratiques pour améliorer votre visibilité et attirer de nouveaux clients dans le secteur du bâtiment.",
-    publishedAt: "2024-03-20",
+    publishedAt: "2025-01-20",
   },
   // Add more static articles here as needed
 ];
