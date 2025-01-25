@@ -17,14 +17,14 @@ export const ResourcesMenu = () => {
             Ressources
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="w-[400px] p-4">
+            <div className="w-[400px] p-4 hover:bg-white">
               <Link
                 to="/ressources"
                 className="block mb-2 text-sm font-medium text-primary hover:underline"
               >
                 Voir toutes les ressources →
               </Link>
-              <div className="mt-4 space-y-2 hover:bg-white">
+              <div className="mt-4 space-y-2">
                 {articles.map((article) => (
                   <Link
                     key={article.id}
