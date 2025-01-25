@@ -10,8 +10,8 @@ export interface Article {
 
 export const articles: Article[] = [
   {
-    id: "comment-augmenter-sa-visibilite",
-    slug: "comment-augmenter-sa-visibilite",
+    id: "comment-augmenter-sa-visibilite-en-tant-qu-artisan-independant-dans-le-batiment",
+    slug: "comment-augmenter-sa-visibilite-en-tant-qu-artisan-independant-dans-le-batiment",
     title: "Comment augmenter sa visibilité en tant qu'artisan indépendant dans le bâtiment ?",
     content: `
       <p class="text-lg leading-relaxed mb-8">Aujourd'hui, être un bon artisan ne suffit plus. Vous avez beau être un excellent maçon, plombier ou électricien, si personne ne vous connaît, vos compétences resteront invisibles. Dans un monde où les clients recherchent leurs prestataires en ligne et où la concurrence est de plus en plus forte, il est crucial de se démarquer pour développer son activité. Bonne nouvelle : il existe des stratégies simples et efficaces pour augmenter votre visibilité, même si vous débutez dans le domaine du marketing. Voici un guide pratique pour les artisans passionnés comme vous.</p>
