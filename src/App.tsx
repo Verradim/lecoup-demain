@@ -1,38 +1,31 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Resources from "./pages/Resources";
-import VisibilityArticle from "./pages/articles/comment-augmenter-sa-visibilite";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import Index from "@/pages/Index";
+import About from "@/pages/About";
+import Resources from "@/pages/Resources";
+import Article from "@/pages/Article";
+import VisibilityArticle from "@/pages/articles/comment-augmenter-sa-visibilite";
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
+function App() {
+  return (
+    <Router>
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/ressources" element={<Resources />} />
+            <Route path="/ressources/:slug" element={<Article />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
       <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/ressources" element={<Resources />} />
-              <Route path="/ressources/comment-augmenter-sa-visibilite" element={<VisibilityArticle />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+    </Router>
+  );
+}
 
 export default App;

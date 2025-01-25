@@ -2,14 +2,8 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import { articles } from "@/data/articles";
+import { MobileMenu } from "./header/MobileMenu";
+import { ResourcesMenu } from "./header/ResourcesMenu";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,34 +66,7 @@ export const Header = () => {
               Règles de la communauté
             </a>
 
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-gray-100 hover:bg-white transition-colors">Ressources</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[400px] p-4">
-                      <Link
-                        to="/ressources"
-                        className="block mb-2 text-sm font-medium text-primary hover:underline"
-                      >
-                        Voir toutes les ressources →
-                      </Link>
-                      <div className="mt-4 space-y-2 hover:bg-white">
-                        {articles.map((article) => (
-                          <Link
-                            key={article.id}
-                            to={`/ressources/${article.id}`}
-                            className="block text-sm text-gray-700 hover:text-primary"
-                          >
-                            {article.title}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            <ResourcesMenu />
           </div>
         </nav>
 
@@ -112,48 +79,11 @@ export const Header = () => {
           </Button>
         </div>
 
-        {isOpen && (
-          <div className="absolute inset-x-0 top-16 origin-top-right transform p-2 transition md:hidden">
-            <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-              <div className="space-y-6 px-5 py-6">
-                <div className="grid gap-y-4">
-                  <Link
-                    to="/about"
-                    className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className="ml-3 text-base font-medium text-gray-900">Qui sommes-nous ?</span>
-                  </Link>
-
-                  <a
-                    href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className="ml-3 text-base font-medium text-gray-900">Règles de la communauté</span>
-                  </a>
-                  
-                  <Link
-                    to="/ressources"
-                    className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className="ml-3 text-base font-medium text-gray-900">Ressources</span>
-                  </Link>
-
-                  <Button
-                    onClick={scrollToForm}
-                    className="w-full bg-primary hover:bg-primary/90 text-white"
-                  >
-                    Rejoignez-nous
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <MobileMenu 
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          scrollToForm={scrollToForm}
+        />
       </div>
     </header>
   );
