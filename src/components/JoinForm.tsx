@@ -2,6 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -23,6 +32,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const formSchema = z.object({
   sponsor: z.string().min(1, "Le parrain est requis"),
@@ -57,6 +67,8 @@ const regions = [
 
 export const JoinForm = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -135,10 +147,7 @@ export const JoinForm = () => {
         return;
       }
 
-      toast({
-        title: "Succès",
-        description: "Votre candidature a été envoyée avec succès ! Vous allez recevoir un email de confirmation.",
-      });
+      setShowSuccessDialog(true);
       form.reset();
       
     } catch (error) {
@@ -151,356 +160,381 @@ export const JoinForm = () => {
     }
   };
 
-  // ... keep existing code (form JSX)
-
   return (
-    <section id="join-form" className="py-20 px-4 bg-background">
-      <div className="container max-w-3xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-secondary mb-16">
-          Rejoindre la communauté
-        </h2>
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
-            {/* Parrainage */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-primary">Parrainage</h3>
-              <FormField
-                control={form.control}
-                name="sponsor"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Je suis parrainé par *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Kylian Mbappé" className="bg-white" {...field} />
-                    </FormControl>
-                    <p className="text-sm text-muted-foreground">
-                      Si vous n'êtes pas recommandé par une personne de la communauté : {" "}
-                      <a href="#not-recommended" className="text-primary underline">
-                        cliquez-ici pour savoir comment rejoindre
-                      </a>
-                    </p>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+    <>
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl font-semibold">
+              Merci d'avoir candidaté pour rejoindre Le Coup de Main, la communauté dédiée aux artisans indépendants et aux entreprises du bâtiment. 🙌
+            </DialogTitle>
+            <DialogDescription className="text-center pt-4">
+              Vous allez recevoir un e-mail de confirmation détaillant les prochaines étapes
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button 
+              type="button"
+              onClick={() => {
+                setShowSuccessDialog(false);
+                navigate("/");
+              }}
+              className="w-full sm:w-auto"
+            >
+              J'ai compris
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-            {/* Informations personnelles */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-primary">Informations personnelles</h3>
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nom et prénom *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Didier Deschamps" className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numéro de téléphone *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="0600102030" className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Adresse e-mail *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="didierdeschamps@gmail.com" className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="linkedin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Lien LinkedIn</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Informations professionnelles */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-primary">Informations professionnelles</h3>
-              <FormField
-                control={form.control}
-                name="companyStatus"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Statut de l'entreprise *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="bg-white">
-                          <SelectValue placeholder="Sélectionnez votre statut" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white z-50">
-                        <SelectItem value="independent">Artisan Indépendant</SelectItem>
-                        <SelectItem value="small">Entreprise (moins de 5 salariés)</SelectItem>
-                        <SelectItem value="medium">Entreprise (5-10 salariés)</SelectItem>
-                        <SelectItem value="other">Autre</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="employeeCount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Combien de salariés avez-vous *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="bg-white">
-                          <SelectValue placeholder="Sélectionnez le nombre de salariés" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white z-50">
-                        <SelectItem value="0">0</SelectItem>
-                        <SelectItem value="1-3">Entre 1 et 3</SelectItem>
-                        <SelectItem value="3-9">Entre 3 et 9</SelectItem>
-                        <SelectItem value="10+">Plus de 10</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="companyName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nom de l'entreprise *</FormLabel>
-                    <FormControl>
-                      <Input className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="instagram"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Lien Instagram</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="website"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Site internet</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="region"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Région d'activité *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="bg-white">
-                          <SelectValue placeholder="Sélectionnez votre région" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white z-50">
-                        {regions.map((region) => (
-                          <SelectItem key={region} value={region.toLowerCase()}>
-                            {region}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="companyDescription"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description de l'activité de l'entreprise *</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Travaux de plomberie" className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Motivations */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-primary">Motivations</h3>
-              <FormField
-                control={form.control}
-                name="discoverySource"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Comment avez-vous connu notre existence ? *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="bg-white">
-                          <SelectValue placeholder="Sélectionnez une option" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white z-50">
-                        <SelectItem value="social">Réseaux sociaux</SelectItem>
-                        <SelectItem value="search">Référencement (moteur de recherche)</SelectItem>
-                        <SelectItem value="word">Bouche-à-oreille</SelectItem>
-                        <SelectItem value="other">Autre</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="joinReason"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pourquoi souhaitez-vous rejoindre la communauté ? *</FormLabel>
-                    <FormControl>
-                      <Textarea className="bg-white" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="otherPlatform.isMember"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormLabel>Êtes-vous déjà membre d'une autre plateforme ? *</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex flex-col space-y-1"
-                      >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="no" />
-                          </FormControl>
-                          <FormLabel className="font-normal">
-                            Non
-                          </FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="yes" />
-                          </FormControl>
-                          <FormLabel className="font-normal">
-                            Oui
-                          </FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {form.watch("otherPlatform.isMember") === "yes" && (
+      <section id="join-form" className="py-20 px-4 bg-background">
+        <div className="container max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-secondary mb-16">
+            Rejoindre la communauté
+          </h2>
+          
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
+              {/* Parrainage */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-primary">Parrainage</h3>
                 <FormField
                   control={form.control}
-                  name="otherPlatform.platformName"
+                  name="sponsor"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Précisez laquelle *</FormLabel>
+                      <FormLabel>Je suis parrainé par *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Yoojo, Travaux.com,..." className="bg-white" {...field} />
+                        <Input placeholder="Kylian Mbappé" className="bg-white" {...field} />
+                      </FormControl>
+                      <p className="text-sm text-muted-foreground">
+                        Si vous n'êtes pas recommandé par une personne de la communauté : {" "}
+                        <a href="#not-recommended" className="text-primary underline">
+                          cliquez-ici pour savoir comment rejoindre
+                        </a>
+                      </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Informations personnelles */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-primary">Informations personnelles</h3>
+                <FormField
+                  control={form.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nom et prénom *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Didier Deschamps" className="bg-white" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              )}
-            </div>
-
-            {/* Engagement */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-primary">Votre engagement</h3>
-              <FormField
-                control={form.control}
-                name="termsAccepted"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        En cochant la case, vous avez pris connaissance des{" "}
-                        <a 
-                          href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline"
-                        >
-                          règles de la communauté
-                        </a>{" "}
-                        et vous vous engagez à les respecter. *
-                      </FormLabel>
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Numéro de téléphone *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="0600102030" className="bg-white" {...field} />
+                      </FormControl>
                       <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Adresse e-mail *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="didierdeschamps@gmail.com" className="bg-white" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="linkedin"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Lien LinkedIn</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <Button type="submit" className="w-full text-white">
-              Envoyer ma candidature
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </section>
+              {/* Informations professionnelles */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-primary">Informations professionnelles</h3>
+                <FormField
+                  control={form.control}
+                  name="companyStatus"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Statut de l'entreprise *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="bg-white">
+                            <SelectValue placeholder="Sélectionnez votre statut" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="independent">Artisan Indépendant</SelectItem>
+                          <SelectItem value="small">Entreprise (moins de 5 salariés)</SelectItem>
+                          <SelectItem value="medium">Entreprise (5-10 salariés)</SelectItem>
+                          <SelectItem value="other">Autre</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="employeeCount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Combien de salariés avez-vous *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="bg-white">
+                            <SelectValue placeholder="Sélectionnez le nombre de salariés" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="0">0</SelectItem>
+                          <SelectItem value="1-3">Entre 1 et 3</SelectItem>
+                          <SelectItem value="3-9">Entre 3 et 9</SelectItem>
+                          <SelectItem value="10+">Plus de 10</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nom de l'entreprise *</FormLabel>
+                      <FormControl>
+                        <Input className="bg-white" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="instagram"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Lien Instagram</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="website"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Site internet</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="region"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Région d'activité *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="bg-white">
+                            <SelectValue placeholder="Sélectionnez votre région" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white z-50">
+                          {regions.map((region) => (
+                            <SelectItem key={region} value={region.toLowerCase()}>
+                              {region}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="companyDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description de l'activité de l'entreprise *</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Travaux de plomberie" className="bg-white" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Motivations */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-primary">Motivations</h3>
+                <FormField
+                  control={form.control}
+                  name="discoverySource"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Comment avez-vous connu notre existence ? *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="bg-white">
+                            <SelectValue placeholder="Sélectionnez une option" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white z-50">
+                          <SelectItem value="social">Réseaux sociaux</SelectItem>
+                          <SelectItem value="search">Référencement (moteur de recherche)</SelectItem>
+                          <SelectItem value="word">Bouche-à-oreille</SelectItem>
+                          <SelectItem value="other">Autre</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="joinReason"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Pourquoi souhaitez-vous rejoindre la communauté ? *</FormLabel>
+                      <FormControl>
+                        <Textarea className="bg-white" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="otherPlatform.isMember"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>Êtes-vous déjà membre d'une autre plateforme ? *</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex flex-col space-y-1"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="no" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Non
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="yes" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Oui
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {form.watch("otherPlatform.isMember") === "yes" && (
+                  <FormField
+                    control={form.control}
+                    name="otherPlatform.platformName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Précisez laquelle *</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Yoojo, Travaux.com,..." className="bg-white" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
+
+              {/* Engagement */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-primary">Votre engagement</h3>
+                <FormField
+                  control={form.control}
+                  name="termsAccepted"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>
+                          En cochant la case, vous avez pris connaissance des{" "}
+                          <a 
+                            href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline"
+                          >
+                            règles de la communauté
+                          </a>{" "}
+                          et vous vous engagez à les respecter. *
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <Button type="submit" className="w-full text-white">
+                Envoyer ma candidature
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </section>
+    </>
   );
 };
 
