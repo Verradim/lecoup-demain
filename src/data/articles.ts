@@ -88,7 +88,7 @@ export const articles: Article[] = [
       <h2 class="text-2xl font-bold mt-12 mb-6">Conclusion : Passez à l'action dès aujourd'hui</h2>
       <p class="mb-8">Augmenter votre visibilité en tant qu'artisan indépendant est un travail qui demande du temps, mais les résultats en valent la peine. Commencez par les bases : une identité professionnelle, une présence en ligne, et une bonne gestion de vos avis clients. Chaque petite action compte et contribue à renforcer votre réputation.</p>
     `,
-    published_at: "2024-03-20",
+    published_at: "2025-01-20",
     meta_title: "Comment augmenter sa visibilité en tant qu'artisan du bâtiment ? Guide complet",
     meta_description: "Découvrez les stratégies efficaces pour améliorer votre visibilité en tant qu'artisan du bâtiment : identité de marque, présence en ligne, réseaux sociaux et plus encore."
   }
