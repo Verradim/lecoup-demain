@@ -84,7 +84,7 @@ export const Header = () => {
                       >
                         Voir toutes les ressources →
                       </Link>
-                      <div className="mt-4 space-y-2">
+                      <div className="mt-4 space-y-2 hover:bg-white">
                         {articles.map((article) => (
                           <Link
                             key={article.slug}
