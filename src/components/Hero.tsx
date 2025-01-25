@@ -9,7 +9,7 @@ export const Hero = () => {
     <section className="min-h-[80vh] flex items-center justify-between bg-primary py-20 px-4">
       <div className="container max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="text-center md:text-left md:max-w-[50%] animate-fade-up">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+          <h1 className="text-3xl md:text-6xl font-bold text-white mb-6">
             La communauté privée des artisans indépendants et des entreprises de bâtiment
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-8">
@@ -34,7 +34,7 @@ export const Hero = () => {
             <img 
               src="/lovable-uploads/29a58e67-540f-431e-b7f6-d21e5face096.png"
               alt="Interface de la communauté WhatsApp Le coup de main"
-              className="w-full h-auto rounded-[40px] shadow-2xl"
+              className="w-70 h-auto rounded-[40px]"
             />
           </div>
         )}
