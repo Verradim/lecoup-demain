@@ -8,7 +8,7 @@ import { Footer } from "./components/Footer";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Resources from "./pages/Resources";
-import Article from "./pages/Article";
+import VisibilityArticle from "./pages/articles/comment-augmenter-sa-visibilite";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +25,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/ressources" element={<Resources />} />
-              <Route path="/ressources/:slug" element={<Article />} />
+              <Route path="/ressources/comment-augmenter-sa-visibilite" element={<VisibilityArticle />} />
             </Routes>
           </main>
           <Footer />

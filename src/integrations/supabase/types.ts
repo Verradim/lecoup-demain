@@ -34,50 +34,6 @@ export type Database = {
           id?: string
           name?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "article_comments_article_id_fkey"
-            columns: ["article_id"]
-            isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      articles: {
-        Row: {
-          content: string
-          created_at: string
-          excerpt: string
-          id: string
-          meta_description: string
-          meta_title: string
-          published_at: string
-          slug: string
-          title: string
-        }
-        Insert: {
-          content?: string
-          created_at?: string
-          excerpt: string
-          id?: string
-          meta_description: string
-          meta_title: string
-          published_at?: string
-          slug: string
-          title: string
-        }
-        Update: {
-          content?: string
-          created_at?: string
-          excerpt?: string
-          id?: string
-          meta_description?: string
-          meta_title?: string
-          published_at?: string
-          slug?: string
-          title?: string
-        }
         Relationships: []
       }
       form_submissions: {
