@@ -30,15 +30,6 @@ export const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex h-16 items-center">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary md:hidden"
-        >
-          <span className="sr-only">Open main menu</span>
-          {isOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
-        </button>
-
-        {/* Desktop Logo */}
         <div className="mr-4 hidden md:flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
             <img 
@@ -49,16 +40,13 @@ export const Header = () => {
           </Link>
         </div>
 
-        {/* Mobile Logo - Centered */}
-        <div className="flex flex-1 justify-center md:hidden">
-          <Link to="/" className="flex items-center">
-            <img 
-              src="/lovable-uploads/eb896c7b-b343-45d7-a812-f67e4b59da23.png" 
-              alt="Le Coup de Main" 
-              className="h-10 w-10 rounded-full object-cover"
-            />
-          </Link>
-        </div>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary md:hidden"
+        >
+          <span className="sr-only">Open main menu</span>
+          {isOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
+        </button>
 
         <nav className="hidden flex-1 items-center md:flex">
           <div className="flex space-x-8">
