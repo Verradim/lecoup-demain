@@ -88,7 +88,7 @@ export const Header = () => {
                         {articles.map((article) => (
                           <Link
                             key={article.id}
-                            to={`/ressources/${article.slug}`}
+                            to={`/ressources/${article.id}`}
                             className="block text-sm text-gray-700 hover:text-primary"
                           >
                             {article.title}

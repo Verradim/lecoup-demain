@@ -2,16 +2,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { BreadcrumbNav } from "@/components/Breadcrumb";
-
-const articles = [
-  {
-    id: "comment-augmenter-sa-visibilite",
-    title: "Comment augmenter sa visibilité en tant qu'artisan indépendant dans le bâtiment",
-    excerpt: "Découvrez les meilleures pratiques pour améliorer votre visibilité et attirer de nouveaux clients dans le secteur du bâtiment.",
-    publishedAt: "2025-01-20",
-  },
-  // Add more static articles here as needed
-];
+import { articles } from "@/data/articles";
 
 const Resources = () => {
   return (
@@ -25,7 +16,7 @@ const Resources = () => {
           <article key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="p-6">
               <p className="text-sm text-gray-500 mb-2">
-                {format(new Date(article.publishedAt), 'dd MMMM yyyy', { locale: fr })}
+                {format(new Date(article.published_at), 'dd MMMM yyyy', { locale: fr })}
               </p>
               <h2 className="text-xl font-semibold mb-3">
                 <Link 
@@ -35,7 +26,7 @@ const Resources = () => {
                   {article.title}
                 </Link>
               </h2>
-              <p className="text-gray-600 mb-4">{article.excerpt}</p>
+              <p className="text-gray-600 mb-4">{article.meta_description}</p>
               <Link
                 to={`/ressources/${article.id}`}
                 className="text-primary hover:underline font-medium"
