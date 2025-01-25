@@ -75,7 +75,7 @@ export const Header = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-white">Ressources</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="bg-gray-100 hover:bg-white transition-colors">Ressources</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="w-[400px] p-4">
                       <Link
