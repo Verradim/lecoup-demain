@@ -35,7 +35,7 @@ export const articles: Article[] = [
       <h3 class="text-xl font-semibold mb-4">Étapes pour bien commencer :</h3>
       <ul class="list-disc pl-6 mb-6">
         <li class="mb-2">Créez un site internet simple : Une page avec vos services, vos coordonnées et quelques photos avant/après de vos chantiers suffit.</li>
-        <li class="mb-2">Inscrivez-vous sur les annuaires en ligne : Des plateformes comme Pages Jaunes, Houzz ou Travaux.com permettent de toucher rapidement des clients locaux.</li>
+        <li class="mb-2">Inscrivez-vous sur les annuaires en ligne : Des plateformes comme Pages Jaunes ou Houzz.om ou permettent de toucher rapidement des clients locaux.</li>
         <li class="mb-2">Soyez actif sur Google My Business : Créez une fiche complète avec des photos, des avis clients, et mettez à jour vos horaires et services.</li>
       </ul>
       <p class="mb-8">💡 Exemple concret : Jean, un artisan couvreur, a augmenté ses demandes de devis de 40 % simplement en optimisant sa fiche Google My Business.</p>
