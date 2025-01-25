@@ -52,14 +52,30 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Email de confirmation pour le candidat
     const userEmailHtml = `
-      <h2>Confirmation de votre candidature</h2>
-      <p>Bonjour ${submission.full_name},</p>
-      <p>Nous avons bien reçu votre candidature pour rejoindre la communauté Le Coup de Main.</p>
-      <p>Notre équipe va étudier votre dossier et reviendra vers vous dans les plus brefs délais.</p>
-      <br/>
-      <p>À très bientôt !</p>
-      <p>Dimitri - Le Coup de Main.</p>
-      <p>PS : Pour nous contacter, veuillez envoyer un email à l'adresse suivante : contact@lecoup-demain.com</p>
+      <h2 style="color: #302CD7;">Confirmation de votre candidature - Le coup de main.</h2>
+        <p>Bonjour <strong>${submission.full_name}</strong>,</p>
+        <p>Merci d’avoir candidaté pour rejoindre <strong>Le Coup de Main</strong>, la communauté dédiée aux artisans indépendants et aux entreprises du bâtiment. 🙌</p>
+
+        <h3 style="color: #302CD7;">Quelles sont les prochaines étapes ?</h3>
+        <ul>
+          <li><strong>👉 Étape 1 :</strong> Nous étudions actuellement votre candidature.<br>
+            Notre équipe veille à construire une communauté dynamique et solidaire, en s’assurant que chaque membre partage nos valeurs d’entraide et de professionnalisme.</li>
+          <li><strong>👉 Étape 2 :</strong> Une fois votre candidature validée, vous recevrez un e-mail avec <strong>le lien d’invitation</strong> pour rejoindre officiellement la communauté.<br>
+            Vous pourrez alors échanger avec d’autres professionnels, trouver de l’aide, partager vos réalisations et profiter d’un réseau unique pour développer votre activité.</li>
+        </ul>
+
+        <h3 style="color: #302CD7;">Pourquoi rejoindre "Le Coup de Main" ?</h3>
+        <ul>
+          <li>✅ Trouvez des conseils et solutions auprès d’autres artisans.</li>
+          <li>✅ Partagez vos besoins ou opportunités de collaboration.</li>
+          <li>✅ Développez votre réseau et votre visibilité en toute simplicité.</li>
+        </ul>
+
+        <p>Nous avons hâte de vous accueillir et de voir ce que vous apporterez à la communauté.</p>
+        <p><strong>Pour toute question, vous pouvez nous écrire à :</strong> <a href="mailto:contact@lecoup-demain.com" style="color: #0056b3; text-decoration: none;">contact@lecoup-demain.com</a></p>
+
+        <p style="margin-top: 20px;">À très bientôt !</p>
+        <p><strong>Dimitri</strong><br>Fondateur de "Le Coup de Main"</p>
     `;
 
     console.log("Preparing to send admin notification email...");
