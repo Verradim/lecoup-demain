@@ -14,6 +14,7 @@ interface FormSubmission {
   email: string;
   company_name: string;
   sponsor: string;
+  phone: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -50,32 +51,76 @@ const handler = async (req: Request): Promise<Response> => {
       </ul>
     `;
 
-    // Email de confirmation pour le candidat
+    // Email de confirmation pour le candidat - Nouveau template
     const userEmailHtml = `
-      <h2 style="color: #302CD7;">Confirmation de votre candidature - <strong>Le Coup de Main</strong></h2>
-        <p>Bonjour <strong>${submission.full_name}</strong>,</p>
-        <p>Merci d’avoir candidaté pour rejoindre <strong>Le Coup de Main</strong>, la communauté dédiée aux artisans indépendants et aux entreprises du bâtiment. 🙌</p>
-
-        <h3 style="color: #302CD7;">Quelles sont les prochaines étapes ?</h3>
-        <ul>
-          <li><strong>👉 Étape 1 :</strong> Nous étudions actuellement votre candidature.<br>
-            Notre équipe veille à construire une communauté dynamique et solidaire, en s’assurant que chaque membre partage nos valeurs d’entraide et de professionnalisme.</li>
-          <li><strong>👉 Étape 2 :</strong> Une fois votre candidature validée, vous recevrez un e-mail avec <strong>le lien d’invitation</strong> pour rejoindre officiellement la communauté.<br>
-            Vous pourrez alors échanger avec d’autres professionnels, trouver de l’aide, partager vos réalisations et profiter d’un réseau unique pour développer votre activité.</li>
-        </ul>
-
-        <h3 style="color: #302CD7;">Pourquoi rejoindre "Le Coup de Main" ?</h3>
-        <ul>
-          <li>✅ Trouvez des conseils et solutions auprès d’autres artisans.</li>
-          <li>✅ Partagez vos besoins ou opportunités de collaboration.</li>
-          <li>✅ Développez votre réseau et votre visibilité en toute simplicité.</li>
-        </ul>
-
-        <p>Nous avons hâte de vous accueillir et de voir ce que vous apporterez à la communauté.</p>
-        <p><strong>Pour toute question, vous pouvez nous écrire à :</strong> <a href="mailto:contact@lecoup-demain.com" style="color: #0056b3; text-decoration: none;">contact@lecoup-demain.com</a></p>
-
-        <p style="margin-top: 20px;">À très bientôt !</p>
-        <p><strong>Dimitri</strong><br>Fondateur de "Le Coup de Main"</p>
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; margin-bottom: 30px; }
+            .content { margin-bottom: 30px; }
+            .footer { text-align: center; color: #666; font-size: 14px; }
+            .highlight { color: #302CD7; }
+            .button { 
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #302CD7;
+              color: white;
+              text-decoration: none;
+              border-radius: 5px;
+              margin: 20px 0;
+            }
+            .steps { 
+              background-color: #f5f5f5;
+              padding: 20px;
+              border-radius: 5px;
+              margin: 20px 0;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 class="highlight">Bienvenue dans la communauté Le Coup de Main ! 🎉</h1>
+            </div>
+            
+            <div class="content">
+              <p>Bonjour <strong>${submission.full_name}</strong>,</p>
+              
+              <p>Nous avons bien reçu votre candidature pour rejoindre <strong>Le Coup de Main</strong>, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Merci de votre intérêt ! 🙌</p>
+              
+              <div class="steps">
+                <h2 class="highlight">Les prochaines étapes</h2>
+                <p><strong>1. Étude de votre candidature</strong></p>
+                <p>Notre équipe va étudier votre profil avec attention. Nous veillons à construire une communauté dynamique où chaque membre partage nos valeurs d'entraide et de professionnalisme.</p>
+                
+                <p><strong>2. Validation et intégration</strong></p>
+                <p>Une fois votre candidature validée, vous recevrez un email avec le lien d'invitation pour rejoindre officiellement la communauté WhatsApp.</p>
+              </div>
+              
+              <h2 class="highlight">Pourquoi rejoindre Le Coup de Main ?</h2>
+              <ul>
+                <li>✅ Échangez avec d'autres professionnels du bâtiment</li>
+                <li>✅ Partagez vos besoins ou opportunités de collaboration</li>
+                <li>✅ Développez votre réseau professionnel</li>
+                <li>✅ Accédez à des ressources exclusives</li>
+              </ul>
+              
+              <p>Nous avons hâte de vous accueillir dans la communauté !</p>
+            </div>
+            
+            <div class="footer">
+              <p>Pour toute question, contactez-nous à :<br>
+              <a href="mailto:contact@lecoup-demain.com" style="color: #302CD7;">contact@lecoup-demain.com</a></p>
+              
+              <p><strong>Dimitri</strong><br>
+              Fondateur de Le Coup de Main</p>
+            </div>
+          </div>
+        </body>
+      </html>
     `;
 
     console.log("Preparing to send admin notification email...");
@@ -119,7 +164,7 @@ const handler = async (req: Request): Promise<Response> => {
       body: JSON.stringify({
         from: "Le Coup de Main <contact@email.lecoup-demain.com>",
         to: [submission.email],
-        subject: "Confirmation de votre candidature - Le Coup de Main",
+        subject: "Bienvenue dans la communauté Le Coup de Main ! 🎉",
         html: userEmailHtml,
       }),
     });
