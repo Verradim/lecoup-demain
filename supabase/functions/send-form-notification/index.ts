@@ -52,7 +52,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Email de confirmation pour le candidat
     const userEmailHtml = `
-      <h2 style="color: #302CD7;">Confirmation de votre candidature - Le coup de main.</h2>
+      <h2 style="color: #302CD7;">Confirmation de votre candidature - <strong>Le Coup de Main</strong></h2>
         <p>Bonjour <strong>${submission.full_name}</strong>,</p>
         <p>Merci d’avoir candidaté pour rejoindre <strong>Le Coup de Main</strong>, la communauté dédiée aux artisans indépendants et aux entreprises du bâtiment. 🙌</p>
 
