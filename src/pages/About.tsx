@@ -1,36 +1,28 @@
-import { Helmet } from "react-helmet";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Layout } from "@/components/Layout";
 
 const About = () => {
   return (
-    <>
-      <Helmet>
-        <html lang="fr" />
-        <title>À propos | Le Coup de Main - Communauté des artisans du bâtiment</title>
-        <meta name="description" content="Découvrez Le Coup de Main, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Ensemble, construisons l'avenir du secteur." />
-        <link rel="canonical" href="https://lecoup-demain.com/about" />
-        <meta property="og:title" content="À propos | Le Coup de Main - Communauté des artisans du bâtiment" />
-        <meta property="og:description" content="Découvrez Le Coup de Main, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Ensemble, construisons l'avenir du secteur." />
-        <meta property="og:url" content="https://lecoup-demain.com/about" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://lecoup-demain.com/lovable-uploads/logo-white1.png" />
-      </Helmet>
-
-    <div className="bg-background font-sans">
-      {/* Hero Section */}
-      <section className="py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
+    <Layout
+      title="À propos | Le Coup de Main - Communauté des artisans du bâtiment"
+      description="Découvrez Le Coup de Main, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Ensemble, construisons l'avenir du secteur."
+      canonicalUrl="https://lecoup-demain.com/about"
+    >
+      <div className="bg-background font-sans">
+        {/* Hero Section */}
+        <section className="py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
         <div className="container max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">Qui sommes-nous ?</h1>
           <p className="text-lg text-gray-700 leading-relaxed">
             Bienvenue dans notre communauté de professionnels du bâtiment. Nous sommes une initiative dédiée à créer des connexions solides entre artisans indépendants et entreprises du bâtiment, afin de favoriser la collaboration, l'entraide et la réussite commune.
           </p>
         </div>
-      </section>
+        </section>
 
-      {/* Mission Section */}
-      <section className="py-16 px-4">
+        {/* Mission Section */}
+        <section className="py-16 px-4">
         <div className="container max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold text-secondary mb-8">Nous avons à cœur de :</h2>
           <div className="space-y-4 text-gray-700">
@@ -45,10 +37,10 @@ const About = () => {
             </p>
           </div>
         </div>
-      </section>
+        </section>
 
-      {/* Values Section */}
-      <section className="py-16 px-4 bg-gray-50">
+        {/* Values Section */}
+        <section className="py-16 px-4 bg-gray-50">
         <div className="container max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold text-secondary mb-8">Nos valeurs</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -70,10 +62,10 @@ const About = () => {
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      {/* Team Section */}
-      <section className="py-16 px-4">
+        {/* Team Section */}
+        <section className="py-16 px-4">
         <div className="container max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold text-secondary mb-8">Notre équipe</h2>
           <div className="text-gray-700 mb-8">
@@ -101,10 +93,10 @@ const About = () => {
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      {/* Why Join Section */}
-      <section className="py-16 px-4 bg-gray-50">
+        {/* Why Join Section */}
+        <section className="py-16 px-4 bg-gray-50">
         <div className="container max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold text-secondary mb-8">Pourquoi nous rejoindre ?</h2>
           <p className="text-gray-700 mb-6">
@@ -133,10 +125,10 @@ const About = () => {
             </li>
           </ul>
         </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-primary text-white">
+        {/* CTA Section */}
+        <section className="py-16 px-4 bg-primary text-white">
         <div className="container max-w-4xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6">Rejoignez-nous dès aujourd'hui</h2>
           <p className="mb-8">
@@ -151,9 +143,9 @@ const About = () => {
             </Button>
           </Link>
         </div>
-      </section>
-    </div>
-    </>
+        </section>
+      </div>
+    </Layout>
   );
 };
 

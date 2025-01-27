@@ -1,25 +1,17 @@
-import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { BreadcrumbNav } from "@/components/Breadcrumb";
 import { articles } from "@/data/articles";
+import { Layout } from "@/components/Layout";
 
 const Resources = () => {
   return (
-    <>
-      <Helmet>
-        <html lang="fr" />
-        <title>Ressources | Le Coup de Main - Guides et conseils pour artisans du bâtiment</title>
-        <meta name="description" content="Accédez à nos ressources exclusives pour les artisans du bâtiment : guides pratiques, conseils d'experts et stratégies pour développer votre activité." />
-        <link rel="canonical" href="https://lecoup-demain.com/ressources" />
-        <meta property="og:title" content="Ressources | Le Coup de Main - Guides et conseils pour artisans du bâtiment" />
-        <meta property="og:description" content="Accédez à nos ressources exclusives pour les artisans du bâtiment : guides pratiques, conseils d'experts et stratégies pour développer votre activité." />
-        <meta property="og:url" content="https://lecoup-demain.com/ressources" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://lecoup-demain.com/lovable-uploads/logo-white1.png" />
-      </Helmet>
-
+    <Layout
+      title="Ressources | Le Coup de Main - Guides et conseils pour artisans du bâtiment"
+      description="Accédez à nos ressources exclusives pour les artisans du bâtiment : guides pratiques, conseils d'experts et stratégies pour développer votre activité."
+      canonicalUrl="https://lecoup-demain.com/ressources"
+    >
       <div className="container mx-auto px-4 py-8">
         <BreadcrumbNav />
         
@@ -52,7 +44,7 @@ const Resources = () => {
           ))}
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
