@@ -7,9 +7,15 @@ const About = () => {
   return (
     <>
       <Helmet>
+        <html lang="fr" />
         <title>À propos | Le Coup de Main - Communauté des artisans du bâtiment</title>
         <meta name="description" content="Découvrez Le Coup de Main, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Ensemble, construisons l'avenir du secteur." />
-        <link rel="canonical" href="https://lecoupdemain.fr/about" />
+        <link rel="canonical" href="https://lecoup-demain.com/about" />
+        <meta property="og:title" content="À propos | Le Coup de Main - Communauté des artisans du bâtiment" />
+        <meta property="og:description" content="Découvrez Le Coup de Main, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Ensemble, construisons l'avenir du secteur." />
+        <meta property="og:url" content="https://lecoup-demain.com/about" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://lecoup-demain.com/lovable-uploads/logo-white1.png" />
       </Helmet>
 
     <div className="bg-background font-sans">

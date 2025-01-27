@@ -24,13 +24,17 @@ const ArticlePage = () => {
   return (
     <>
       <Helmet>
+        <html lang="fr" />
         <title>{article.meta_title}</title>
         <meta name="description" content={article.meta_description} />
-        <link rel="canonical" href={`https://lecoupdemain.fr/ressources/${article.slug}`} />
+        <link rel="canonical" href={`https://lecoup-demain.com/ressources/${article.slug}`} />
         <meta property="og:title" content={article.meta_title} />
         <meta property="og:description" content={article.meta_description} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://lecoupdemain.fr/ressources/${article.slug}`} />
+        <meta property="og:url" content={`https://lecoup-demain.com/ressources/${article.slug}`} />
+        <meta property="og:image" content="https://lecoup-demain.com/lovable-uploads/logo-white1.png" />
+        <meta property="article:published_time" content={article.published_at} />
+        <meta property="article:author" content="Dimitri Chauchoy" />
       </Helmet>
 
       <div className="container mx-auto px-4 py-8">
