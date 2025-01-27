@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import { BreadcrumbNav } from "@/components/Breadcrumb";
 import { ArticleContent } from "@/components/ArticleContent";
@@ -13,11 +14,6 @@ const ArticlePage = () => {
     const foundArticle = articles.find(a => a.slug === slug);
     if (foundArticle) {
       setArticle(foundArticle);
-      document.title = foundArticle.meta_title;
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', foundArticle.meta_description);
-      }
     }
   }, [slug]);
 
@@ -26,15 +22,27 @@ const ArticlePage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <BreadcrumbNav />
-      <ArticleContent
-        title={article.title}
-        content={article.content}
-        publishedAt={article.published_at}
-      />
-      <Comments articleId={article.id} />
-    </div>
+    <>
+      <Helmet>
+        <title>{article.meta_title}</title>
+        <meta name="description" content={article.meta_description} />
+        <link rel="canonical" href={`https://lecoupdemain.fr/ressources/${article.slug}`} />
+        <meta property="og:title" content={article.meta_title} />
+        <meta property="og:description" content={article.meta_description} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://lecoupdemain.fr/ressources/${article.slug}`} />
+      </Helmet>
+
+      <div className="container mx-auto px-4 py-8">
+        <BreadcrumbNav />
+        <ArticleContent
+          title={article.title}
+          content={article.content}
+          publishedAt={article.published_at}
+        />
+        <Comments articleId={article.id} />
+      </div>
+    </>
   );
 };
 

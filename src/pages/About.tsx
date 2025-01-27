@@ -1,9 +1,17 @@
+import { Helmet } from "react-helmet";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const About = () => {
   return (
+    <>
+      <Helmet>
+        <title>À propos | Le Coup de Main - Communauté des artisans du bâtiment</title>
+        <meta name="description" content="Découvrez Le Coup de Main, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Ensemble, construisons l'avenir du secteur." />
+        <link rel="canonical" href="https://lecoupdemain.fr/about" />
+      </Helmet>
+
     <div className="bg-background font-sans">
       {/* Hero Section */}
       <section className="py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
@@ -139,6 +147,7 @@ const About = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
