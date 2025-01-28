@@ -6,8 +6,10 @@ import { MobileMenu } from "./header/MobileMenu";
 import { ResourcesMenu } from "./header/ResourcesMenu";
 
 export const Header = () => {
+  console.log("Header component mounted");
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  console.log("Current location:", location);
 
   const scrollToForm = () => {
     setIsOpen(false);
@@ -71,6 +73,7 @@ export const Header = () => {
             <Link 
               to="/news" 
               className="whitespace-nowrap text-sm font-medium bg-primary/10 text-primary rounded-full px-4 py-2 hover:bg-primary/20 transition-colors"
+              onClick={() => console.log("News link clicked")}
             >
               Le coup de main News
             </Link>
@@ -94,4 +97,4 @@ export const Header = () => {
       </div>
     </header>
   );
-}
+};

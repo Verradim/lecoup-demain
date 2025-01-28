@@ -7,18 +7,24 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const News = () => {
+  console.log("News component mounted");
   const [isIntroExpanded, setIsIntroExpanded] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
-  const { data: articles, isLoading } = useQuery({
+  const { data: articles, isLoading, error } = useQuery({
     queryKey: ["news-articles"],
     queryFn: async () => {
+      console.log("Fetching news articles...");
       const { data, error } = await supabase
         .from("news_articles")
         .select("*")
         .order("publication_date", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching articles:", error);
+        throw error;
+      }
+      console.log("Fetched articles:", data);
       return data;
     },
   });
@@ -28,10 +34,14 @@ const News = () => {
     ? [...new Set(articles.map(article => article.publication_month))]
     : [];
 
+  console.log("Unique months:", uniqueMonths);
+
   // Filter articles by selected month
   const filteredArticles = selectedMonth
     ? articles?.filter(article => article.publication_month === selectedMonth)
     : articles;
+
+  console.log("Filtered articles:", filteredArticles);
 
   return (
     <Layout
@@ -93,6 +103,11 @@ const News = () => {
       {/* Articles Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
+          {error && (
+            <div className="text-red-500 text-center mb-4">
+              Une erreur est survenue lors du chargement des articles.
+            </div>
+          )}
           {isLoading ? (
             <div className="flex justify-center items-center min-h-[200px]">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
