@@ -44,8 +44,7 @@
   </head>
   <body>
     <div id="root">
-      <!-- Contenu lisible par les moteurs de recherche (fallback pour React) -->
-      <noscript>
+      <div style="display: none" aria-hidden="true">
         <header>
           <h1>Le Coup de Main - La communauté privée des artisans indépendants et des entreprises du bâtiment</h1>
           <p>Bienvenue sur Le Coup de Main, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment.</p>
@@ -72,7 +71,7 @@
         <footer>
           <p>Contactez-nous pour en savoir plus sur Le Coup de Main et comment rejoindre notre communauté d'artisans.</p>
         </footer>
-      </noscript>
+      </div>
     </div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
