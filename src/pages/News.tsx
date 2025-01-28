@@ -43,7 +43,7 @@ const News = () => {
       <section className="py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
         <div className="container max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-            Actualités du bâtiment
+            Actualités du bâtiment: Ressources et conseils pour les artisans et petites entreprises.
           </h1>
           <div 
             className="prose prose-lg max-w-none mb-12"
