@@ -43,7 +43,7 @@ const News = () => {
       <section className="py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
         <div className="container max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-            Actualités du bâtiment: Ressources et conseils pour les artisans et petites entreprises.
+            Actualités du bâtiment
           </h1>
           <div 
             className="prose prose-lg max-w-none mb-12"
@@ -91,66 +91,62 @@ const News = () => {
       </section>
 
       {/* Articles Section */}
-        <section className="py-16 px-4">
-          <div className="container mx-auto">
-            {isLoading ? (
-              <div className="flex justify-center items-center min-h-[200px]">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredArticles?.map((article) => (
-                  <article 
-                    key={article.id}
-                    className="bg-white rounded-lg shadow-sm p-6 flex flex-col h-full"
-                    itemScope 
-                    itemType="https://schema.org/NewsArticle"
+      <section className="py-16 px-4">
+        <div className="container mx-auto">
+          {isLoading ? (
+            <div className="flex justify-center items-center min-h-[200px]">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredArticles?.map((article) => (
+                <article 
+                  key={article.id}
+                  className="bg-white rounded-lg shadow-sm p-6 flex flex-col h-full"
+                  itemScope 
+                  itemType="https://schema.org/NewsArticle"
+                >
+                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
+                    <time dateTime={article.publication_date}>
+                      {format(new Date(article.publication_date), 'dd MMMM yyyy', { locale: fr })}
+                    </time>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {article.categories.map((category) => (
+                      <span 
+                        key={category}
+                        className="bg-primary/5 px-3 py-1 rounded-full text-xs text-primary"
+                      >
+                        {category}
+                      </span>
+                    ))}
+                  </div>
+
+                  <h2 
+                    className="text-2xl font-semibold mb-3"
+                    itemProp="headline"
                   >
-                    <meta itemProp="datePublished" content={article.publication_date} />
-                    <meta itemProp="publisher" content="Le Coup de Main" />
-                    
-                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                      <time dateTime={article.publication_date}>
-                        {format(new Date(article.publication_date), 'dd MMMM yyyy', { locale: fr })}
-                      </time>
-                    </div>
+                    {article.title}
+                  </h2>
+                  
+                  <p 
+                    className="text-lg font-medium text-gray-700 mb-4"
+                    itemProp="description"
+                  >
+                    {article.hook}
+                  </p>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {article.categories.map((category) => (
-                        <span 
-                          key={category}
-                          className="bg-primary/5 px-3 py-1 rounded-full text-xs text-primary"
-                        >
-                          {category}
-                        </span>
-                      ))}
-                    </div>
+                  <p className="text-sm text-gray-700 mb-4 flex-grow">
+                    {article.summary}
+                  </p>
 
-                    <h2 
-                      className="text-2xl font-semibold mb-3"
-                      itemProp="headline"
-                    >
-                      {article.title}
-                    </h2>
-                    
-                    <p 
-                      className="text-lg font-medium text-gray-700 mb-4"
-                      itemProp="description"
-                    >
-                      {article.hook}
-                    </p>
-
-                    <div className="text-gray-700 mb-4 flex-grow">
-                      <p className="text-sm" itemProp="articleBody">
-                        {article.summary}
-                      </p>
-                    </div>
-
+                  <div className="mt-auto">
                     <a
                       href={article.article_url}
                       target="_blank"
                       rel="noopener follow"
-                      className="text-primary hover:underline font-medium mt-auto inline-block"
+                      className="text-primary hover:underline font-medium inline-block mb-2"
                     >
                       Lire l'article complet →
                     </a>
@@ -159,16 +155,18 @@ const News = () => {
                       href={article.source_website}
                       target="_blank"
                       rel="noopener follow"
-                      className="text-sm text-blue-500 hover:underline mt-4"
+                      className="text-sm text-blue-500 hover:underline block"
+                      itemProp="publisher"
                     >
                       Source: {article.source_website}
                     </a>
-                  </article>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
     </Layout>
   );
 };
