@@ -4,9 +4,11 @@ import { fr } from "date-fns/locale";
 import { Layout } from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const News = () => {
   const [isIntroExpanded, setIsIntroExpanded] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
   const { data: articles, isLoading } = useQuery({
     queryKey: ["news-articles"],
@@ -20,6 +22,16 @@ const News = () => {
       return data;
     },
   });
+
+  // Get unique months from articles
+  const uniqueMonths = articles
+    ? [...new Set(articles.map(article => article.publication_month))]
+    : [];
+
+  // Filter articles by selected month
+  const filteredArticles = selectedMonth
+    ? articles?.filter(article => article.publication_month === selectedMonth)
+    : articles;
 
   return (
     <Layout
@@ -50,6 +62,24 @@ const News = () => {
         </div>
       </section>
 
+      {/* Month Filter Section */}
+      <section className="py-8 px-4">
+        <div className="container mx-auto">
+          <div className="flex flex-wrap gap-2 justify-center mb-8">
+            {uniqueMonths.map((month) => (
+              <Button
+                key={month}
+                variant={selectedMonth === month ? "default" : "outline"}
+                onClick={() => setSelectedMonth(selectedMonth === month ? null : month)}
+                className="text-sm"
+              >
+                {month}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Articles Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
@@ -59,7 +89,7 @@ const News = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {articles?.map((article) => (
+              {filteredArticles?.map((article) => (
                 <article 
                   key={article.id}
                   className="bg-white rounded-lg shadow-sm p-6 flex flex-col h-full"
@@ -94,14 +124,14 @@ const News = () => {
                   </h2>
                   
                   <p 
-                    className="text-gray-600 mb-4"
+                    className="text-lg font-medium text-gray-700 mb-4"
                     itemProp="description"
                   >
                     {article.hook}
                   </p>
 
                   <div className="text-gray-700 mb-4 flex-grow">
-                    <p itemProp="articleBody">
+                    <p className="text-sm" itemProp="articleBody">
                       {article.summary}
                     </p>
                   </div>
@@ -113,6 +143,15 @@ const News = () => {
                     className="text-primary hover:underline font-medium mt-auto inline-block"
                   >
                     Lire l'article complet →
+                  </a>
+
+                  <a
+                    href={article.source_website}
+                    target="_blank"
+                    rel="noopener follow"
+                    className="text-sm text-blue-500 hover:underline mt-4"
+                  >
+                    Source: {article.source_website}
                   </a>
                 </article>
               ))}
