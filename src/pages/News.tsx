@@ -39,18 +39,21 @@ const News = () => {
       description="Retrouvez les dernières actualités du secteur de la construction et de la rénovation, sélectionnées pour les artisans indépendants et chefs d'entreprise du bâtiment."
       canonicalUrl="https://lecoup-demain.com/news"
     >
-      {/* Hero Section with Title */}
-      <section className="py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
-        <div className="container max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-            Retrouvez toutes les actualités du secteur de la construction, de la rénovation pour les artisans indépendants et chefs d'entreprise du bâtiment
-          </h1>
-          
-          <div className="relative">
-            <p className={`text-lg text-gray-700 leading-relaxed transition-all duration-300 ${
-              isIntroExpanded ? '' : 'line-clamp-3'
-            }`}>
-              Bienvenue sur votre espace dédié aux actualités du bâtiment, conçu spécialement pour les chefs d'entreprise de moins de 10 salariés et les artisans indépendants. Chaque semaine, nous sélectionnons pour vous les informations les plus pertinentes pour vous accompagner dans la gestion et le développement de votre activité : tendances du secteur, stratégies pour améliorer votre visibilité, conseils en recrutement, innovations technologiques ou pratiques, et opportunités à saisir. Simplifiez vos démarches et boostez votre entreprise avec nos ressources ciblées et concrètes !
+      <div className="container mx-auto px-4 py-12">
+        <h1 className="text-3xl font-bold mb-6">
+          Retrouvez toutes les actualités du secteur de la construction, de la rénovation pour les artisans indépendants et chefs d'entreprise du bâtiment
+        </h1>
+
+        <div 
+          className="prose prose-lg max-w-none mb-12"
+          itemScope 
+          itemType="https://schema.org/Article"
+        >
+          <div 
+            className={`relative overflow-hidden transition-all duration-300 ease-in-out`}
+          >
+            <p className="text-gray-700">
+              Bienvenue sur votre espace dédié aux actualités du bâtiment, conçu spécialement pour les chefs d'entreprise du bâtiment et les artisans indépendants. Chaque semaine, nous sélectionnons pour vous les informations les plus pertinentes pour vous accompagner dans la gestion et le développement de votre activité : tendances du secteur, stratégies pour améliorer votre visibilité, conseils en recrutement, innovations technologiques ou pratiques, et opportunités à saisir. Simplifiez vos démarches et boostez votre entreprise avec nos ressources ciblées et concrètes !
             </p>
             <button
               onClick={() => setIsIntroExpanded(!isIntroExpanded)}
