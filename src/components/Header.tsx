@@ -58,7 +58,7 @@ export const Header = () => {
             </Link>
             
             <a
-              href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
+              href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd"
               target="_blank"
               rel="noopener noreferrer"
               className="whitespace-nowrap text-sm font-medium text-gray-700 hover:text-primary px-3 py-2"
@@ -67,6 +67,13 @@ export const Header = () => {
             </a>
 
             <ResourcesMenu />
+
+            <Link 
+              to="/news" 
+              className="whitespace-nowrap text-sm font-medium bg-primary/10 text-primary rounded-full px-4 py-2 hover:bg-primary/20 transition-colors"
+            >
+              Le coup de main News
+            </Link>
           </div>
         </nav>
 
@@ -87,4 +94,4 @@ export const Header = () => {
       </div>
     </header>
   );
-};
+}

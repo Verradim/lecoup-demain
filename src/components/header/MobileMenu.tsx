@@ -16,7 +16,7 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
       <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
         <div className="space-y-6 px-5 py-6">
           <div className="grid gap-y-4">
-          <Link
+            <Link
               to="/"
               className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
               onClick={() => setIsOpen(false)}
@@ -33,7 +33,7 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
             </Link>
 
             <a
-              href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd?pvs=74"
+              href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd"
               target="_blank"
               rel="noopener noreferrer"
               className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
@@ -48,6 +48,14 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
               onClick={() => setIsOpen(false)}
             >
               <span className="ml-3 text-base font-medium text-gray-900">Ressources</span>
+            </Link>
+
+            <Link
+              to="/news"
+              className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="ml-3 text-base font-medium text-gray-900">Le coup de main News</span>
             </Link>
 
             <Button

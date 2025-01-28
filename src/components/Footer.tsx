@@ -12,30 +12,38 @@ export const Footer = () => {
             </p>
           </div>
           <div>
-  <h3 className="font-semibold text-lg mb-4">Liens rapides</h3>
-  <ul className="space-y-2">
-    <li>
-      <a 
-        href="https://calendly.com/lecoupdemain/appel-de-decouverte" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="text-gray-600 hover:text-primary"
-      >
-        Prendre rendez-vous pour s'inscrire
-      </a>
-    </li>
-    <li>
-      <a 
-        href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="text-gray-600 hover:text-primary"
-      >
-        Les règles de la communauté
-      </a>
-    </li>
-  </ul>
-</div>
+            <h3 className="font-semibold text-lg mb-4">Liens rapides</h3>
+            <ul className="space-y-2">
+              <li>
+                <a 
+                  href="https://calendly.com/lecoupdemain/appel-de-decouverte" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-600 hover:text-primary"
+                >
+                  Prendre rendez-vous pour s'inscrire
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-600 hover:text-primary"
+                >
+                  Les règles de la communauté
+                </a>
+              </li>
+              <li>
+                <Link 
+                  to="/news" 
+                  className="text-gray-600 hover:text-primary"
+                >
+                  Le coup de main News
+                </Link>
+              </li>
+            </ul>
+          </div>
           <div>
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <p className="text-gray-600">

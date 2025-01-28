@@ -3,6 +3,7 @@ import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Resources from "@/pages/Resources";
 import Article from "@/pages/Article";
+import News from "@/pages/News";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/ressources" element={<Resources />} />
         <Route path="/ressources/:slug" element={<Article />} />
+        <Route path="/news" element={<News />} />
       </Routes>
     </Router>
   );
