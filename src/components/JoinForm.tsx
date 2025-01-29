@@ -29,7 +29,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
@@ -41,7 +40,6 @@ const formSchema = z.object({
   email: z.string().email("Email invalide").min(1, "L'email est requis"),
   linkedin: z.string().optional(),
   companyStatus: z.string().min(1, "Le statut de l'entreprise est requis"),
-  employeeCount: z.string().min(1, "Le nombre de salariés est requis"),
   companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
   instagram: z.string().optional(),
   website: z.string().optional(),
@@ -49,10 +47,6 @@ const formSchema = z.object({
   companyDescription: z.string().min(1, "La description est requise"),
   discoverySource: z.string().min(1, "La source est requise"),
   joinReason: z.string().min(1, "La raison est requise"),
-  otherPlatform: z.object({
-    isMember: z.string().min(1, "Ce champ est requis"),
-    platformName: z.string().optional(),
-  }),
   termsAccepted: z.boolean().refine((val) => val === true, {
     message: "Vous devez accepter les règles de la communauté",
   }),
@@ -78,7 +72,6 @@ export const JoinForm = () => {
       email: "",
       linkedin: "",
       companyStatus: "",
-      employeeCount: "",
       companyName: "",
       instagram: "",
       website: "",
@@ -86,17 +79,12 @@ export const JoinForm = () => {
       companyDescription: "",
       discoverySource: "",
       joinReason: "",
-      otherPlatform: {
-        isMember: "",
-        platformName: "",
-      },
       termsAccepted: false,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Insertion dans Supabase
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([
@@ -107,7 +95,6 @@ export const JoinForm = () => {
             email: values.email,
             linkedin: values.linkedin,
             company_status: values.companyStatus,
-            employee_count: values.employeeCount,
             company_name: values.companyName,
             instagram: values.instagram,
             website: values.website,
@@ -115,9 +102,10 @@ export const JoinForm = () => {
             company_description: values.companyDescription,
             discovery_source: values.discoverySource,
             join_reason: values.joinReason,
-            other_platform_is_member: values.otherPlatform.isMember,
-            other_platform_name: values.otherPlatform.platformName,
             terms_accepted: values.termsAccepted,
+            employee_count: "N/A",
+            other_platform_is_member: "N/A",
+            other_platform_name: null,
           }
         ])
         .select();
@@ -132,7 +120,6 @@ export const JoinForm = () => {
         return;
       }
 
-      // Appel de la fonction Edge pour l'envoi des emails
       const { error: functionError } = await supabase.functions.invoke('send-form-notification', {
         body: { record: data[0] }
       });
@@ -292,33 +279,11 @@ export const JoinForm = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-white z-50">
-                          <SelectItem value="independent">Artisan Indépendant</SelectItem>
-                          <SelectItem value="small">Entreprise (moins de 5 salariés)</SelectItem>
-                          <SelectItem value="medium">Entreprise (5-10 salariés)</SelectItem>
-                          <SelectItem value="other">Autre</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="employeeCount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Combien de salariés avez-vous *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="bg-white">
-                            <SelectValue placeholder="Sélectionnez le nombre de salariés" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="bg-white z-50">
-                          <SelectItem value="0">0</SelectItem>
-                          <SelectItem value="1-3">Entre 1 et 3</SelectItem>
-                          <SelectItem value="3-9">Entre 3 et 9</SelectItem>
-                          <SelectItem value="10+">Plus de 10</SelectItem>
+                          <SelectItem value="independent">Artisan indépendant (Auto-entrepreneur, EI, EURL…)</SelectItem>
+                          <SelectItem value="small">TPE – Petite entreprise (1 à 4 salariés)</SelectItem>
+                          <SelectItem value="medium">PME – Entreprise de taille moyenne (5 à 10 salariés)</SelectItem>
+                          <SelectItem value="large">Entreprise générale du bâtiment (Plus de 10 salariés)</SelectItem>
+                          <SelectItem value="other">Autre (à préciser)</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -442,55 +407,6 @@ export const JoinForm = () => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="otherPlatform.isMember"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>Êtes-vous déjà membre d'une autre plateforme ? *</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col space-y-1"
-                        >
-                          <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="no" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Non
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="yes" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Oui
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {form.watch("otherPlatform.isMember") === "yes" && (
-                  <FormField
-                    control={form.control}
-                    name="otherPlatform.platformName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Précisez laquelle *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Yoojo, Travaux.com,..." className="bg-white" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
               </div>
 
               {/* Engagement */}
