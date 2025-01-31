@@ -34,15 +34,13 @@ export const ArtisanForm = () => {
     try {
       setIsSubmitting(true);
       
-      const submissionData = {
-        ...values,
-        current_step: 1,
-        completed: false,
-      };
-
       const { error } = await supabase
         .from("propositions")
-        .insert(submissionData);
+        .insert({
+          ...values,
+          current_step: 1,
+          completed: false,
+        });
 
       if (error) throw error;
 
