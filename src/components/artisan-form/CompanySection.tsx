@@ -22,65 +22,61 @@ export const CompanySection = () => {
   const showOtherField = form.watch("company_type") === "autre";
 
   return (
-    <div className="space-y-6 rounded-lg border border-border/50 p-6">
-      <h3 className="text-lg font-semibold text-secondary">Informations de l'entreprise</h3>
-      
-      <div className="space-y-4">
+    <div className="space-y-4">
+      <FormField
+        control={form.control}
+        name="company_name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Nom de l'entreprise</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="company_type"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Type d'entreprise</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionnez le type d'entreprise" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {companyTypes.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {showOtherField && (
         <FormField
           control={form.control}
-          name="company_name"
+          name="company_type_other"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nom de l'entreprise</FormLabel>
+              <FormLabel>Précisez le type d'entreprise</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Textarea {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="company_type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type d'entreprise</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez le type d'entreprise" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {companyTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {showOtherField && (
-          <FormField
-            control={form.control}
-            name="company_type_other"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Précisez le type d'entreprise</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 };

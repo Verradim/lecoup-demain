@@ -1,7 +1,7 @@
 export const ReassuranceTexts = () => {
   return (
-    <div className="space-y-4 text-secondary rounded-lg border border-border/50 p-6">
-      <p className="text-lg font-medium">
+    <div className="space-y-4 text-secondary">
+      <p className="text-lg">
         Pour vous trouver les perles rares, on a besoin de vous connaître un peu plus.
       </p>
       <p>
