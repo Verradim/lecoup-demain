@@ -40,7 +40,7 @@ export const ArtisanForm = () => {
           ...values,
           current_step: 1,
           completed: false,
-        });
+        } as any); // Using type assertion here as a temporary fix
 
       if (error) throw error;
 
