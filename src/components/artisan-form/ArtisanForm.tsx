@@ -37,11 +37,13 @@ const formSchema = z.object({
   activity_sectors: z.array(z.string()).min(1, "Sélectionnez au moins un secteur d'activité"),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 export const ArtisanForm = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       company_name: "",
@@ -54,7 +56,7 @@ export const ArtisanForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormValues) => {
     try {
       setIsSubmitting(true);
       
@@ -63,6 +65,7 @@ export const ArtisanForm = () => {
         .insert({
           ...values,
           current_step: 1,
+          completed: false,
         });
 
       if (error) throw error;
