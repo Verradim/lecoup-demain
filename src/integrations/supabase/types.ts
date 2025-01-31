@@ -144,6 +144,51 @@ export type Database = {
         }
         Relationships: []
       }
+      propositions: {
+        Row: {
+          activity_sectors: string[]
+          company_name: string
+          company_type: string
+          company_type_other: string | null
+          completed: boolean
+          contact_name: string
+          created_at: string
+          current_step: number
+          email: string
+          id: string
+          phone: string
+          siret: string
+        }
+        Insert: {
+          activity_sectors: string[]
+          company_name: string
+          company_type: string
+          company_type_other?: string | null
+          completed?: boolean
+          contact_name: string
+          created_at?: string
+          current_step?: number
+          email: string
+          id?: string
+          phone: string
+          siret: string
+        }
+        Update: {
+          activity_sectors?: string[]
+          company_name?: string
+          company_type?: string
+          company_type_other?: string | null
+          completed?: boolean
+          contact_name?: string
+          created_at?: string
+          current_step?: number
+          email?: string
+          id?: string
+          phone?: string
+          siret?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
