@@ -60,10 +60,10 @@ export const ArtisanForm = () => {
       
       const { error } = await supabase
         .from("propositions")
-        .insert([{
+        .insert({
           ...values,
           current_step: 1,
-        }]);
+        });
 
       if (error) throw error;
 
