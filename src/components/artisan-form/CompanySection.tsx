@@ -23,7 +23,7 @@ export const CompanySection = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold text-primary">Informations de l'entreprise</h3>
+      <h2 className="text-2xl font-semibold text-primary">Informations de l'entreprise</h2>
       <FormField
         control={form.control}
         name="company_name"
