@@ -16,13 +16,15 @@ const FindArtisans = () => {
             </h1>
             <ArtisanForm />
           </div>
-          <div className="hidden lg:block">
-            <div className="aspect-square rounded-lg overflow-hidden">
-              <img
-                src="/lovable-uploads/logo-white1.png"
-                alt="Artisans au travail"
-                className="w-full h-full object-cover"
-              />
+          <div className="hidden lg:block relative">
+            <div className="sticky top-8">
+              <div className="aspect-[3/4] rounded-lg overflow-hidden">
+                <img
+                  src="/lovable-uploads/a2baa7c3-59f0-476b-92b3-62a964de62d5.png"
+                  alt="Artisans travaillant sur un échafaudage"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
