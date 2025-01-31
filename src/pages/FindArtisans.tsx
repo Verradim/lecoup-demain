@@ -1,5 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { ArtisanForm } from "@/components/artisan-form/ArtisanForm";
+import { ReassuranceTexts } from "@/components/artisan-form/ReassuranceTexts";
 
 const FindArtisans = () => {
   return (
@@ -18,12 +19,13 @@ const FindArtisans = () => {
           </div>
           <div className="hidden lg:block relative">
             <div className="sticky top-8">
-              <div className="aspect-[3/4] rounded-lg overflow-hidden">
+              <div className="aspect-[3/4] rounded-lg overflow-hidden relative">
                 <img
                   src="/lovable-uploads/a2baa7c3-59f0-476b-92b3-62a964de62d5.png"
                   alt="Artisans travaillant sur un échafaudage"
                   className="w-full h-full object-cover"
                 />
+                <ReassuranceTexts />
               </div>
             </div>
           </div>

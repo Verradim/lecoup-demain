@@ -6,7 +6,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { ReassuranceTexts } from "./ReassuranceTexts";
 import { CompanySection } from "./CompanySection";
 import { ContactSection } from "./ContactSection";
 import { ActivitySectorsSection } from "./ActivitySectorsSection";
@@ -56,7 +55,6 @@ export const ArtisanForm = () => {
 
   return (
     <div className="space-y-8">
-      <ReassuranceTexts />
       <ArtisanFormProvider form={form} isSubmitting={isSubmitting}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
