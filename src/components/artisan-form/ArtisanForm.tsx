@@ -40,7 +40,7 @@ export const ArtisanForm = () => {
           ...values,
           current_step: 1,
           completed: false,
-        } as any); // Using type assertion here as a temporary fix
+        } as any);
 
       if (error) throw error;
 
@@ -59,13 +59,13 @@ export const ArtisanForm = () => {
       <ReassuranceTexts />
       <ArtisanFormProvider form={form} isSubmitting={isSubmitting}>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
             <CompanySection />
             <ContactSection />
             <ActivitySectorsSection />
             <Button
               type="submit"
-              className="w-full"
+              className="w-full text-white"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Enregistrement..." : "Continuer"}

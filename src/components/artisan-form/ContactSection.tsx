@@ -12,7 +12,8 @@ export const ContactSection = () => {
   const { form } = useArtisanForm();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      <h3 className="text-2xl font-semibold text-primary">Informations de contact</h3>
       <FormField
         control={form.control}
         name="contact_name"
@@ -20,7 +21,7 @@ export const ContactSection = () => {
           <FormItem>
             <FormLabel>Nom et prénom du contact</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input className="bg-white" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -34,7 +35,7 @@ export const ContactSection = () => {
           <FormItem>
             <FormLabel>Email</FormLabel>
             <FormControl>
-              <Input type="email" {...field} />
+              <Input type="email" className="bg-white" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -48,7 +49,7 @@ export const ContactSection = () => {
           <FormItem>
             <FormLabel>Téléphone</FormLabel>
             <FormControl>
-              <Input type="tel" {...field} />
+              <Input type="tel" className="bg-white" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -63,6 +64,7 @@ export const ContactSection = () => {
             <FormLabel>SIRET</FormLabel>
             <FormControl>
               <Input
+                className="bg-white"
                 {...field}
                 maxLength={14}
                 onChange={(e) => {

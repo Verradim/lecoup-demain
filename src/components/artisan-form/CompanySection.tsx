@@ -22,7 +22,8 @@ export const CompanySection = () => {
   const showOtherField = form.watch("company_type") === "autre";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      <h3 className="text-2xl font-semibold text-primary">Informations de l'entreprise</h3>
       <FormField
         control={form.control}
         name="company_name"
@@ -30,7 +31,7 @@ export const CompanySection = () => {
           <FormItem>
             <FormLabel>Nom de l'entreprise</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input className="bg-white" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -45,11 +46,11 @@ export const CompanySection = () => {
             <FormLabel>Type d'entreprise</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white">
                   <SelectValue placeholder="Sélectionnez le type d'entreprise" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="bg-white">
                 {companyTypes.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}
@@ -70,7 +71,7 @@ export const CompanySection = () => {
             <FormItem>
               <FormLabel>Précisez le type d'entreprise</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea className="bg-white" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
