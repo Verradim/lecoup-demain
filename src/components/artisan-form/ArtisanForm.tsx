@@ -25,6 +25,7 @@ export const ArtisanForm = () => {
       phone: "",
       siret: "",
       company_type: "",
+      company_type_other: "",
       activity_sectors: [],
     },
   });
@@ -33,13 +34,15 @@ export const ArtisanForm = () => {
     try {
       setIsSubmitting(true);
       
+      const submissionData = {
+        ...values,
+        current_step: 1,
+        completed: false,
+      };
+
       const { error } = await supabase
         .from("propositions")
-        .insert({
-          ...values,
-          current_step: 1,
-          completed: false,
-        });
+        .insert(submissionData);
 
       if (error) throw error;
 
