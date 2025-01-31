@@ -55,17 +55,17 @@ export const ArtisanForm = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <ReassuranceTexts />
       <ArtisanFormProvider form={form} isSubmitting={isSubmitting}>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
             <CompanySection />
             <ContactSection />
             <ActivitySectorsSection />
             <Button
               type="submit"
-              className="w-full"
+              className="w-full text-white"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Enregistrement..." : "Continuer"}
