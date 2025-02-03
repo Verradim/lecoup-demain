@@ -17,7 +17,6 @@ const formSchema = z.object({
   fullName: z.string().min(1, "Le nom et prénom sont requis"),
   phone: z.string().min(1, "Le numéro de téléphone est requis"),
   email: z.string().email("Email invalide").min(1, "L'email est requis"),
-  linkedin: z.string().optional(),
 });
 
 export const PersonalInfoSection = ({ form }: PersonalInfoSectionProps) => {
@@ -58,19 +57,6 @@ export const PersonalInfoSection = ({ form }: PersonalInfoSectionProps) => {
             <FormLabel>Adresse e-mail *</FormLabel>
             <FormControl>
               <Input placeholder="didierdeschamps@gmail.com" className="bg-white" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="linkedin"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Lien LinkedIn</FormLabel>
-            <FormControl>
-              <Input placeholder="Copiez-collez le lien suivant" className="bg-white" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -9,7 +9,6 @@ import { useState } from "react";
 import { SponsorshipSection } from "./join-form/SponsorshipSection";
 import { PersonalInfoSection } from "./join-form/PersonalInfoSection";
 import { ProfessionalInfoSection } from "./join-form/ProfessionalInfoSection";
-import { MotivationSection } from "./join-form/MotivationSection";
 import { EngagementSection } from "./join-form/EngagementSection";
 import { SuccessDialog } from "./join-form/SuccessDialog";
 
@@ -18,15 +17,9 @@ const formSchema = z.object({
   fullName: z.string().min(1, "Le nom et prénom sont requis"),
   phone: z.string().min(1, "Le numéro de téléphone est requis"),
   email: z.string().email("Email invalide").min(1, "L'email est requis"),
-  linkedin: z.string().optional(),
-  companyStatus: z.string().min(1, "Le statut de l'entreprise est requis"),
   companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
-  instagram: z.string().optional(),
   website: z.string().optional(),
   region: z.string().min(1, "La région est requise"),
-  companyDescription: z.string().min(1, "La description est requise"),
-  discoverySource: z.string().min(1, "La source est requise"),
-  joinReason: z.string().min(1, "La raison est requise"),
   termsAccepted: z.boolean().refine((val) => val === true, {
     message: "Vous devez accepter les règles de la communauté",
   }),
@@ -42,15 +35,9 @@ export const JoinForm = () => {
       fullName: "",
       phone: "",
       email: "",
-      linkedin: "",
-      companyStatus: "",
       companyName: "",
-      instagram: "",
       website: "",
       region: "",
-      companyDescription: "",
-      discoverySource: "",
-      joinReason: "",
       termsAccepted: false,
     },
   });
@@ -65,15 +52,15 @@ export const JoinForm = () => {
             full_name: values.fullName,
             phone: values.phone,
             email: values.email,
-            linkedin: values.linkedin,
-            company_status: values.companyStatus,
+            linkedin: null,
+            company_status: "N/A",
             company_name: values.companyName,
-            instagram: values.instagram,
+            instagram: null,
             website: values.website,
             region: values.region,
-            company_description: values.companyDescription,
-            discovery_source: values.discoverySource,
-            join_reason: values.joinReason,
+            company_description: "N/A",
+            discovery_source: "N/A",
+            join_reason: "N/A",
             terms_accepted: values.termsAccepted,
             employee_count: "N/A",
             other_platform_is_member: "N/A",
@@ -137,7 +124,6 @@ export const JoinForm = () => {
               <SponsorshipSection form={form} />
               <PersonalInfoSection form={form} />
               <ProfessionalInfoSection form={form} />
-              <MotivationSection form={form} />
               <EngagementSection form={form} />
 
               <Button type="submit" className="w-full text-white">

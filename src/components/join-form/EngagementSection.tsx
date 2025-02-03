@@ -22,7 +22,6 @@ const formSchema = z.object({
 export const EngagementSection = ({ form }: EngagementSectionProps) => {
   return (
     <div className="space-y-6">
-      <h3 className="text-2xl font-semibold text-primary">Votre engagement</h3>
       <FormField
         control={form.control}
         name="termsAccepted"
