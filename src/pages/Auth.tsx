@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, Lock, Github } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -44,20 +44,6 @@ const Auth = () => {
       if (error) throw error;
       
       toast.success("Vérifiez votre email pour confirmer votre inscription!");
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      setLoading(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-      });
-      if (error) throw error;
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -132,29 +118,6 @@ const Auth = () => {
                 </Button>
               </div>
             </form>
-
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Ou continuer avec</span>
-              </div>
-            </div>
-
-            <Button
-              onClick={handleGoogleSignIn}
-              variant="outline"
-              className="w-full"
-              disabled={loading}
-            >
-              <img
-                src="https://authjs.dev/img/providers/google.svg"
-                alt="Google"
-                className="w-5 h-5 mr-2"
-              />
-              Google
-            </Button>
           </div>
         </div>
       </div>
