@@ -10,12 +10,12 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/my-projects");
+      navigate("/projets");
     }
   }, [user, navigate]);
 
   const handleAuthSuccess = () => {
-    navigate("/my-projects");
+    navigate("/projets");
   };
 
   // If user is already logged in, don't render the auth form
