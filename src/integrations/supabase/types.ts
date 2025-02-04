@@ -9,33 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      article_comments: {
-        Row: {
-          article_id: string
-          content: string
-          created_at: string
-          email: string
-          id: string
-          name: string
-        }
-        Insert: {
-          article_id: string
-          content: string
-          created_at?: string
-          email: string
-          id?: string
-          name: string
-        }
-        Update: {
-          article_id?: string
-          content?: string
-          created_at?: string
-          email?: string
-          id?: string
-          name?: string
-        }
-        Relationships: []
-      }
       form_submissions: {
         Row: {
           company_description: string
@@ -99,48 +72,6 @@ export type Database = {
           sponsor?: string
           terms_accepted?: boolean
           website?: string | null
-        }
-        Relationships: []
-      }
-      news_articles: {
-        Row: {
-          article_url: string
-          categories: string[]
-          created_at: string
-          hook: string
-          id: string
-          publication_date: string
-          publication_month: string
-          published: boolean
-          source_website: string
-          summary: string
-          title: string
-        }
-        Insert: {
-          article_url: string
-          categories: string[]
-          created_at?: string
-          hook: string
-          id?: string
-          publication_date: string
-          publication_month: string
-          published?: boolean
-          source_website: string
-          summary: string
-          title: string
-        }
-        Update: {
-          article_url?: string
-          categories?: string[]
-          created_at?: string
-          hook?: string
-          id?: string
-          publication_date?: string
-          publication_month?: string
-          published?: boolean
-          source_website?: string
-          summary?: string
-          title?: string
         }
         Relationships: []
       }
