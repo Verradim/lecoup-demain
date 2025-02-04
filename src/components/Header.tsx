@@ -3,13 +3,10 @@ import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { MobileMenu } from "./header/MobileMenu";
-import { ResourcesMenu } from "./header/ResourcesMenu";
 
 export const Header = () => {
-  console.log("Header component mounted");
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  console.log("Current location:", location);
 
   const scrollToForm = () => {
     setIsOpen(false);
@@ -53,29 +50,10 @@ export const Header = () => {
         <nav className="hidden flex-1 items-center md:flex">
           <div className="flex space-x-8">
             <Link 
-              to="/about" 
-              className="whitespace-nowrap text-sm font-medium text-gray-700 hover:text-primary px-3 py-2"
-            >
-              Qui sommes-nous ?
-            </Link>
-            
-            <a
-              href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whitespace-nowrap text-sm font-medium text-gray-700 hover:text-primary px-3 py-2"
-            >
-              Règles de la communauté
-            </a>
-
-            <ResourcesMenu />
-
-            <Link 
-              to="/news" 
+              to="/trouver-des-artisans" 
               className="whitespace-nowrap text-sm font-medium bg-primary/10 text-primary rounded-full px-4 py-2 hover:bg-primary/20 transition-colors"
-              onClick={() => console.log("News link clicked")}
             >
-              Le coup de main News
+              Trouver des artisans
             </Link>
           </div>
         </nav>

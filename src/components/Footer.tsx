@@ -34,14 +34,6 @@ export const Footer = () => {
                   Les règles de la communauté
                 </a>
               </li>
-              <li>
-                <Link 
-                  to="/news" 
-                  className="text-gray-600 hover:text-primary"
-                >
-                  Le coup de main News
-                </Link>
-              </li>
             </ul>
           </div>
           <div>

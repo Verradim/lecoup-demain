@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
-import { articles } from "@/data/articles";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -25,37 +24,11 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
             </Link>
 
             <Link
-              to="/about"
+              to="/trouver-des-artisans"
               className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
               onClick={() => setIsOpen(false)}
             >
-              <span className="ml-3 text-base font-medium text-gray-900">Qui sommes-nous ?</span>
-            </Link>
-
-            <a
-              href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="ml-3 text-base font-medium text-gray-900">Règles de la communauté</span>
-            </a>
-            
-            <Link
-              to="/ressources"
-              className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="ml-3 text-base font-medium text-gray-900">Ressources</span>
-            </Link>
-
-            <Link
-              to="/news"
-              className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="ml-3 text-base font-medium text-gray-900">Le coup de main News</span>
+              <span className="ml-3 text-base font-medium text-gray-900">Trouver des artisans</span>
             </Link>
 
             <Button
