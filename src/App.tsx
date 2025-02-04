@@ -3,6 +3,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "@/pages/Index";
 import FindArtisans from "@/pages/FindArtisans";
 import Auth from "@/pages/Auth";
+import MyProjects from "@/pages/MyProjects";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/trouver-des-artisans" element={<FindArtisans />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/my-projects" element={<MyProjects />} />
         </Routes>
       </Router>
     </AuthProvider>
