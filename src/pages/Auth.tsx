@@ -26,7 +26,8 @@ const Auth = () => {
       
       navigate("/");
     } catch (error: any) {
-      toast.error(error.message);
+      const errorMessage = error.message || "Une erreur est survenue lors de la connexion";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -41,11 +42,18 @@ const Auth = () => {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Check for specific signup disabled error
+        if (error.message.includes("Signups not allowed")) {
+          throw new Error("Les inscriptions sont actuellement désactivées. Veuillez contacter l'administrateur.");
+        }
+        throw error;
+      }
       
       toast.success("Vérifiez votre email pour confirmer votre inscription!");
     } catch (error: any) {
-      toast.error(error.message);
+      const errorMessage = error.message || "Une erreur est survenue lors de l'inscription";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
