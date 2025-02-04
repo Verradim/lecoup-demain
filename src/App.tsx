@@ -13,7 +13,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/trouver-des-artisans" element={<FindArtisans />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/my-projects" element={<MyProjects />} />
+          <Route path="/projet" element={<MyProjects />} />
         </Routes>
       </Router>
     </AuthProvider>

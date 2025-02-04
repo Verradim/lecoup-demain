@@ -54,13 +54,13 @@ const MyProjects = () => {
 
   return (
     <Layout
-      title="My Projects - Le Coup de Main"
-      description="Manage your projects on Le Coup de Main"
-      canonicalUrl="https://lecoup-demain.com/my-projects"
+      title="Mes projets - Le Coup de Main"
+      description="Gérer mes projets - Le Coup de Main"
+      canonicalUrl="https://lecoup-demain.com/projets"
     >
       <div className="container py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">My Projects</h1>
+          <h1 className="text-3xl font-bold">Mes projets</h1>
           <Button onClick={handleCreateProject} className="bg-primary hover:bg-primary/90">
             <Plus className="w-4 h-4 mr-2" />
             Create Project
@@ -68,10 +68,10 @@ const MyProjects = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">Loading projects...</div>
+          <div className="text-center py-8">Chargement des projets...</div>
         ) : projects.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500">You haven't created any projects yet.</p>
+            <p className="text-gray-500">Vous n'avez pas encore créer de projets... Envie d'essayer ?</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -85,7 +85,7 @@ const MyProjects = () => {
                   <p className="text-gray-600 mb-4">{project.description}</p>
                 )}
                 <p className="text-sm text-gray-500">
-                  Created on {new Date(project.created_at).toLocaleDateString()}
+                  Créé le {new Date(project.created_at).toLocaleDateString()}
                 </p>
               </div>
             ))}
