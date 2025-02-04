@@ -26,7 +26,15 @@ const Auth = () => {
       
       navigate("/");
     } catch (error: any) {
-      const errorMessage = error.message || "Une erreur est survenue lors de la connexion";
+      let errorMessage = "Une erreur est survenue lors de la connexion";
+      
+      // Handle specific error cases
+      if (error.message.includes("Invalid login credentials")) {
+        errorMessage = "Email ou mot de passe incorrect";
+      } else if (error.message.includes("Email not confirmed")) {
+        errorMessage = "Veuillez confirmer votre email avant de vous connecter";
+      }
+      
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -37,22 +45,34 @@ const Auth = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signUp({
+      
+      // First attempt to sign up the user
+      const { error: signUpError, data } = await supabase.auth.signUp({
         email,
         password,
       });
 
-      if (error) {
+      if (signUpError) {
         // Check for specific signup disabled error
-        if (error.message.includes("Signups not allowed")) {
+        if (signUpError.message.includes("Signups not allowed")) {
           throw new Error("Les inscriptions sont actuellement désactivées. Veuillez contacter l'administrateur.");
         }
-        throw error;
+        throw signUpError;
+      }
+
+      // If signup was successful
+      if (data?.user) {
+        toast.success("Inscription réussie! Vérifiez votre email pour confirmer votre compte.");
+      }
+
+    } catch (error: any) {
+      let errorMessage = error.message || "Une erreur est survenue lors de l'inscription";
+      
+      // Handle specific error cases
+      if (error.message.includes("User already registered")) {
+        errorMessage = "Un compte existe déjà avec cet email";
       }
       
-      toast.success("Vérifiez votre email pour confirmer votre inscription!");
-    } catch (error: any) {
-      const errorMessage = error.message || "Une erreur est survenue lors de l'inscription";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
