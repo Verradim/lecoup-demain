@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { MobileMenu } from "./header/MobileMenu";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const scrollToForm = () => {
     setIsOpen(false);
@@ -23,6 +27,16 @@ export const Header = () => {
         top: offsetPosition,
         behavior: "smooth"
       });
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      toast.success("Déconnexion réussie");
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -58,13 +72,36 @@ export const Header = () => {
           </div>
         </nav>
 
-        <div className="hidden md:flex md:items-center md:justify-end md:flex-1">
-          <Button
-            onClick={scrollToForm}
-            className="bg-primary hover:bg-primary/90 text-white"
-          >
-            Rejoignez-nous
-          </Button>
+        <div className="hidden md:flex md:items-center md:justify-end md:flex-1 space-x-4">
+          {user ? (
+            <>
+              <span className="text-sm text-gray-600">{user.email}</span>
+              <Button
+                onClick={handleSignOut}
+                variant="ghost"
+                size="sm"
+                className="text-gray-600"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Déconnexion
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/auth">
+                <Button variant="ghost" size="sm" className="text-gray-600">
+                  <User className="h-4 w-4 mr-2" />
+                  Connexion
+                </Button>
+              </Link>
+              <Button
+                onClick={scrollToForm}
+                className="bg-primary hover:bg-primary/90 text-white"
+              >
+                Rejoignez-nous
+              </Button>
+            </>
+          )}
         </div>
 
         <MobileMenu 
