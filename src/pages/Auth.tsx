@@ -24,7 +24,7 @@ const Auth = () => {
 
       if (error) throw error;
       
-      navigate("/");
+      navigate("/my-projects");
     } catch (error: any) {
       let errorMessage = "Une erreur est survenue lors de la connexion";
       
