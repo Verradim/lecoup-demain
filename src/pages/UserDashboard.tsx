@@ -80,12 +80,6 @@ const UserDashboard = () => {
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">Mon espace</h1>
-        <Link to="/mon-espace/projets/nouveau">
-          <Button className="bg-primary hover:bg-primary/90 text-white">
-            <Plus className="w-4 h-4 mr-2" />
-            Créer un nouveau chantier
-          </Button>
-        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
