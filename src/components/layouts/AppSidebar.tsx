@@ -8,8 +8,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -38,7 +38,7 @@ export function AppSidebar() {
   return (
     <div className="sticky top-16 h-[calc(100vh-4rem)]"> {/* 4rem = header height (64px) */}
       <Sidebar className="h-full border-r">
-        <SidebarContent>
+        <SidebarContent className="pt-4"> {/* Added padding top */}
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
             <SidebarGroupContent>
