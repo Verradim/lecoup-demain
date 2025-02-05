@@ -77,24 +77,53 @@ export type Database = {
       }
       profiles: {
         Row: {
+          company_address: string | null
+          company_name: string | null
           created_at: string
           email: string
           id: string
+          is_default: boolean | null
+          legal_representative_first_name: string | null
+          legal_representative_last_name: string | null
+          parent_profile_id: string | null
+          siret: string | null
           updated_at: string
         }
         Insert: {
+          company_address?: string | null
+          company_name?: string | null
           created_at?: string
           email: string
           id: string
+          is_default?: boolean | null
+          legal_representative_first_name?: string | null
+          legal_representative_last_name?: string | null
+          parent_profile_id?: string | null
+          siret?: string | null
           updated_at?: string
         }
         Update: {
+          company_address?: string | null
+          company_name?: string | null
           created_at?: string
           email?: string
           id?: string
+          is_default?: boolean | null
+          legal_representative_first_name?: string | null
+          legal_representative_last_name?: string | null
+          parent_profile_id?: string | null
+          siret?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_parent_profile_id_fkey"
+            columns: ["parent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       projects: {
         Row: {

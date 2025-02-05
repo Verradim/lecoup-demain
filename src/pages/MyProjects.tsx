@@ -1,9 +1,9 @@
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Plus, LogOut } from "lucide-react";
+import { Plus, LogOut, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -74,6 +74,12 @@ const MyProjects = () => {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">Mes projets</h1>
           <div className="flex items-center space-x-4">
+            <Link to="/projets/profil">
+              <Button variant="outline" size="sm" className="text-gray-700">
+                <User className="w-4 h-4 mr-2" />
+                Mes profils
+              </Button>
+            </Link>
             <Button onClick={handleCreateProject} className="bg-primary hover:bg-primary/90 text-white">
               <Plus className="w-4 h-4 mr-2" />
               Create Project
