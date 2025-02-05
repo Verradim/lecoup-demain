@@ -28,7 +28,17 @@ const ProjectList = () => {
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        setProjects(data || []);
+
+        // Transform the raw data to match our Project type
+        const typedProjects: Project[] = (data || []).map(project => ({
+          ...project,
+          work_titles: project.work_titles ? project.work_titles.map((wt: any) => ({
+            title: wt.title,
+            descriptions: wt.descriptions
+          })) : null
+        }));
+
+        setProjects(typedProjects);
       } catch (error: any) {
         console.error("Error fetching projects:", error);
         toast.error("Erreur lors du chargement des projets");
