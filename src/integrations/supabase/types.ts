@@ -134,6 +134,8 @@ export type Database = {
           description: string | null
           id: string
           name: string
+          quote_file_name: string | null
+          quote_file_path: string | null
           user_id: string
         }
         Insert: {
@@ -141,6 +143,8 @@ export type Database = {
           description?: string | null
           id?: string
           name: string
+          quote_file_name?: string | null
+          quote_file_path?: string | null
           user_id: string
         }
         Update: {
@@ -148,6 +152,8 @@ export type Database = {
           description?: string | null
           id?: string
           name?: string
+          quote_file_name?: string | null
+          quote_file_path?: string | null
           user_id?: string
         }
         Relationships: []

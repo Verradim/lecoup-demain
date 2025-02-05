@@ -14,6 +14,7 @@ interface Project {
   name: string;
   description: string | null;
   user_id: string;
+  quote_file_name: string | null;
 }
 
 const MyProjects = () => {
@@ -47,10 +48,6 @@ const MyProjects = () => {
     fetchProjects();
   }, [user, navigate]);
 
-  const handleCreateProject = () => {
-    toast.info("Create project functionality coming soon!");
-  };
-
   const handleSignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -72,7 +69,7 @@ const MyProjects = () => {
     >
       <div className="container py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">Mes projets</h1>
+          <h1 className="text-3xl font-bold">Mes chantiers</h1>
           <div className="flex items-center space-x-4">
             <Link to="/projets/profil">
               <Button variant="outline" size="sm" className="text-gray-700">
@@ -80,10 +77,12 @@ const MyProjects = () => {
                 Mes profils
               </Button>
             </Link>
-            <Button onClick={handleCreateProject} className="bg-primary hover:bg-primary/90 text-white">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Project
-            </Button>
+            <Link to="/projets/nouveau">
+              <Button className="bg-primary hover:bg-primary/90 text-white">
+                <Plus className="w-4 h-4 mr-2" />
+                Créer un nouveau chantier
+              </Button>
+            </Link>
             <Button 
               onClick={handleSignOut} 
               variant="ghost" 
@@ -97,10 +96,10 @@ const MyProjects = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">Chargement des projets...</div>
+          <div className="text-center py-8">Chargement des chantiers...</div>
         ) : projects.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500">Vous n'avez pas encore créer de projets... Envie d'essayer ?</p>
+            <p className="text-gray-500">Vous n'avez pas encore créé de chantier... Envie d'essayer ?</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -112,6 +111,11 @@ const MyProjects = () => {
                 <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
                 {project.description && (
                   <p className="text-gray-600 mb-4">{project.description}</p>
+                )}
+                {project.quote_file_name && (
+                  <p className="text-sm text-gray-500 mb-2">
+                    Devis : {project.quote_file_name}
+                  </p>
                 )}
                 <p className="text-sm text-gray-500">
                   Créé le {new Date(project.created_at).toLocaleDateString()}
