@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Index from "@/pages/Index";
@@ -12,6 +12,7 @@ import ProjectEdit from "@/pages/ProjectEdit";
 import ProfileManagement from "@/pages/ProfileManagement";
 import ProfileForm from "@/pages/ProfileForm";
 import ProfileEdit from "@/pages/ProfileEdit";
+import { AppLayout } from "@/components/layouts/AppLayout";
 
 function App() {
   return (
@@ -22,13 +23,22 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/trouver-des-artisans" element={<FindArtisans />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/mon-espace" element={<UserDashboard />} />
-            <Route path="/mon-espace/projets/nouveau" element={<ProjectForm />} />
-            <Route path="/mon-espace/projets/:id" element={<ProjectDetails />} />
-            <Route path="/mon-espace/projets/:id/modifier" element={<ProjectEdit />} />
-            <Route path="/mon-espace/profil" element={<ProfileManagement />} />
-            <Route path="/mon-espace/profil/nouveau" element={<ProfileForm />} />
-            <Route path="/mon-espace/profil/modifier" element={<ProfileEdit />} />
+            
+            {/* Protected routes under mon-espace */}
+            <Route path="/mon-espace" element={<AppLayout />}>
+              <Route index element={<UserDashboard />} />
+              <Route path="projets">
+                <Route index element={<Navigate to="/mon-espace" replace />} />
+                <Route path="nouveau" element={<ProjectForm />} />
+                <Route path=":id" element={<ProjectDetails />} />
+                <Route path=":id/modifier" element={<ProjectEdit />} />
+              </Route>
+              <Route path="profil">
+                <Route index element={<ProfileManagement />} />
+                <Route path="nouveau" element={<ProfileForm />} />
+                <Route path="modifier" element={<ProfileEdit />} />
+              </Route>
+            </Route>
           </Routes>
         </Router>
       </SidebarProvider>
@@ -37,4 +47,3 @@ function App() {
 }
 
 export default App;
-
