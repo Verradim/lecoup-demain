@@ -25,6 +25,7 @@ export const AuthForm = ({ onSuccess }: AuthFormProps) => {
 
       if (error) throw error;
       
+      toast.success("Connexion réussie!");
       onSuccess();
     } catch (error: any) {
       let errorMessage = "Une erreur est survenue lors de la connexion";
@@ -36,6 +37,7 @@ export const AuthForm = ({ onSuccess }: AuthFormProps) => {
       }
       
       toast.error(errorMessage);
+      console.error("Login error:", error.message);
     } finally {
       setLoading(false);
     }
@@ -49,6 +51,9 @@ export const AuthForm = ({ onSuccess }: AuthFormProps) => {
       const { error: signUpError, data } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: window.location.origin + "/auth"
+        }
       });
 
       if (signUpError) {
@@ -70,6 +75,7 @@ export const AuthForm = ({ onSuccess }: AuthFormProps) => {
       }
       
       toast.error(errorMessage);
+      console.error("Signup error:", error.message);
     } finally {
       setLoading(false);
     }
@@ -119,7 +125,7 @@ export const AuthForm = ({ onSuccess }: AuthFormProps) => {
           className="flex-1"
           disabled={loading}
         >
-          Se connecter
+          {loading ? "Chargement..." : "Se connecter"}
         </Button>
         <Button
           type="button"
@@ -128,7 +134,7 @@ export const AuthForm = ({ onSuccess }: AuthFormProps) => {
           className="flex-1"
           disabled={loading}
         >
-          S'inscrire
+          {loading ? "Chargement..." : "S'inscrire"}
         </Button>
       </div>
     </form>
