@@ -38,7 +38,8 @@ const ProjectDetails = () => {
           work_titles: data.work_titles ? data.work_titles.map((wt: any) => ({
             title: wt.title,
             descriptions: wt.descriptions
-          })) : null
+          })) : null,
+          description: data.description
         };
         
         setProject(typedProject);
@@ -91,6 +92,9 @@ const ProjectDetails = () => {
           <div className="space-y-6">
             <div className="border-b pb-4">
               <h1 className="text-3xl font-bold mb-2">{project.name}</h1>
+              {project.description && (
+                <p className="text-gray-600 mt-2">{project.description}</p>
+              )}
               <div className="text-sm text-gray-600 space-y-1">
                 {project.created_at && (
                   <p>Créé le {new Date(project.created_at).toLocaleDateString()}</p>

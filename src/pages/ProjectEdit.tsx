@@ -37,7 +37,8 @@ const ProjectEdit = () => {
           work_titles: data.work_titles ? data.work_titles.map((wt: any) => ({
             title: wt.title,
             descriptions: wt.descriptions
-          })) : null
+          })) : null,
+          description: data.description
         };
 
         setProject(typedProject);

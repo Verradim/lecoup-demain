@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -247,4 +246,3 @@ const UserDashboard = () => {
 };
 
 export default UserDashboard;
-
