@@ -46,6 +46,7 @@ const UserDashboard = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -85,13 +86,26 @@ const UserDashboard = () => {
   }, [user, navigate]);
 
   const handleSignOut = async () => {
+    if (isLoggingOut) return; // Prevent multiple clicks
+
+    setIsLoggingOut(true);
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      toast.success("Déconnexion réussie");
+      await supabase.auth.signOut();
+      // Even if we get an error about session not found, we still want to
+      // clear local state and redirect the user
       navigate("/");
+      toast.success("Déconnexion réussie");
     } catch (error: any) {
-      toast.error("Erreur lors de la déconnexion: " + error.message);
+      console.error("Logout error:", error);
+      // If we get a session_not_found error, we still want to clear local state
+      if (error.message?.includes("session_not_found")) {
+        navigate("/");
+        toast.success("Déconnexion réussie");
+      } else {
+        toast.error("Une erreur est survenue lors de la déconnexion");
+      }
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
