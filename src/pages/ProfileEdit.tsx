@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -106,50 +105,38 @@ const ProfileEdit = () => {
 
   if (loading) {
     return (
-      <Layout
-        title="Chargement... - Le Coup de Main"
-        description="Modification du profil - Le Coup de Main"
-        canonicalUrl="https://lecoup-demain.com/mon-espace/profil/modifier"
-      >
-        <div className="container py-8">
-          <div className="text-center">Chargement du profil...</div>
-        </div>
-      </Layout>
+      <div className="container py-8">
+        <div className="text-center">Chargement du profil...</div>
+      </div>
     );
   }
 
   return (
-    <Layout
-      title="Modifier mon profil - Le Coup de Main"
-      description="Modifier mon profil - Le Coup de Main"
-      canonicalUrl="https://lecoup-demain.com/mon-espace/profil/modifier"
-    >
-      <div className="container py-8">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Modifier mon profil</h1>
+    <div className="container py-8">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">Modifier mon profil</h1>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <CompanyInfoFields form={form} />
-              <LegalRepresentativeFields form={form} />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <CompanyInfoFields form={form} />
+            <LegalRepresentativeFields form={form} />
 
-              <div className="flex justify-end space-x-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => navigate("/mon-espace/profil")}
-                >
-                  Annuler
-                </Button>
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Enregistrement..." : "Enregistrer"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
+            <div className="flex justify-end space-x-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate("/mon-espace/profil")}
+              >
+                Annuler
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Enregistrement..." : "Enregistrer"}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
-    </Layout>
+    </div>
   );
 };
 
