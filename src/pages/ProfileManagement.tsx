@@ -58,11 +58,11 @@ const ProfileManagement = () => {
   }, [user, navigate]);
 
   const handleCreateProfile = () => {
-    navigate("/projets/profil/nouveau");
+    navigate("/mon-espace/profil/nouveau");
   };
 
   const handleEditProfile = () => {
-    navigate("/projets/profil/modifier");
+    navigate("/mon-espace/profil/modifier");
   };
 
   if (!user) return null;
@@ -71,7 +71,7 @@ const ProfileManagement = () => {
     <Layout
       title="Mon profil - Le Coup de Main"
       description="Gérer mon profil - Le Coup de Main"
-      canonicalUrl="https://lecoup-demain.com/projets/profil"
+      canonicalUrl="https://lecoup-demain.com/mon-espace/profil"
     >
       <div className="container py-8">
         <div className="flex items-center justify-between mb-8">
