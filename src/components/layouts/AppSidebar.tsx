@@ -9,7 +9,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -39,7 +38,6 @@ export function AppSidebar() {
     <Sidebar className="border-r pt-16">
      <SidebarContent>
       <SidebarGroup>
-       <SidebarGroupLabel>Navigation</SidebarGroupLabel>
          <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
