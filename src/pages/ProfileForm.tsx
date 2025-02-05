@@ -68,7 +68,7 @@ const ProfileForm = () => {
 
       // Création du nouveau profil
       const { error } = await supabase.from("profiles").insert({
-        id: crypto.randomUUID(), // Generate a new UUID for this profile
+        id: user.id, // Use the authenticated user's ID to comply with RLS
         email: user.email,
         siret: values.siret,
         company_address: values.company_address,
