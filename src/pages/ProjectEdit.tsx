@@ -30,7 +30,17 @@ const ProjectEdit = () => {
           .single();
 
         if (error) throw error;
-        setProject(data as Project);
+
+        // Type cast the work_titles to ensure they match our WorkTitle interface
+        const typedProject: Project = {
+          ...data,
+          work_titles: data.work_titles ? data.work_titles.map((wt: any) => ({
+            title: wt.title,
+            descriptions: wt.descriptions
+          })) : null
+        };
+
+        setProject(typedProject);
       } catch (error: any) {
         toast.error("Erreur lors du chargement du projet : " + error.message);
         navigate("/projets");

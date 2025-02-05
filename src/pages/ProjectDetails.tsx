@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -6,7 +7,7 @@ import { ArrowLeft, Edit } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Project } from "./project-form/types";
+import { Project, WorkTitle } from "./project-form/types";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,17 @@ const ProjectDetails = () => {
           .single();
 
         if (error) throw error;
-        setProject(data as Project);
+
+        // Type cast the work_titles to ensure they match our WorkTitle interface
+        const typedProject: Project = {
+          ...data,
+          work_titles: data.work_titles ? data.work_titles.map((wt: any) => ({
+            title: wt.title,
+            descriptions: wt.descriptions
+          })) : null
+        };
+        
+        setProject(typedProject);
       } catch (error: any) {
         console.error("Error fetching project:", error);
         toast.error("Erreur lors du chargement du projet");
@@ -81,7 +92,9 @@ const ProjectDetails = () => {
             <div className="border-b pb-4">
               <h1 className="text-3xl font-bold mb-2">{project.name}</h1>
               <div className="text-sm text-gray-600 space-y-1">
-                <p>Créé le {new Date(project.created_at).toLocaleDateString()}</p>
+                {project.created_at && (
+                  <p>Créé le {new Date(project.created_at).toLocaleDateString()}</p>
+                )}
                 {project.updated_at && (
                   <p>Dernière modification le {new Date(project.updated_at).toLocaleDateString()}</p>
                 )}
