@@ -1,44 +1,44 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
-
-const profileFormSchema = z.object({
-  siret: z
-    .string()
-    .min(14, "Le SIRET doit contenir 14 chiffres")
-    .max(14, "Le SIRET doit contenir 14 chiffres")
-    .regex(/^\d+$/, "Le SIRET ne doit contenir que des chiffres"),
-  company_address: z.string().min(1, "L'adresse est requise"),
-  company_name: z.string().min(1, "Le nom de l'entreprise est requis"),
-  legal_representative_first_name: z.string().min(1, "Le prénom est requis"),
-  legal_representative_last_name: z.string().min(1, "Le nom est requis"),
-  is_default: z.boolean().default(false),
-});
+import { CompanyInfoFields } from "@/components/profile/CompanyInfoFields";
+import { LegalRepresentativeFields } from "@/components/profile/LegalRepresentativeFields";
+import { profileFormSchema, type ProfileFormValues } from "@/types/profile";
 
 const ProfileForm = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof profileFormSchema>>({
+  useEffect(() => {
+    const checkExistingProfile = async () => {
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("parent_profile_id", user.id)
+        .single();
+
+      if (data) {
+        toast.error("Vous avez déjà créé un profil");
+        navigate("/projets/profil");
+      }
+    };
+
+    checkExistingProfile();
+  }, [user, navigate]);
+
+  const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       siret: "",
@@ -50,7 +50,7 @@ const ProfileForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof profileFormSchema>) => {
+  const onSubmit = async (values: ProfileFormValues) => {
     if (!user) {
       toast.error("Vous devez être connecté pour créer un profil");
       return;
@@ -58,17 +58,8 @@ const ProfileForm = () => {
 
     setIsSubmitting(true);
     try {
-      // Si c'est défini comme profil par défaut, on retire d'abord le statut par défaut des autres profils
-      if (values.is_default) {
-        await supabase
-          .from("profiles")
-          .update({ is_default: false })
-          .eq("parent_profile_id", user.id);
-      }
-
-      // Création du nouveau profil
       const { error } = await supabase.from("profiles").insert({
-        id: user.id, // Use the authenticated user's ID to comply with RLS
+        id: user.id,
         email: user.email,
         siret: values.siret,
         company_address: values.company_address,
@@ -107,105 +98,8 @@ const ProfileForm = () => {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="siret"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>SIRET</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        maxLength={14}
-                        placeholder="12345678901234"
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, "");
-                          if (value.length <= 14) {
-                            field.onChange(value);
-                          }
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="company_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nom de l'entreprise</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Nom de l'entreprise" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="company_address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Adresse complète de l'entreprise</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="123 rue Example, 75000 Paris" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="legal_representative_first_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Prénom du représentant légal</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Prénom" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="legal_representative_last_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nom du représentant légal</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Nom" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="is_default"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Définir comme profil par défaut</FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
+              <CompanyInfoFields form={form} />
+              <LegalRepresentativeFields form={form} />
 
               <div className="flex justify-end space-x-4">
                 <Button
