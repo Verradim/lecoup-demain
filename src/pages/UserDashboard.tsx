@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -90,19 +91,24 @@ const UserDashboard = () => {
 
     setIsLoggingOut(true);
     try {
-      // Even if the server session is invalid, we want to clear the client state
+      // First attempt to clear the session server-side
       await supabase.auth.signOut();
-      // Clear the auth context by forcing a page reload
-      window.location.href = "/";
-      toast.success("Déconnexion réussie");
-    } catch (error: any) {
+    } catch (error) {
+      // Log the error but continue with cleanup
       console.error("Logout error:", error);
-      // If there's any error, we still want to clear the local state
-      window.location.href = "/";
-      toast.success("Déconnexion réussie");
-    } finally {
-      setIsLoggingOut(false);
     }
+    
+    try {
+      // Clear any remaining session data client-side
+      await supabase.auth.clearSession();
+    } catch (error) {
+      console.error("Session clear error:", error);
+    }
+
+    // Always redirect and show success message, regardless of any errors
+    window.location.href = "/";
+    toast.success("Déconnexion réussie");
+    setIsLoggingOut(false);
   };
 
   if (!user) return null;
