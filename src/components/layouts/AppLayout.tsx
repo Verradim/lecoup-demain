@@ -24,13 +24,10 @@ export function AppLayout() {
       description="Gérez vos chantiers et votre profil sur Le Coup de Main"
       canonicalUrl={`https://lecoup-demain.com${location.pathname}`}
     >
-      <div className="flex w-full">
-        {/* Main content area that starts below header */}
-        <div className="pt-16 flex w-full min-h-[calc(100vh-4rem)]"> {/* 4rem = header height (64px) */}
-          <AppSidebar />
-          <div className="flex-1 p-8">
-            <Outlet />
-          </div>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar />
+        <div className="flex-1 p-8">
+          <Outlet />
         </div>
       </div>
     </Layout>
