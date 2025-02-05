@@ -68,7 +68,6 @@ const ProfileForm = () => {
 
       // Création du nouveau profil
       const { error } = await supabase.from("profiles").insert({
-        id: user.id, // L'id du profil doit être l'id de l'utilisateur pour la première création
         email: user.email, // L'email est requis par le schéma
         siret: values.siret,
         company_address: values.company_address,
