@@ -46,7 +46,7 @@ const ProfileEdit = () => {
 
         if (!data) {
           toast.error("Profil introuvable");
-          navigate("/projets/profil");
+          navigate("/mon-espace/profil");
           return;
         }
 
@@ -91,7 +91,7 @@ const ProfileEdit = () => {
       if (error) throw error;
 
       toast.success("Profil mis à jour avec succès");
-      navigate("/projets/profil");
+      navigate("/mon-espace/profil");
     } catch (error: any) {
       toast.error("Erreur lors de la mise à jour du profil : " + error.message);
     } finally {
@@ -107,9 +107,9 @@ const ProfileEdit = () => {
   if (loading) {
     return (
       <Layout
-        title="Modification du profil - Le Coup de Main"
-        description="Modifier mon profil - Le Coup de Main"
-        canonicalUrl="https://lecoup-demain.com/projets/profil/modifier"
+        title="Chargement... - Le Coup de Main"
+        description="Modification du profil - Le Coup de Main"
+        canonicalUrl="https://lecoup-demain.com/mon-espace/profil/modifier"
       >
         <div className="container py-8">
           <div className="text-center">Chargement du profil...</div>
@@ -120,9 +120,9 @@ const ProfileEdit = () => {
 
   return (
     <Layout
-      title="Modification du profil - Le Coup de Main"
+      title="Modifier mon profil - Le Coup de Main"
       description="Modifier mon profil - Le Coup de Main"
-      canonicalUrl="https://lecoup-demain.com/projets/profil/modifier"
+      canonicalUrl="https://lecoup-demain.com/mon-espace/profil/modifier"
     >
       <div className="container py-8">
         <div className="max-w-2xl mx-auto">
@@ -137,7 +137,7 @@ const ProfileEdit = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate("/projets/profil")}
+                  onClick={() => navigate("/mon-espace/profil")}
                 >
                   Annuler
                 </Button>

@@ -47,7 +47,7 @@ const ProfileForm = () => {
 
       if (data?.completed) {
         toast.error("Vous avez déjà créé un profil");
-        navigate("/projets/profil");
+        navigate("/mon-espace/profil");
       }
     };
 
@@ -78,7 +78,7 @@ const ProfileForm = () => {
       if (error) throw error;
 
       toast.success("Profil créé avec succès");
-      navigate("/projets/profil");
+      navigate("/mon-espace/profil");
     } catch (error: any) {
       toast.error("Erreur lors de la création du profil : " + error.message);
     } finally {
@@ -95,7 +95,7 @@ const ProfileForm = () => {
     <Layout
       title="Nouveau profil - Le Coup de Main"
       description="Créer un nouveau profil - Le Coup de Main"
-      canonicalUrl="https://lecoup-demain.com/projets/profil/nouveau"
+      canonicalUrl="https://lecoup-demain.com/mon-espace/profil/nouveau"
     >
       <div className="container py-8">
         <div className="max-w-2xl mx-auto">
@@ -110,7 +110,7 @@ const ProfileForm = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate("/projets/profil")}
+                  onClick={() => navigate("/mon-espace/profil")}
                 >
                   Annuler
                 </Button>
