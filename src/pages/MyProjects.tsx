@@ -1,12 +1,21 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Plus, LogOut, User } from "lucide-react";
+import { Plus, LogOut, User, Edit, Trash2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Project {
   id: string;
@@ -15,6 +24,10 @@ interface Project {
   description: string | null;
   user_id: string;
   quote_file_name: string | null;
+  work_location: string | null;
+  detailed_descriptions: string[] | null;
+  start_date: string | null;
+  end_date: string | null;
 }
 
 const MyProjects = () => {
@@ -22,6 +35,7 @@ const MyProjects = () => {
   const { user } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -56,6 +70,30 @@ const MyProjects = () => {
       navigate("/");
     } catch (error: any) {
       toast.error("Error signing out: " + error.message);
+    }
+  };
+
+  const handleEdit = (projectId: string) => {
+    navigate(`/projets/${projectId}/edit`);
+  };
+
+  const handleDelete = async () => {
+    if (!projectToDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .delete()
+        .eq("id", projectToDelete);
+
+      if (error) throw error;
+
+      setProjects(projects.filter((p) => p.id !== projectToDelete));
+      toast.success("Projet supprimé avec succès");
+    } catch (error: any) {
+      toast.error("Erreur lors de la suppression : " + error.message);
+    } finally {
+      setProjectToDelete(null);
     }
   };
 
@@ -108,9 +146,34 @@ const MyProjects = () => {
                 key={project.id}
                 className="border rounded-lg p-6 hover:shadow-md transition-shadow"
               >
-                <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-xl font-semibold">{project.name}</h3>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEdit(project.id)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setProjectToDelete(project.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
                 {project.description && (
                   <p className="text-gray-600 mb-4">{project.description}</p>
+                )}
+                {project.work_location && (
+                  <p className="text-sm text-gray-500 mb-2">
+                    Lieu : {project.work_location}
+                  </p>
                 )}
                 {project.quote_file_name && (
                   <p className="text-sm text-gray-500 mb-2">
@@ -125,6 +188,23 @@ const MyProjects = () => {
           </div>
         )}
       </div>
+
+      <AlertDialog open={!!projectToDelete} onOpenChange={() => setProjectToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce projet ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. Toutes les données du projet seront définitivement supprimées.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-red-500 hover:bg-red-600">
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Layout>
   );
 };
