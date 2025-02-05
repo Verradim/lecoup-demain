@@ -5,7 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { MobileMenu } from "./header/MobileMenu";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "sonner";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,10 +64,10 @@ export const Header = () => {
         <div className="hidden md:flex md:items-center md:justify-end md:flex-1 space-x-4">
           {user ? (
             <Link
-              to="/projets"
+              to="/mon-espace"
               className="text-sm font-medium text-gray-700 hover:text-gray-900"
             >
-              Mes projets
+              Mon espace
             </Link>
           ) : (
             <>
@@ -97,3 +96,4 @@ export const Header = () => {
     </header>
   );
 };
+

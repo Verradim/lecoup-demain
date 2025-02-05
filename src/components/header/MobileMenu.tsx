@@ -38,11 +38,11 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
 
             {user ? (
               <Link
-                to="/projets"
+                to="/mon-espace"
                 className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
-                <span className="ml-3 text-base font-medium text-gray-900">Mes projets</span>
+                <span className="ml-3 text-base font-medium text-gray-900">Mon espace</span>
               </Link>
             ) : (
               <>
@@ -68,3 +68,4 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
     </div>
   );
 };
+
