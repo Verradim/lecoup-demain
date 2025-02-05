@@ -102,14 +102,23 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
 
         if (updateError) throw updateError;
       } else {
-        const { data: newProject, error: createError } = await supabase
+        const { data: newProjectData, error: createError } = await supabase
           .from("projects")
           .insert(projectData)
           .select()
           .single();
 
         if (createError) throw createError;
-        project = newProject;
+
+        // Type cast the work_titles to ensure they match our WorkTitle interface
+        const typedProject: Project = {
+          ...newProjectData,
+          work_titles: newProjectData.work_titles ? newProjectData.work_titles.map((wt: any) => ({
+            title: wt.title,
+            descriptions: wt.descriptions
+          })) : null
+        };
+        project = typedProject;
       }
 
       // Handle quote file upload if present
