@@ -42,7 +42,7 @@ const ProjectForm = () => {
       // If there's a quote file, upload it
       if (quoteFile && project) {
         const fileExt = quoteFile.name.split('.').pop();
-        const filePath = `${project.id}/${crypto.randomUUID()}.${fileExt}`;
+        const filePath = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
         
         const { error: uploadError } = await supabase.storage
           .from('quotes')
