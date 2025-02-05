@@ -6,23 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ProjectForm from "./ProjectForm";
-
-interface WorkTitle {
-  title: string;
-  descriptions: string[];
-}
-
-interface Project {
-  id: string;
-  name: string;
-  description: string | null;
-  work_titles: WorkTitle[] | null;
-  work_location: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  quote_file_name: string | null;
-  quote_file_path: string | null;
-}
+import { Project } from "./project-form/types";
 
 const ProjectEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,7 +30,7 @@ const ProjectEdit = () => {
           .single();
 
         if (error) throw error;
-        setProject(data);
+        setProject(data as Project);
       } catch (error: any) {
         toast.error("Erreur lors du chargement du projet : " + error.message);
         navigate("/projets");

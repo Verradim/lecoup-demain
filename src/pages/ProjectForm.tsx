@@ -1,37 +1,17 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Plus, Upload, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-
-interface WorkTitle {
-  title: string;
-  descriptions: string[];
-}
-
-interface Project {
-  id: string;
-  name: string;
-  description: string | null;
-  detailed_descriptions: string[] | null;
-  work_titles: WorkTitle[] | null;
-  work_location: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  quote_file_name: string | null;
-  quote_file_path: string | null;
-}
+import { WorkTitle, Project } from "./project-form/types";
+import { WorkTitleInput } from "./project-form/WorkTitleInput";
+import { DateInputs } from "./project-form/DateInputs";
+import { QuoteFileInput } from "./project-form/QuoteFileInput";
 
 interface ProjectFormProps {
   project?: Project;
@@ -199,58 +179,16 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
           <div className="space-y-4">
             <Label>Intitulés de travaux</Label>
             {workTitles.map((workTitle, titleIndex) => (
-              <div key={titleIndex} className="space-y-3 p-4 border rounded-lg">
-                <div className="flex gap-2">
-                  <Input
-                    value={workTitle.title}
-                    onChange={(e) => updateWorkTitle(titleIndex, e.target.value)}
-                    placeholder="Ex: Plomberie"
-                    className="flex-1"
-                  />
-                  {workTitles.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={() => removeWorkTitle(titleIndex)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-
-                <div className="space-y-3 pl-4 border-l-2">
-                  {workTitle.descriptions.map((desc, descIndex) => (
-                    <div key={descIndex} className="flex gap-2">
-                      <Input
-                        value={desc}
-                        onChange={(e) => updateDescription(titleIndex, descIndex, e.target.value)}
-                        placeholder="Ex: Alimentation en eau chaude/froide"
-                        className="flex-1"
-                      />
-                      {workTitle.descriptions.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={() => removeDescription(titleIndex, descIndex)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => addDescription(titleIndex)}
-                    className="w-full"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Ajouter une description
-                  </Button>
-                </div>
-              </div>
+              <WorkTitleInput
+                key={titleIndex}
+                workTitle={workTitle}
+                titleIndex={titleIndex}
+                onUpdateTitle={updateWorkTitle}
+                onRemoveTitle={removeWorkTitle}
+                onUpdateDescription={updateDescription}
+                onAddDescription={addDescription}
+                onRemoveDescription={removeDescription}
+              />
             ))}
             <Button
               type="button"
@@ -274,91 +212,18 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
             />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Date de début des travaux</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !startDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? (
-                      format(startDate, "PPP", { locale: fr })
-                    ) : (
-                      <span>Sélectionner une date</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+          <DateInputs
+            startDate={startDate}
+            endDate={endDate}
+            onStartDateChange={setStartDate}
+            onEndDateChange={setEndDate}
+          />
 
-            <div className="space-y-2">
-              <Label>Date de fin du contrat</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !endDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? (
-                      format(endDate, "PPP", { locale: fr })
-                    ) : (
-                      <span>Sélectionner une date</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="quote">Devis original (PDF)</Label>
-            <div className="mt-1">
-              <label
-                htmlFor="quote"
-                className="flex justify-center w-full h-32 px-4 transition border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none"
-              >
-                <span className="flex items-center space-x-2">
-                  <Upload className="w-6 h-6 text-gray-600" />
-                  <span className="text-sm text-gray-600">
-                    {quoteFile ? quoteFile.name : project?.quote_file_name || "Cliquez pour uploader le devis"}
-                  </span>
-                </span>
-                <input
-                  id="quote"
-                  type="file"
-                  accept=".pdf"
-                  className="hidden"
-                  onChange={(e) => setQuoteFile(e.target.files?.[0] || null)}
-                />
-              </label>
-            </div>
-          </div>
+          <QuoteFileInput
+            quoteFile={quoteFile}
+            currentFileName={project?.quote_file_name}
+            onFileChange={setQuoteFile}
+          />
 
           <Button
             type="submit"

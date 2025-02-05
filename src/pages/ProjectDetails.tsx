@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -7,26 +6,7 @@ import { ArrowLeft, Edit } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
-interface WorkTitle {
-  title: string;
-  descriptions: string[];
-}
-
-interface Project {
-  id: string;
-  created_at: string;
-  name: string;
-  description: string | null;
-  user_id: string;
-  quote_file_name: string | null;
-  quote_file_path: string | null;
-  work_location: string | null;
-  work_titles: WorkTitle[] | null;
-  start_date: string | null;
-  end_date: string | null;
-  updated_at: string | null;
-}
+import { Project } from "./project-form/types";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -50,7 +30,7 @@ const ProjectDetails = () => {
           .single();
 
         if (error) throw error;
-        setProject(data);
+        setProject(data as Project);
       } catch (error: any) {
         console.error("Error fetching project:", error);
         toast.error("Erreur lors du chargement du projet");
