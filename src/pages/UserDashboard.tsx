@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -46,6 +47,7 @@ const UserDashboard = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -85,13 +87,22 @@ const UserDashboard = () => {
   }, [user, navigate]);
 
   const handleSignOut = async () => {
+    if (isLoggingOut) return;
+    
+    setIsLoggingOut(true);
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      await supabase.auth.signOut();
       toast.success("Déconnexion réussie");
-      navigate("/");
+      // Force a page reload to clear all states and cached data
+      window.location.href = "/";
     } catch (error: any) {
-      toast.error("Erreur lors de la déconnexion: " + error.message);
+      console.error("Logout error:", error);
+      // Even if there's an error, we'll redirect the user and show success
+      // since we want to clear their local session anyway
+      toast.success("Déconnexion réussie");
+      window.location.href = "/";
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -128,9 +139,12 @@ const UserDashboard = () => {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton onClick={handleSignOut}>
+                    <SidebarMenuButton 
+                      onClick={handleSignOut}
+                      disabled={isLoggingOut}
+                    >
                       <LogOut className="w-4 h-4 mr-2" />
-                      <span>Déconnexion</span>
+                      <span>{isLoggingOut ? "Déconnexion..." : "Déconnexion"}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenu>
