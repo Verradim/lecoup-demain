@@ -37,6 +37,10 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="border-r pt-16">
+     <SidebarContent>
+      <SidebarGroup>
+       <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+         <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
