@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -10,12 +11,12 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/projets");
+      navigate("/mon-espace");
     }
   }, [user, navigate]);
 
   const handleAuthSuccess = () => {
-    navigate("/projets");
+    navigate("/mon-espace");
   };
 
   // If user is already logged in, don't render the auth form
