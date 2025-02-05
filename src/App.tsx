@@ -6,6 +6,7 @@ import FindArtisans from "@/pages/FindArtisans";
 import Auth from "@/pages/Auth";
 import MyProjects from "@/pages/MyProjects";
 import ProfileManagement from "@/pages/ProfileManagement";
+import ProfileForm from "@/pages/ProfileForm";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/projets" element={<MyProjects />} />
           <Route path="/projets/profil" element={<ProfileManagement />} />
+          <Route path="/projets/profil/nouveau" element={<ProfileForm />} />
         </Routes>
       </Router>
     </AuthProvider>
