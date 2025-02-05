@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -47,7 +46,6 @@ const UserDashboard = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -87,28 +85,14 @@ const UserDashboard = () => {
   }, [user, navigate]);
 
   const handleSignOut = async () => {
-    if (isLoggingOut) return;
-
-    setIsLoggingOut(true);
     try {
-      // First attempt to clear the session server-side
-      await supabase.auth.signOut();
-    } catch (error) {
-      // Log the error but continue with cleanup
-      console.error("Logout error:", error);
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      toast.success("Déconnexion réussie");
+      navigate("/");
+    } catch (error: any) {
+      toast.error("Erreur lors de la déconnexion: " + error.message);
     }
-    
-    try {
-      // Clear any remaining session data client-side
-      await supabase.auth.clearSession();
-    } catch (error) {
-      console.error("Session clear error:", error);
-    }
-
-    // Always redirect and show success message, regardless of any errors
-    window.location.href = "/";
-    toast.success("Déconnexion réussie");
-    setIsLoggingOut(false);
   };
 
   if (!user) return null;

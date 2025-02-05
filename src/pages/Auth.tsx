@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -11,12 +10,12 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/mon-espace");
+      navigate("/projets");
     }
   }, [user, navigate]);
 
   const handleAuthSuccess = () => {
-    navigate("/mon-espace");
+    navigate("/projets");
   };
 
   // If user is already logged in, don't render the auth form
@@ -43,4 +42,3 @@ const Auth = () => {
 };
 
 export default Auth;
-
