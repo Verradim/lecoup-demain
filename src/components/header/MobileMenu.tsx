@@ -1,9 +1,8 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-import { LogOut, User } from "lucide-react";
-import { toast } from "sonner";
+import { User } from "lucide-react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -13,17 +12,6 @@ interface MobileMenuProps {
 
 export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps) => {
   const { user } = useAuth();
-
-  const handleSignOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      setIsOpen(false);
-      toast.success("Déconnexion réussie");
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
 
   if (!isOpen) return null;
 
@@ -49,19 +37,13 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
             </Link>
 
             {user ? (
-              <>
-                <div className="px-3 py-2 text-sm text-gray-600">
-                  {user.email}
-                </div>
-                <Button
-                  onClick={handleSignOut}
-                  variant="ghost"
-                  className="w-full justify-start"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Déconnexion
-                </Button>
-              </>
+              <Link
+                to="/projets"
+                className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
+                onClick={() => setIsOpen(false)}
+              >
+                <span className="ml-3 text-base font-medium text-gray-900">Mes projets</span>
+              </Link>
             ) : (
               <>
                 <Link

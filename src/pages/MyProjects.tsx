@@ -1,8 +1,9 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -50,6 +51,17 @@ const MyProjects = () => {
     toast.info("Create project functionality coming soon!");
   };
 
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      toast.success("Déconnexion réussie");
+      navigate("/");
+    } catch (error: any) {
+      toast.error("Error signing out: " + error.message);
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -61,10 +73,21 @@ const MyProjects = () => {
       <div className="container py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">Mes projets</h1>
-          <Button onClick={handleCreateProject} className="bg-primary hover:bg-primary/90">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Project
-          </Button>
+          <div className="flex items-center space-x-4">
+            <Button onClick={handleCreateProject} className="bg-primary hover:bg-primary/90 text-white">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Project
+            </Button>
+            <Button 
+              onClick={handleSignOut} 
+              variant="ghost" 
+              size="sm"
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Déconnexion
+            </Button>
+          </div>
         </div>
 
         {loading ? (
