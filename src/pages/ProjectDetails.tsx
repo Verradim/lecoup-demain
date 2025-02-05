@@ -7,7 +7,7 @@ import { ArrowLeft, Edit } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Project, WorkTitle } from "./project-form/types";
+import { Project } from "./project-form/types";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -55,7 +55,7 @@ const ProjectDetails = () => {
   }, [id, user, navigate]);
 
   const handleGoBack = () => {
-    navigate("/projets");
+    navigate("/mon-espace");
   };
 
   if (!user) return null;
@@ -64,7 +64,7 @@ const ProjectDetails = () => {
     <Layout
       title={`${project?.name || 'Chargement...'} - Le Coup de Main`}
       description="Détails du projet - Le Coup de Main"
-      canonicalUrl={`https://lecoup-demain.com/projets/${id}`}
+      canonicalUrl={`https://lecoup-demain.com/mon-espace/projets/${id}`}
     >
       <div className="container py-8">
         <div className="flex items-center justify-between mb-6">
@@ -77,7 +77,7 @@ const ProjectDetails = () => {
           </Button>
           
           {project && (
-            <Link to={`/projets/${id}/modifier`}>
+            <Link to={`/mon-espace/projets/${id}/modifier`}>
               <Button variant="outline">
                 <Edit className="w-4 h-4 mr-2" />
                 Modifier le chantier

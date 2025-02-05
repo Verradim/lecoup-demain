@@ -44,7 +44,7 @@ const ProjectEdit = () => {
         setProject(typedProject);
       } catch (error: any) {
         toast.error("Erreur lors du chargement du projet : " + error.message);
-        navigate("/projets");
+        navigate("/mon-espace");
       } finally {
         setLoading(false);
       }
@@ -60,7 +60,7 @@ const ProjectEdit = () => {
       <Layout
         title="Chargement... - Le Coup de Main"
         description="Modification d'un chantier - Le Coup de Main"
-        canonicalUrl={`https://lecoup-demain.com/projets/${id}/modifier`}
+        canonicalUrl={`https://lecoup-demain.com/mon-espace/projets/${id}/modifier`}
       >
         <div className="container py-8">
           <div className="text-center">Chargement...</div>
@@ -74,7 +74,7 @@ const ProjectEdit = () => {
       <Layout
         title="Projet non trouvé - Le Coup de Main"
         description="Projet non trouvé - Le Coup de Main"
-        canonicalUrl={`https://lecoup-demain.com/projets/${id}/modifier`}
+        canonicalUrl={`https://lecoup-demain.com/mon-espace/projets/${id}/modifier`}
       >
         <div className="container py-8">
           <div className="text-center">Ce projet n'existe pas</div>
@@ -87,7 +87,7 @@ const ProjectEdit = () => {
     <Layout
       title={`Modifier ${project.name} - Le Coup de Main`}
       description="Modification d'un chantier - Le Coup de Main"
-      canonicalUrl={`https://lecoup-demain.com/projets/${id}/modifier`}
+      canonicalUrl={`https://lecoup-demain.com/mon-espace/projets/${id}/modifier`}
     >
       <ProjectForm project={project} mode="edit" />
     </Layout>
