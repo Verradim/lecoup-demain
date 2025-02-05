@@ -86,24 +86,20 @@ const UserDashboard = () => {
   }, [user, navigate]);
 
   const handleSignOut = async () => {
-    if (isLoggingOut) return; // Prevent multiple clicks
+    if (isLoggingOut) return;
 
     setIsLoggingOut(true);
     try {
+      // Even if the server session is invalid, we want to clear the client state
       await supabase.auth.signOut();
-      // Even if we get an error about session not found, we still want to
-      // clear local state and redirect the user
-      navigate("/");
+      // Clear the auth context by forcing a page reload
+      window.location.href = "/";
       toast.success("Déconnexion réussie");
     } catch (error: any) {
       console.error("Logout error:", error);
-      // If we get a session_not_found error, we still want to clear local state
-      if (error.message?.includes("session_not_found")) {
-        navigate("/");
-        toast.success("Déconnexion réussie");
-      } else {
-        toast.error("Une erreur est survenue lors de la déconnexion");
-      }
+      // If there's any error, we still want to clear the local state
+      window.location.href = "/";
+      toast.success("Déconnexion réussie");
     } finally {
       setIsLoggingOut(false);
     }
