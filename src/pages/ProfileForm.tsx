@@ -9,7 +9,6 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "@/components/ui/checkbox";
 import { CompanyInfoFields } from "@/components/profile/CompanyInfoFields";
 import { LegalRepresentativeFields } from "@/components/profile/LegalRepresentativeFields";
 import { profileFormSchema, type ProfileFormValues } from "@/types/profile";
@@ -18,25 +17,6 @@ const ProfileForm = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const checkExistingProfile = async () => {
-      if (!user) return;
-
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("parent_profile_id", user.id)
-        .single();
-
-      if (data) {
-        toast.error("Vous avez déjà créé un profil");
-        navigate("/projets/profil");
-      }
-    };
-
-    checkExistingProfile();
-  }, [user, navigate]);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -50,6 +30,30 @@ const ProfileForm = () => {
     },
   });
 
+  useEffect(() => {
+    const checkExistingProfile = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("parent_profile_id", user.id)
+        .maybeSingle();
+
+      if (error) {
+        toast.error("Erreur lors de la vérification du profil");
+        return;
+      }
+
+      if (data) {
+        toast.error("Vous avez déjà créé un profil");
+        navigate("/projets/profil");
+      }
+    };
+
+    checkExistingProfile();
+  }, [user, navigate]);
+
   const onSubmit = async (values: ProfileFormValues) => {
     if (!user) {
       toast.error("Vous devez être connecté pour créer un profil");
@@ -58,8 +62,11 @@ const ProfileForm = () => {
 
     setIsSubmitting(true);
     try {
+      // Generate a new UUID for the profile
+      const profileId = crypto.randomUUID();
+      
       const { error } = await supabase.from("profiles").insert({
-        id: user.id,
+        id: profileId, // Use new UUID instead of user.id
         email: user.email,
         siret: values.siret,
         company_address: values.company_address,
