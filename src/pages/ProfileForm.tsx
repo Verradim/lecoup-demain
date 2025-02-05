@@ -37,7 +37,7 @@ const ProfileForm = () => {
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("parent_profile_id", user.id)
+        .eq("id", user.id)
         .maybeSingle();
 
       if (error) {
@@ -45,7 +45,7 @@ const ProfileForm = () => {
         return;
       }
 
-      if (data) {
+      if (data?.completed) {
         toast.error("Vous avez déjà créé un profil");
         navigate("/projets/profil");
       }
@@ -62,20 +62,18 @@ const ProfileForm = () => {
 
     setIsSubmitting(true);
     try {
-      // Generate a new UUID for the profile
-      const profileId = crypto.randomUUID();
-      
-      const { error } = await supabase.from("profiles").insert({
-        id: profileId, // Use new UUID instead of user.id
-        email: user.email,
-        siret: values.siret,
-        company_address: values.company_address,
-        company_name: values.company_name,
-        legal_representative_first_name: values.legal_representative_first_name,
-        legal_representative_last_name: values.legal_representative_last_name,
-        is_default: values.is_default,
-        parent_profile_id: user.id,
-      });
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          siret: values.siret,
+          company_address: values.company_address,
+          company_name: values.company_name,
+          legal_representative_first_name: values.legal_representative_first_name,
+          legal_representative_last_name: values.legal_representative_last_name,
+          is_default: values.is_default,
+          completed: true,
+        })
+        .eq("id", user.id);
 
       if (error) throw error;
 
