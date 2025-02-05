@@ -58,7 +58,7 @@ export function AppSidebar() {
                 >
                   <Link to="/mon-espace/projets">
                     <Building2 className="w-4 h-4 mr-2" />
-                    <span>Mes Chantiers</span>
+                    <span>Mes chantiers</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -69,7 +69,7 @@ export function AppSidebar() {
                 >
                   <Link to="/mon-espace/profil">
                     <User className="w-4 h-4 mr-2" />
-                    <span>Mon Profil</span>
+                    <span>Mon profil</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
