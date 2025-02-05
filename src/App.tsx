@@ -7,6 +7,7 @@ import Auth from "@/pages/Auth";
 import MyProjects from "@/pages/MyProjects";
 import ProfileManagement from "@/pages/ProfileManagement";
 import ProfileForm from "@/pages/ProfileForm";
+import ProfileEdit from "@/pages/ProfileEdit";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/projets" element={<MyProjects />} />
           <Route path="/projets/profil" element={<ProfileManagement />} />
           <Route path="/projets/profil/nouveau" element={<ProfileForm />} />
+          <Route path="/projets/profil/modifier" element={<ProfileEdit />} />
         </Routes>
       </Router>
     </AuthProvider>
