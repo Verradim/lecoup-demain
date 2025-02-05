@@ -68,7 +68,8 @@ const ProfileForm = () => {
 
       // Création du nouveau profil
       const { error } = await supabase.from("profiles").insert({
-        email: user.email, // L'email est requis par le schéma
+        id: crypto.randomUUID(), // Generate a new UUID for this profile
+        email: user.email,
         siret: values.siret,
         company_address: values.company_address,
         company_name: values.company_name,
