@@ -106,7 +106,8 @@ const MyProjects = () => {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="border rounded-lg p-6 hover:shadow-md transition-shadow"
+                className="border rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => navigate(`/projets/${project.id}`)}
               >
                 <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
                 {project.description && (
