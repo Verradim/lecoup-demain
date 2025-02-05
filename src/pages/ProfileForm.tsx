@@ -58,7 +58,7 @@ const ProfileForm = () => {
 
     setIsSubmitting(true);
     try {
-      // If this is set as default, first remove default status from all other profiles
+      // Si c'est défini comme profil par défaut, on retire d'abord le statut par défaut des autres profils
       if (values.is_default) {
         await supabase
           .from("profiles")
@@ -66,8 +66,10 @@ const ProfileForm = () => {
           .eq("parent_profile_id", user.id);
       }
 
-      // Create the new profile
+      // Création du nouveau profil
       const { error } = await supabase.from("profiles").insert({
+        id: user.id, // L'id du profil doit être l'id de l'utilisateur pour la première création
+        email: user.email, // L'email est requis par le schéma
         siret: values.siret,
         company_address: values.company_address,
         company_name: values.company_name,
