@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, Plus, Upload, X } from "lucide-react";
@@ -15,15 +14,34 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
-const ProjectForm = () => {
+interface ProjectFormProps {
+  initialData?: {
+    id: string;
+    name: string;
+    detailed_descriptions?: string[];
+    work_location?: string;
+    start_date?: string;
+    end_date?: string;
+    quote_file_name?: string;
+  };
+  mode?: 'create' | 'edit';
+}
+
+const ProjectForm = ({ initialData, mode = 'create' }: ProjectFormProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [descriptions, setDescriptions] = useState<string[]>(["", ""]);
-  const [location, setLocation] = useState("");
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
+  const [name, setName] = useState(initialData?.name || "");
+  const [descriptions, setDescriptions] = useState<string[]>(
+    initialData?.detailed_descriptions || ["", ""]
+  );
+  const [location, setLocation] = useState(initialData?.work_location || "");
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    initialData?.start_date ? new Date(initialData.start_date) : undefined
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    initialData?.end_date ? new Date(initialData.end_date) : undefined
+  );
   const [quoteFile, setQuoteFile] = useState<File | null>(null);
 
   const addDescriptionLine = () => {
@@ -48,52 +66,59 @@ const ProjectForm = () => {
     try {
       setLoading(true);
 
-      // Filter out empty descriptions
       const filteredDescriptions = descriptions.filter(desc => desc.trim() !== "");
+      
+      const projectData = {
+        name,
+        detailed_descriptions: filteredDescriptions,
+        work_location: location,
+        start_date: startDate?.toISOString(),
+        end_date: endDate?.toISOString(),
+        user_id: user.id,
+      };
 
-      // Create the project first
-      const { data: project, error: projectError } = await supabase
-        .from("projects")
-        .insert({
-          name,
-          detailed_descriptions: filteredDescriptions,
-          work_location: location,
-          start_date: startDate?.toISOString(),
-          end_date: endDate?.toISOString(),
-          user_id: user.id,
-        })
-        .select()
-        .single();
-
-      if (projectError) throw projectError;
-
-      // If there's a quote file, upload it
-      if (quoteFile && project) {
-        const fileExt = quoteFile.name.split('.').pop();
-        const filePath = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('quotes')
-          .upload(filePath, quoteFile);
-
-        if (uploadError) throw uploadError;
-
-        // Update project with quote file info
+      if (mode === 'edit' && initialData) {
         const { error: updateError } = await supabase
-          .from('projects')
-          .update({
-            quote_file_path: filePath,
-            quote_file_name: quoteFile.name
-          })
-          .eq('id', project.id);
+          .from("projects")
+          .update(projectData)
+          .eq("id", initialData.id);
 
         if (updateError) throw updateError;
+      } else {
+        const { data: project, error: projectError } = await supabase
+          .from("projects")
+          .insert(projectData)
+          .select()
+          .single();
+
+        if (projectError) throw projectError;
+
+        if (quoteFile && project) {
+          const fileExt = quoteFile.name.split('.').pop();
+          const filePath = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from('quotes')
+            .upload(filePath, quoteFile);
+
+          if (uploadError) throw uploadError;
+
+          const { error: updateError } = await supabase
+            .from('projects')
+            .update({
+              quote_file_path: filePath,
+              quote_file_name: quoteFile.name
+            })
+            .eq('id', project.id);
+
+          if (updateError) throw updateError;
+        }
       }
 
-      toast.success("Projet créé avec succès");
+      toast.success(mode === 'edit' ? "Projet mis à jour avec succès" : "Projet créé avec succès");
       navigate("/projets");
     } catch (error: any) {
-      toast.error("Erreur lors de la création du projet : " + error.message);
+      toast.error(`Erreur lors de la ${mode === 'edit' ? 'mise à jour' : 'création'} du projet : ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -106,9 +131,9 @@ const ProjectForm = () => {
 
   return (
     <Layout
-      title="Créer un nouveau chantier - Le Coup de Main"
-      description="Créer un nouveau chantier sur Le Coup de Main"
-      canonicalUrl="https://lecoup-demain.com/projets/nouveau"
+      title={`${mode === 'edit' ? 'Modifier' : 'Créer'} un chantier - Le Coup de Main`}
+      description={`${mode === 'edit' ? 'Modifier' : 'Créer'} un chantier sur Le Coup de Main`}
+      canonicalUrl={`https://lecoup-demain.com/projets/${mode === 'edit' ? 'edit' : 'nouveau'}`}
     >
       <div className="container py-8">
         <div className="max-w-2xl mx-auto space-y-8">

@@ -6,12 +6,22 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import ProjectForm from "./ProjectForm";
 
+interface Project {
+  id: string;
+  name: string;
+  detailed_descriptions?: string[];
+  work_location?: string;
+  start_date?: string;
+  end_date?: string;
+  quote_file_name?: string;
+}
+
 const ProjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState<Project | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -34,7 +44,7 @@ const ProjectEdit = () => {
           return;
         }
 
-        setProject(data);
+        setProject(data as Project);
       } catch (error: any) {
         toast.error("Erreur lors du chargement du projet : " + error.message);
         navigate("/projets");
@@ -59,6 +69,8 @@ const ProjectEdit = () => {
       </Layout>
     );
   }
+
+  if (!project) return null;
 
   return (
     <Layout
