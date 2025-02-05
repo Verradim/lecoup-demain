@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -6,18 +5,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon, Plus, Upload, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 const ProjectForm = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [descriptions, setDescriptions] = useState<string[]>(["", ""]);
+  const [location, setLocation] = useState("");
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
   const [quoteFile, setQuoteFile] = useState<File | null>(null);
+
+  const addDescriptionLine = () => {
+    setDescriptions([...descriptions, ""]);
+  };
+
+  const removeDescriptionLine = (index: number) => {
+    const newDescriptions = descriptions.filter((_, i) => i !== index);
+    setDescriptions(newDescriptions);
+  };
+
+  const updateDescription = (index: number, value: string) => {
+    const newDescriptions = [...descriptions];
+    newDescriptions[index] = value;
+    setDescriptions(newDescriptions);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +48,18 @@ const ProjectForm = () => {
     try {
       setLoading(true);
 
+      // Filter out empty descriptions
+      const filteredDescriptions = descriptions.filter(desc => desc.trim() !== "");
+
       // Create the project first
       const { data: project, error: projectError } = await supabase
         .from("projects")
         .insert({
           name,
-          description,
+          detailed_descriptions: filteredDescriptions,
+          work_location: location,
+          start_date: startDate?.toISOString(),
+          end_date: endDate?.toISOString(),
           user_id: user.id,
         })
         .select()
@@ -83,30 +111,133 @@ const ProjectForm = () => {
       canonicalUrl="https://lecoup-demain.com/projets/nouveau"
     >
       <div className="container py-8">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Créer un nouveau chantier</h1>
+        <div className="max-w-2xl mx-auto space-y-8">
+          <div>
+            <h1 className="text-3xl font-bold">Créer un nouveau chantier</h1>
+            <p className="mt-2 text-gray-600">
+              Remplissez les informations ci-dessous pour créer votre nouveau chantier.
+            </p>
+          </div>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Nom du chantier</Label>
+              <Label htmlFor="name">Intitulé des travaux</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                placeholder="Entrez le nom du chantier"
+                placeholder="Ex: Rénovation complète salle de bain"
+                className="w-full"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Décrivez votre chantier (optionnel)"
-                rows={4}
+              <Label>Description détaillée des travaux</Label>
+              <div className="space-y-3">
+                {descriptions.map((desc, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      value={desc}
+                      onChange={(e) => updateDescription(index, e.target.value)}
+                      placeholder="Ex: Alimentation en eau chaude/froide"
+                      className="flex-1"
+                    />
+                    {descriptions.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => removeDescriptionLine(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={addDescriptionLine}
+                  className="w-full"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Ajouter une ligne
+                </Button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="location">Lieu d'exécution des travaux</Label>
+              <Input
+                id="location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Adresse complète du chantier"
+                className="w-full"
               />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Date de début des travaux</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !startDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {startDate ? (
+                        format(startDate, "PPP", { locale: fr })
+                      ) : (
+                        <span>Sélectionner une date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={setStartDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Date de fin du contrat</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !endDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {endDate ? (
+                        format(endDate, "PPP", { locale: fr })
+                      ) : (
+                        <span>Sélectionner une date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={setEndDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
 
             <div className="space-y-2">

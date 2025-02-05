@@ -132,29 +132,41 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          detailed_descriptions: string[] | null
+          end_date: string | null
           id: string
           name: string
           quote_file_name: string | null
           quote_file_path: string | null
+          start_date: string | null
           user_id: string
+          work_location: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
+          detailed_descriptions?: string[] | null
+          end_date?: string | null
           id?: string
           name: string
           quote_file_name?: string | null
           quote_file_path?: string | null
+          start_date?: string | null
           user_id: string
+          work_location?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
+          detailed_descriptions?: string[] | null
+          end_date?: string | null
           id?: string
           name?: string
           quote_file_name?: string | null
           quote_file_path?: string | null
+          start_date?: string | null
           user_id?: string
+          work_location?: string | null
         }
         Relationships: []
       }
