@@ -15,11 +15,17 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
+interface WorkTitle {
+  title: string;
+  descriptions: string[];
+}
+
 interface Project {
   id: string;
   name: string;
   description: string | null;
   detailed_descriptions: string[] | null;
+  work_titles: WorkTitle[] | null;
   work_location: string | null;
   start_date: string | null;
   end_date: string | null;
@@ -37,8 +43,8 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(project?.name ?? "");
-  const [descriptions, setDescriptions] = useState<string[]>(
-    project?.detailed_descriptions ?? ["", ""]
+  const [workTitles, setWorkTitles] = useState<WorkTitle[]>(
+    project?.work_titles ?? [{ title: "", descriptions: ["", ""] }]
   );
   const [location, setLocation] = useState(project?.work_location ?? "");
   const [startDate, setStartDate] = useState<Date | undefined>(
@@ -49,19 +55,39 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
   );
   const [quoteFile, setQuoteFile] = useState<File | null>(null);
 
-  const addDescriptionLine = () => {
-    setDescriptions([...descriptions, ""]);
+  const addWorkTitle = () => {
+    setWorkTitles([...workTitles, { title: "", descriptions: ["", ""] }]);
   };
 
-  const removeDescriptionLine = (index: number) => {
-    const newDescriptions = descriptions.filter((_, i) => i !== index);
-    setDescriptions(newDescriptions);
+  const removeWorkTitle = (titleIndex: number) => {
+    const newWorkTitles = workTitles.filter((_, i) => i !== titleIndex);
+    setWorkTitles(newWorkTitles);
   };
 
-  const updateDescription = (index: number, value: string) => {
-    const newDescriptions = [...descriptions];
-    newDescriptions[index] = value;
-    setDescriptions(newDescriptions);
+  const updateWorkTitle = (titleIndex: number, value: string) => {
+    const newWorkTitles = [...workTitles];
+    newWorkTitles[titleIndex].title = value;
+    setWorkTitles(newWorkTitles);
+  };
+
+  const addDescription = (titleIndex: number) => {
+    const newWorkTitles = [...workTitles];
+    newWorkTitles[titleIndex].descriptions.push("");
+    setWorkTitles(newWorkTitles);
+  };
+
+  const removeDescription = (titleIndex: number, descIndex: number) => {
+    const newWorkTitles = [...workTitles];
+    newWorkTitles[titleIndex].descriptions = newWorkTitles[titleIndex].descriptions.filter(
+      (_, i) => i !== descIndex
+    );
+    setWorkTitles(newWorkTitles);
+  };
+
+  const updateDescription = (titleIndex: number, descIndex: number, value: string) => {
+    const newWorkTitles = [...workTitles];
+    newWorkTitles[titleIndex].descriptions[descIndex] = value;
+    setWorkTitles(newWorkTitles);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,12 +97,17 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
     try {
       setLoading(true);
 
-      // Filter out empty descriptions
-      const filteredDescriptions = descriptions.filter(desc => desc.trim() !== "");
+      // Filter out empty titles and descriptions
+      const filteredWorkTitles = workTitles.filter(
+        title => title.title.trim() !== "" && title.descriptions.some(desc => desc.trim() !== "")
+      ).map(title => ({
+        ...title,
+        descriptions: title.descriptions.filter(desc => desc.trim() !== "")
+      }));
 
       const projectData = {
         name,
-        detailed_descriptions: filteredDescriptions,
+        work_titles: filteredWorkTitles,
         work_location: location,
         start_date: startDate?.toISOString(),
         end_date: endDate?.toISOString(),
@@ -154,7 +185,7 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Intitulé des travaux</Label>
+            <Label htmlFor="name">Nom du chantier</Label>
             <Input
               id="name"
               value={name}
@@ -165,39 +196,71 @@ const ProjectForm = ({ project, mode = "create" }: ProjectFormProps) => {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label>Description détaillée des travaux</Label>
-            <div className="space-y-3">
-              {descriptions.map((desc, index) => (
-                <div key={index} className="flex gap-2">
+          <div className="space-y-4">
+            <Label>Intitulés de travaux</Label>
+            {workTitles.map((workTitle, titleIndex) => (
+              <div key={titleIndex} className="space-y-3 p-4 border rounded-lg">
+                <div className="flex gap-2">
                   <Input
-                    value={desc}
-                    onChange={(e) => updateDescription(index, e.target.value)}
-                    placeholder="Ex: Alimentation en eau chaude/froide"
+                    value={workTitle.title}
+                    onChange={(e) => updateWorkTitle(titleIndex, e.target.value)}
+                    placeholder="Ex: Plomberie"
                     className="flex-1"
                   />
-                  {descriptions.length > 1 && (
+                  {workTitles.length > 1 && (
                     <Button
                       type="button"
                       variant="outline"
                       size="icon"
-                      onClick={() => removeDescriptionLine(index)}
+                      onClick={() => removeWorkTitle(titleIndex)}
                     >
                       <X className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                onClick={addDescriptionLine}
-                className="w-full"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Ajouter une ligne
-              </Button>
-            </div>
+
+                <div className="space-y-3 pl-4 border-l-2">
+                  {workTitle.descriptions.map((desc, descIndex) => (
+                    <div key={descIndex} className="flex gap-2">
+                      <Input
+                        value={desc}
+                        onChange={(e) => updateDescription(titleIndex, descIndex, e.target.value)}
+                        placeholder="Ex: Alimentation en eau chaude/froide"
+                        className="flex-1"
+                      />
+                      {workTitle.descriptions.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={() => removeDescription(titleIndex, descIndex)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => addDescription(titleIndex)}
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Ajouter une description
+                  </Button>
+                </div>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addWorkTitle}
+              className="w-full"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Ajouter un intitulé de travaux
+            </Button>
           </div>
 
           <div className="space-y-2">

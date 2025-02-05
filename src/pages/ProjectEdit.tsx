@@ -7,11 +7,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ProjectForm from "./ProjectForm";
 
+interface WorkTitle {
+  title: string;
+  descriptions: string[];
+}
+
 interface Project {
   id: string;
   name: string;
   description: string | null;
-  detailed_descriptions: string[] | null;
+  work_titles: WorkTitle[] | null;
   work_location: string | null;
   start_date: string | null;
   end_date: string | null;

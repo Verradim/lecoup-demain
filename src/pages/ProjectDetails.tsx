@@ -8,6 +8,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+interface WorkTitle {
+  title: string;
+  descriptions: string[];
+}
+
 interface Project {
   id: string;
   created_at: string;
@@ -17,7 +22,7 @@ interface Project {
   quote_file_name: string | null;
   quote_file_path: string | null;
   work_location: string | null;
-  detailed_descriptions: string[] | null;
+  work_titles: WorkTitle[] | null;
   start_date: string | null;
   end_date: string | null;
   updated_at: string | null;
@@ -110,14 +115,21 @@ const ProjectDetails = () => {
               </div>
             )}
 
-            {project.detailed_descriptions && project.detailed_descriptions.length > 0 && (
+            {project.work_titles && project.work_titles.length > 0 && (
               <div>
-                <h2 className="text-xl font-semibold mb-2">Détails des travaux</h2>
-                <ul className="list-disc pl-5 space-y-2">
-                  {project.detailed_descriptions.map((desc, index) => (
-                    <li key={index} className="text-gray-700">{desc}</li>
+                <h2 className="text-xl font-semibold mb-4">Détails des travaux</h2>
+                <div className="space-y-4">
+                  {project.work_titles.map((workTitle, index) => (
+                    <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                      <h3 className="font-medium text-lg mb-2">{workTitle.title}</h3>
+                      <ul className="list-disc pl-5 space-y-2">
+                        {workTitle.descriptions.map((desc, descIndex) => (
+                          <li key={descIndex} className="text-gray-700">{desc}</li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
 
