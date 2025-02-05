@@ -36,44 +36,46 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="border-r">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  className={isActive("/mon-espace") && !isActive("/mon-espace/profil") ? "bg-accent" : ""}
-                >
-                  <Link to="/mon-espace">
-                    <Building2 className="w-4 h-4 mr-2" />
-                    <span>Mes Chantiers</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  className={isActive("/mon-espace/profil") ? "bg-accent" : ""}
-                >
-                  <Link to="/mon-espace/profil">
-                    <User className="w-4 h-4 mr-2" />
-                    <span>Mon Profil</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleSignOut}>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  <span>Déconnexion</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+    <div className="sticky top-16 h-[calc(100vh-4rem)]"> {/* 4rem = header height (64px) */}
+      <Sidebar className="h-full border-r">
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    className={isActive("/mon-espace/projets") || (isActive("/mon-espace") && !isActive("/mon-espace/profil")) ? "bg-accent" : ""}
+                  >
+                    <Link to="/mon-espace/projets">
+                      <Building2 className="w-4 h-4 mr-2" />
+                      <span>Mes Chantiers</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    className={isActive("/mon-espace/profil") ? "bg-accent" : ""}
+                  >
+                    <Link to="/mon-espace/profil">
+                      <User className="w-4 h-4 mr-2" />
+                      <span>Mon Profil</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    <span>Déconnexion</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </div>
   );
 }
