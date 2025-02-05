@@ -1,9 +1,9 @@
 
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Edit } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ interface Project {
   detailed_descriptions: string[] | null;
   start_date: string | null;
   end_date: string | null;
+  updated_at: string | null;
 }
 
 const ProjectDetails = () => {
@@ -41,15 +42,9 @@ const ProjectDetails = () => {
           .from("projects")
           .select("*")
           .eq("id", id)
-          .maybeSingle();
+          .single();
 
         if (error) throw error;
-        if (!data) {
-          toast.error("Ce projet n'existe pas");
-          navigate("/projets");
-          return;
-        }
-        
         setProject(data);
       } catch (error: any) {
         console.error("Error fetching project:", error);
@@ -75,14 +70,24 @@ const ProjectDetails = () => {
       canonicalUrl={`https://lecoup-demain.com/projets/${id}`}
     >
       <div className="container py-8">
-        <Button
-          variant="ghost"
-          onClick={handleGoBack}
-          className="mb-6"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Retour aux projets
-        </Button>
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            variant="ghost"
+            onClick={handleGoBack}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour aux projets
+          </Button>
+          
+          {project && (
+            <Link to={`/projets/${id}/modifier`}>
+              <Button variant="outline">
+                <Edit className="w-4 h-4 mr-2" />
+                Modifier le chantier
+              </Button>
+            </Link>
+          )}
+        </div>
 
         {loading ? (
           <div className="text-center py-8">Chargement du projet...</div>
@@ -90,17 +95,13 @@ const ProjectDetails = () => {
           <div className="space-y-6">
             <div className="border-b pb-4">
               <h1 className="text-3xl font-bold mb-2">{project.name}</h1>
-              <p className="text-gray-600">
-                Créé le {new Date(project.created_at).toLocaleDateString()}
-              </p>
-            </div>
-
-            {project.description && (
-              <div>
-                <h2 className="text-xl font-semibold mb-2">Description</h2>
-                <p className="text-gray-700">{project.description}</p>
+              <div className="text-sm text-gray-600 space-y-1">
+                <p>Créé le {new Date(project.created_at).toLocaleDateString()}</p>
+                {project.updated_at && (
+                  <p>Dernière modification le {new Date(project.updated_at).toLocaleDateString()}</p>
+                )}
               </div>
-            )}
+            </div>
 
             {project.work_location && (
               <div>

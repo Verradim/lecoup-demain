@@ -139,6 +139,7 @@ export type Database = {
           quote_file_name: string | null
           quote_file_path: string | null
           start_date: string | null
+          updated_at: string | null
           user_id: string
           work_location: string | null
         }
@@ -152,6 +153,7 @@ export type Database = {
           quote_file_name?: string | null
           quote_file_path?: string | null
           start_date?: string | null
+          updated_at?: string | null
           user_id: string
           work_location?: string | null
         }
@@ -165,6 +167,7 @@ export type Database = {
           quote_file_name?: string | null
           quote_file_path?: string | null
           start_date?: string | null
+          updated_at?: string | null
           user_id?: string
           work_location?: string | null
         }
