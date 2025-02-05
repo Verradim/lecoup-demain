@@ -1,6 +1,6 @@
 
 import { useLocation, Link } from "react-router-dom";
-import { Building2, User, LogOut } from "lucide-react";
+import { Building2, User, LogOut, Home } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -20,7 +20,7 @@ export function AppSidebar() {
   const { user } = useAuth();
   
   const isActive = (path: string) => {
-    return location.pathname.startsWith(path);
+    return location.pathname === path;
   };
 
   const handleSignOut = async () => {
@@ -45,9 +45,20 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={isActive("/mon-espace") && !isActive("/mon-espace/profil") ? "bg-accent" : ""}
+                  className={isActive("/mon-espace") ? "bg-accent" : ""}
                 >
                   <Link to="/mon-espace">
+                    <Home className="w-4 h-4 mr-2" />
+                    <span>Mon espace</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={isActive("/mon-espace/projets") ? "bg-accent" : ""}
+                >
+                  <Link to="/mon-espace/projets">
                     <Building2 className="w-4 h-4 mr-2" />
                     <span>Mes Chantiers</span>
                   </Link>

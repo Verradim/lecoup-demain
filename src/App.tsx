@@ -9,6 +9,7 @@ import UserDashboard from "@/pages/UserDashboard";
 import ProjectForm from "@/pages/ProjectForm";
 import ProjectDetails from "@/pages/ProjectDetails";
 import ProjectEdit from "@/pages/ProjectEdit";
+import ProjectList from "@/pages/ProjectList";
 import ProfileManagement from "@/pages/ProfileManagement";
 import ProfileForm from "@/pages/ProfileForm";
 import ProfileEdit from "@/pages/ProfileEdit";
@@ -28,7 +29,7 @@ function App() {
             <Route path="/mon-espace" element={<AppLayout />}>
               <Route index element={<UserDashboard />} />
               <Route path="projets">
-                <Route index element={<Navigate to="/mon-espace" replace />} />
+                <Route index element={<ProjectList />} />
                 <Route path="nouveau" element={<ProjectForm />} />
                 <Route path=":id" element={<ProjectDetails />} />
                 <Route path=":id/modifier" element={<ProjectEdit />} />
