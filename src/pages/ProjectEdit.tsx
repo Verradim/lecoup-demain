@@ -60,6 +60,7 @@ const ProjectEdit = () => {
       <Layout
         title="Chargement... - Le Coup de Main"
         description="Modification d'un chantier - Le Coup de Main"
+        canonicalUrl={`https://lecoup-demain.com/projets/${id}/modifier`}
       >
         <div className="container py-8">
           <div className="text-center">Chargement...</div>
@@ -73,6 +74,7 @@ const ProjectEdit = () => {
       <Layout
         title="Projet non trouvé - Le Coup de Main"
         description="Projet non trouvé - Le Coup de Main"
+        canonicalUrl={`https://lecoup-demain.com/projets/${id}/modifier`}
       >
         <div className="container py-8">
           <div className="text-center">Ce projet n'existe pas</div>
