@@ -5,9 +5,15 @@ interface FileUploadProps {
   label: string;
   file: File | null;
   onFileChange: (file: File | null) => void;
+  accept?: string;
 }
 
-export const FileUpload = ({ label, file, onFileChange }: FileUploadProps) => {
+export const FileUpload = ({ 
+  label, 
+  file, 
+  onFileChange,
+  accept = ".pdf,.jpg,.jpeg,.png"
+}: FileUploadProps) => {
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
@@ -25,7 +31,7 @@ export const FileUpload = ({ label, file, onFileChange }: FileUploadProps) => {
             type="file"
             className="hidden"
             onChange={(e) => onFileChange(e.target.files?.[0] || null)}
-            accept=".pdf,.jpg,.jpeg,.png"
+            accept={accept}
           />
         </label>
       </div>

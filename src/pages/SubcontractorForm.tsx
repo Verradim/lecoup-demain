@@ -4,27 +4,45 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Layout } from "@/components/Layout";
-import { FileUpload } from "@/components/subcontractor/FileUpload";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
+import { SubcontractorFormFields } from "@/components/subcontractor/SubcontractorFormFields";
+
+const formSchema = z.object({
+  companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
+  siret: z
+    .string()
+    .length(14, "Le SIRET doit contenir 14 chiffres")
+    .regex(/^\d+$/, "Le SIRET ne doit contenir que des chiffres"),
+  companyAddress: z.string().min(1, "L'adresse est requise"),
+  legalRepresentativeFirstName: z.string().min(1, "Le prénom est requis"),
+  legalRepresentativeLastName: z.string().min(1, "Le nom est requis"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export const SubcontractorForm = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    companyName: "",
-    siret: "",
-    companyAddress: "",
-    legalRepresentativeFirstName: "",
-    legalRepresentativeLastName: "",
-  });
   const [vigilanceProof, setVigilanceProof] = useState<File | null>(null);
   const [insuranceProof, setInsuranceProof] = useState<File | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      companyName: "",
+      siret: "",
+      companyAddress: "",
+      legalRepresentativeFirstName: "",
+      legalRepresentativeLastName: "",
+    },
+  });
+
+  const handleSubmit = async (values: FormValues) => {
     if (!user) return;
 
     try {
@@ -32,7 +50,9 @@ export const SubcontractorForm = () => {
 
       // Upload files if they exist
       let vigilanceProofPath = null;
+      let vigilanceProofName = null;
       let insuranceProofPath = null;
+      let insuranceProofName = null;
 
       if (vigilanceProof) {
         const fileExt = vigilanceProof.name.split('.').pop();
@@ -44,6 +64,7 @@ export const SubcontractorForm = () => {
 
         if (uploadError) throw uploadError;
         vigilanceProofPath = filePath;
+        vigilanceProofName = vigilanceProof.name;
       }
 
       if (insuranceProof) {
@@ -56,26 +77,27 @@ export const SubcontractorForm = () => {
 
         if (uploadError) throw uploadError;
         insuranceProofPath = filePath;
+        insuranceProofName = insuranceProof.name;
       }
 
       // Create subcontractor record
       const { error } = await supabase.from('subcontractors').insert({
         user_id: user.id,
-        company_name: formData.companyName,
-        siret: formData.siret,
-        company_address: formData.companyAddress,
-        legal_representative_first_name: formData.legalRepresentativeFirstName,
-        legal_representative_last_name: formData.legalRepresentativeLastName,
+        company_name: values.companyName,
+        siret: values.siret,
+        company_address: values.companyAddress,
+        legal_representative_first_name: values.legalRepresentativeFirstName,
+        legal_representative_last_name: values.legalRepresentativeLastName,
         vigilance_proof_path: vigilanceProofPath,
-        vigilance_proof_name: vigilanceProof?.name,
+        vigilance_proof_name: vigilanceProofName,
         insurance_proof_path: insuranceProofPath,
-        insurance_proof_name: insuranceProof?.name,
+        insurance_proof_name: insuranceProofName,
       });
 
       if (error) throw error;
 
       toast.success("Sous-traitant ajouté avec succès");
-      navigate("/mon-espace");
+      navigate("/mon-espace/sous-traitants");
     } catch (error: any) {
       console.error('Error:', error);
       toast.error("Erreur lors de l'ajout du sous-traitant");
@@ -93,73 +115,21 @@ export const SubcontractorForm = () => {
       <div className="container max-w-2xl py-8">
         <h1 className="text-3xl font-bold mb-8">Ajouter un sous-traitant</h1>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="companyName">Nom de l'entreprise</Label>
-            <Input
-              id="companyName"
-              value={formData.companyName}
-              onChange={(e) => setFormData(prev => ({ ...prev, companyName: e.target.value }))}
-              required
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+            <SubcontractorFormFields
+              form={form}
+              vigilanceProof={vigilanceProof}
+              insuranceProof={insuranceProof}
+              onVigilanceProofChange={setVigilanceProof}
+              onInsuranceProofChange={setInsuranceProof}
             />
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="siret">SIRET</Label>
-            <Input
-              id="siret"
-              value={formData.siret}
-              onChange={(e) => setFormData(prev => ({ ...prev, siret: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="companyAddress">Adresse de l'entreprise</Label>
-            <Input
-              id="companyAddress"
-              value={formData.companyAddress}
-              onChange={(e) => setFormData(prev => ({ ...prev, companyAddress: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="legalRepresentativeFirstName">Prénom du représentant légal</Label>
-            <Input
-              id="legalRepresentativeFirstName"
-              value={formData.legalRepresentativeFirstName}
-              onChange={(e) => setFormData(prev => ({ ...prev, legalRepresentativeFirstName: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="legalRepresentativeLastName">Nom du représentant légal</Label>
-            <Input
-              id="legalRepresentativeLastName"
-              value={formData.legalRepresentativeLastName}
-              onChange={(e) => setFormData(prev => ({ ...prev, legalRepresentativeLastName: e.target.value }))}
-              required
-            />
-          </div>
-
-          <FileUpload
-            label="Attestation de vigilance"
-            file={vigilanceProof}
-            onFileChange={setVigilanceProof}
-          />
-
-          <FileUpload
-            label="Attestation d'assurance"
-            file={insuranceProof}
-            onFileChange={setInsuranceProof}
-          />
-
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Ajout en cours..." : "Ajouter le sous-traitant"}
-          </Button>
-        </form>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Ajout en cours..." : "Ajouter le sous-traitant"}
+            </Button>
+          </form>
+        </Form>
       </div>
     </Layout>
   );
