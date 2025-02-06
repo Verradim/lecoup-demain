@@ -3,6 +3,7 @@ import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Layout } from "@/components/Layout";
 import { AppSidebar } from "./AppSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export function AppLayout() {
   const navigate = useNavigate();
@@ -23,12 +24,14 @@ export function AppLayout() {
       description="Gérez vos chantiers et votre profil sur Le Coup de Main"
       canonicalUrl={`https://lecoup-demain.com${location.pathname}`}
     >
-      <div className="min-h-screen flex w-full">
-        <AppSidebar />
-        <div className="flex-1 p-8">
-          <Outlet />
+      <SidebarProvider>
+        <div className="min-h-screen flex w-full">
+          <AppSidebar />
+          <div className="flex-1 p-8">
+            <Outlet />
+          </div>
         </div>
-      </div>
+      </SidebarProvider>
     </Layout>
   );
 }
