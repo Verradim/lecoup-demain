@@ -15,6 +15,7 @@ export const useContractForm = () => {
     defaultValues: {
       name: "",
       profile_id: "",
+      subcontractor_id: "",
       legal_representative_first_name: "",
       legal_representative_last_name: "",
       siret: "",
@@ -28,6 +29,7 @@ export const useContractForm = () => {
       const { error } = await supabase.from("contracts").insert({
         name: values.name,
         profile_id: values.profile_id,
+        subcontractor_id: values.subcontractor_id,
         legal_representative_first_name: values.legal_representative_first_name,
         legal_representative_last_name: values.legal_representative_last_name,
         siret: values.siret,

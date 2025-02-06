@@ -6,9 +6,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { ContractNameField } from "@/components/contract/ContractNameField";
 import { ProfileSelectField } from "@/components/contract/ProfileSelectField";
+import { SubcontractorSelectField } from "@/components/contract/SubcontractorSelectField";
 import { ProfilePreview } from "@/components/contract/ProfilePreview";
+import { SubcontractorPreview } from "@/components/contract/SubcontractorPreview";
 import { useContractForm } from "@/hooks/useContractForm";
 import { Profile } from "@/types/profile";
+import { Tables } from "@/integrations/supabase/types";
+
+type Subcontractor = Tables<"subcontractors">;
 
 const ContractForm = () => {
   const navigate = useNavigate();
@@ -24,6 +29,18 @@ const ContractForm = () => {
 
       if (error) throw error;
       return data as Profile[];
+    },
+  });
+
+  const { data: subcontractors } = useQuery({
+    queryKey: ["subcontractors"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("subcontractors")
+        .select("*");
+
+      if (error) throw error;
+      return data as Subcontractor[];
     },
   });
 
@@ -45,8 +62,15 @@ const ContractForm = () => {
     }
   };
 
+  const handleSubcontractorChange = (subcontractorId: string) => {
+    form.setValue("subcontractor_id", subcontractorId);
+  };
+
   const selectedProfileId = form.watch("profile_id");
   const selectedProfile = profiles?.find((p) => p.id === selectedProfileId);
+
+  const selectedSubcontractorId = form.watch("subcontractor_id");
+  const selectedSubcontractor = subcontractors?.find((s) => s.id === selectedSubcontractorId);
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -60,15 +84,30 @@ const ContractForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <ContractNameField form={form} />
-          <ProfileSelectField
-            form={form}
-            profiles={profiles}
-            onProfileChange={handleProfileChange}
-          />
+          
+          <div className="space-y-4">
+            <ProfileSelectField
+              form={form}
+              profiles={profiles}
+              onProfileChange={handleProfileChange}
+            />
 
-          {selectedProfile && (
-            <ProfilePreview profile={selectedProfile} />
-          )}
+            {selectedProfile && (
+              <ProfilePreview profile={selectedProfile} />
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <SubcontractorSelectField
+              form={form}
+              subcontractors={subcontractors}
+              onSubcontractorChange={handleSubcontractorChange}
+            />
+
+            {selectedSubcontractor && (
+              <SubcontractorPreview subcontractor={selectedSubcontractor} />
+            )}
+          </div>
 
           <div className="flex justify-end space-x-4">
             <Button
