@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Building2, User, LogOut, Home, Users } from "lucide-react";
+import { Building2, User, LogOut, Home, Users, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -58,6 +58,17 @@ export function AppSidebar() {
                   <Link to="/mon-espace/projets">
                     <Building2 className="w-4 h-4 mr-2" />
                     <span>Mes chantiers</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={isActive("/mon-espace/contrats") ? "bg-accent" : ""}
+                >
+                  <Link to="/mon-espace/contrats">
+                    <FileText className="w-4 h-4 mr-2" />
+                    <span>Mes contrats</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
