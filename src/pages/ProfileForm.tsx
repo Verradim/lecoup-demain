@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -92,11 +91,6 @@ const ProfileForm = () => {
   }
 
   return (
-    <Layout
-      title="Nouveau profil - Le Coup de Main"
-      description="Créer un nouveau profil - Le Coup de Main"
-      canonicalUrl="https://lecoup-demain.com/mon-espace/profil/nouveau"
-    >
       <div className="container py-8">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-8">Créer un nouveau profil</h1>
@@ -122,7 +116,6 @@ const ProfileForm = () => {
           </Form>
         </div>
       </div>
-    </Layout>
   );
 };
 
