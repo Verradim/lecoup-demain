@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Building2, User, LogOut, Home } from "lucide-react";
+import { Building2, User, LogOut, Home, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ import {
 export function AppSidebar() {
   const location = useLocation();
   const { user } = useAuth();
-  
+
   const isActive = (path: string) => {
     return location.pathname === path;
   };
@@ -69,6 +69,17 @@ export function AppSidebar() {
                   <Link to="/mon-espace/profil">
                     <User className="w-4 h-4 mr-2" />
                     <span>Mon profil</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={isActive("/mon-espace/sous-traitants") ? "bg-accent" : ""}
+                >
+                  <Link to="/mon-espace/sous-traitants">
+                    <Users className="w-4 h-4 mr-2" />
+                    <span>Mes sous-traitants</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
