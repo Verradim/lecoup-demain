@@ -12,7 +12,8 @@ import ProjectForm from "@/pages/ProjectForm";
 import ProjectList from "@/pages/ProjectList";
 import ProjectEdit from "@/pages/ProjectEdit";
 import ProjectDetails from "@/pages/ProjectDetails";
-import { SubcontractorRoutes } from "@/routes/subcontractor.routes";
+import { SubcontractorList } from "@/components/subcontractor/SubcontractorList";
+import SubcontractorFormPage from "@/pages/subcontractor/SubcontractorFormPage";
 
 function App() {
   return (
@@ -30,7 +31,8 @@ function App() {
             <Route path="projets" element={<ProjectList />} />
             <Route path="projets/:id" element={<ProjectDetails />} />
             <Route path="projets/:id/modifier" element={<ProjectEdit />} />
-            <SubcontractorRoutes />
+            <Route path="sous-traitants" element={<SubcontractorList />} />
+            <Route path="sous-traitants/nouveau" element={<SubcontractorFormPage />} />
           </Route>
         </Routes>
         <Toaster />
