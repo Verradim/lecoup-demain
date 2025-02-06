@@ -1,10 +1,12 @@
 import { Route } from "react-router-dom";
-import SubcontractorForm from "@/pages/subcontractor/SubcontractorFormPage";
+import SubcontractorFormPage from "@/pages/subcontractor/SubcontractorFormPage";
+import { SubcontractorList } from "@/components/subcontractor/SubcontractorList";
 
 export const SubcontractorRoutes = () => {
   return (
     <>
-      <Route path="sous-traitants/nouveau" element={<SubcontractorForm />} />
+      <Route path="sous-traitants" element={<SubcontractorList />} />
+      <Route path="sous-traitants/nouveau" element={<SubcontractorFormPage />} />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { SubcontractorForm } from "@/components/subcontractor/SubcontractorForm";
 
-export const SubcontractorFormPage = () => {
+const SubcontractorFormPage = () => {
   return (
     <Layout
       title="Ajouter un sous-traitant - Le Coup de Main"
@@ -15,3 +15,5 @@ export const SubcontractorFormPage = () => {
     </Layout>
   );
 };
+
+export default SubcontractorFormPage;
