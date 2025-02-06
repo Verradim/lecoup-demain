@@ -21,6 +21,7 @@ export type Database = {
           name: string
           profile_id: string
           project_id: string | null
+          selected_work_descriptions: string[] | null
           siret: string
           status: string
           subcontractor_id: string | null
@@ -38,6 +39,7 @@ export type Database = {
           name: string
           profile_id: string
           project_id?: string | null
+          selected_work_descriptions?: string[] | null
           siret: string
           status?: string
           subcontractor_id?: string | null
@@ -55,6 +57,7 @@ export type Database = {
           name?: string
           profile_id?: string
           project_id?: string | null
+          selected_work_descriptions?: string[] | null
           siret?: string
           status?: string
           subcontractor_id?: string | null
@@ -341,6 +344,70 @@ export type Database = {
           vigilance_proof_path?: string | null
         }
         Relationships: []
+      }
+      work_descriptions: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          updated_at: string
+          work_title_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          updated_at?: string
+          work_title_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          updated_at?: string
+          work_title_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_descriptions_work_title_id_fkey"
+            columns: ["work_title_id"]
+            isOneToOne: false
+            referencedRelation: "work_titles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_titles: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_titles_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

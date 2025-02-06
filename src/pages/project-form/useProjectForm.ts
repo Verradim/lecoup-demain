@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -134,7 +133,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
       }
 
       toast.success(mode === "edit" ? "Projet modifié avec succès" : "Projet créé avec succès");
-      navigate("/projets");
+      navigate("/mon-espace/projets");
     } catch (error: any) {
       toast.error(`Erreur lors de la ${mode === "edit" ? "modification" : "création"} du projet : ${error.message}`);
     } finally {
