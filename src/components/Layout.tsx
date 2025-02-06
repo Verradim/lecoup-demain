@@ -39,7 +39,7 @@ export const Layout = ({
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
       </Helmet>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col w-full">
         <Header />
         <main className="flex-1" role="main" aria-label={title}>
           <noscript>
