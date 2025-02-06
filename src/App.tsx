@@ -18,6 +18,7 @@ import SubcontractorFormPage from "@/pages/subcontractor/SubcontractorFormPage";
 import ContractList from "@/pages/ContractList";
 import ContractForm from "@/pages/ContractForm";
 import ContractDetails from "@/pages/ContractDetails";
+import ContractEdit from "@/pages/ContractEdit";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="contrats" element={<ContractList />} />
             <Route path="contrats/nouveau" element={<ContractForm />} />
             <Route path="contrats/:id" element={<ContractDetails />} />
+            <Route path="contrats/:id/modifier" element={<ContractEdit />} />
           </Route>
         </Routes>
         <Toaster />
