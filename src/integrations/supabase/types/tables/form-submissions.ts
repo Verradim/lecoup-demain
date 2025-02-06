@@ -1,0 +1,65 @@
+export interface FormSubmissionsTable {
+  Row: {
+    id: string;
+    created_at: string;
+    sponsor: string;
+    full_name: string;
+    phone: string;
+    email: string;
+    linkedin: string | null;
+    company_status: string;
+    employee_count: string;
+    company_name: string;
+    instagram: string | null;
+    website: string | null;
+    region: string;
+    company_description: string;
+    discovery_source: string;
+    join_reason: string;
+    other_platform_is_member: string;
+    other_platform_name: string | null;
+    terms_accepted: boolean;
+  };
+  Insert: {
+    id?: string;
+    created_at?: string;
+    sponsor: string;
+    full_name: string;
+    phone: string;
+    email: string;
+    linkedin?: string | null;
+    company_status: string;
+    employee_count: string;
+    company_name: string;
+    instagram?: string | null;
+    website?: string | null;
+    region: string;
+    company_description: string;
+    discovery_source: string;
+    join_reason: string;
+    other_platform_is_member: string;
+    other_platform_name?: string | null;
+    terms_accepted: boolean;
+  };
+  Update: {
+    id?: string;
+    created_at?: string;
+    sponsor?: string;
+    full_name?: string;
+    phone?: string;
+    email?: string;
+    linkedin?: string | null;
+    company_status?: string;
+    employee_count?: string;
+    company_name?: string;
+    instagram?: string | null;
+    website?: string | null;
+    region?: string;
+    company_description?: string;
+    discovery_source?: string;
+    join_reason?: string;
+    other_platform_is_member?: string;
+    other_platform_name?: string | null;
+    terms_accepted?: boolean;
+  };
+}
