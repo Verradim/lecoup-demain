@@ -33,7 +33,7 @@ export const WorkItemsSelect = ({
 
       <div className="space-y-4 pl-2">
         {workTitles.map((title) => {
-          const titleHasSelectedDesc = title.descriptions.some(
+          const titleHasSelectedDesc = title.work_descriptions.some(
             (desc) => selectedDescriptions.includes(desc.id || '')
           );
 
@@ -41,7 +41,7 @@ export const WorkItemsSelect = ({
             <div key={title.id} className="space-y-2">
               <div className="font-medium">{title.title}</div>
               <div className="pl-4 space-y-2">
-                {title.descriptions.map((desc) => (
+                {title.work_descriptions.map((desc) => (
                   <div key={desc.id} className="flex items-center space-x-2">
                     <Checkbox
                       id={desc.id}

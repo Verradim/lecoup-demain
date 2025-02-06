@@ -7,7 +7,7 @@ export interface WorkDescription {
 export interface WorkTitle {
   id?: string;
   title: string;
-  descriptions: WorkDescription[];
+  work_descriptions: WorkDescription[];
 }
 
 export interface Project {

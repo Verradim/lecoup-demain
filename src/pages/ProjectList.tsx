@@ -24,21 +24,21 @@ const ProjectList = () => {
       try {
         const { data, error } = await supabase
           .from("projects")
-          .select("*")
+          .select(`
+            *,
+            work_titles (
+              id,
+              title,
+              work_descriptions (
+                id,
+                description
+              )
+            )
+          `)
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-
-        // Transform the raw data to match our Project type
-        const typedProjects: Project[] = (data || []).map(project => ({
-          ...project,
-          work_titles: project.work_titles ? project.work_titles.map((wt: any) => ({
-            title: wt.title,
-            descriptions: wt.descriptions
-          })) : null
-        }));
-
-        setProjects(typedProjects);
+        setProjects(data as Project[]);
       } catch (error: any) {
         console.error("Error fetching projects:", error);
         toast.error("Erreur lors du chargement des projets");
@@ -87,7 +87,7 @@ const ProjectList = () => {
                   <p className="text-sm text-gray-500">{project.description}</p>
                 )}
                 <div className="text-sm text-gray-500">
-                  Créé le {new Date(project.created_at).toLocaleDateString()}
+                  Créé le {new Date(project.created_at || '').toLocaleDateString()}
                 </div>
               </div>
               {project.quote_file_name && (

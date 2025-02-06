@@ -25,23 +25,22 @@ const ProjectDetails = () => {
       try {
         const { data, error } = await supabase
           .from("projects")
-          .select("*")
+          .select(`
+            *,
+            work_titles (
+              id,
+              title,
+              work_descriptions (
+                id,
+                description
+              )
+            )
+          `)
           .eq("id", id)
           .single();
 
         if (error) throw error;
-
-        // Type cast the work_titles to ensure they match our WorkTitle interface
-        const typedProject: Project = {
-          ...data,
-          work_titles: data.work_titles ? data.work_titles.map((wt: any) => ({
-            title: wt.title,
-            descriptions: wt.descriptions
-          })) : null,
-          description: data.description
-        };
-        
-        setProject(typedProject);
+        setProject(data as Project);
       } catch (error: any) {
         console.error("Error fetching project:", error);
         toast.error("Erreur lors du chargement du projet");
@@ -114,8 +113,8 @@ const ProjectDetails = () => {
                   <div key={index} className="bg-gray-50 p-4 rounded-lg">
                     <h3 className="font-medium text-lg mb-2">{workTitle.title}</h3>
                     <ul className="list-disc pl-5 space-y-2">
-                      {workTitle.descriptions.map((desc, descIndex) => (
-                        <li key={descIndex} className="text-gray-700">{desc}</li>
+                      {workTitle.work_descriptions.map((desc, descIndex) => (
+                        <li key={descIndex} className="text-gray-700">{desc.description}</li>
                       ))}
                     </ul>
                   </div>

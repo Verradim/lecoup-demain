@@ -16,7 +16,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(project?.name ?? "");
   const [workTitles, setWorkTitles] = useState<WorkTitle[]>(
-    project?.work_titles ?? [{ title: "", descriptions: [{ description: "" }] }]
+    project?.work_titles ?? [{ title: "", work_descriptions: [{ description: "" }] }]
   );
   const [location, setLocation] = useState(project?.work_location ?? "");
   const [startDate, setStartDate] = useState<Date | undefined>(
@@ -28,7 +28,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
   const [quoteFile, setQuoteFile] = useState<File | null>(null);
 
   const addWorkTitle = () => {
-    setWorkTitles([...workTitles, { title: "", descriptions: [{ description: "" }] }]);
+    setWorkTitles([...workTitles, { title: "", work_descriptions: [{ description: "" }] }]);
   };
 
   const removeWorkTitle = (titleIndex: number) => {
@@ -44,13 +44,13 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
 
   const addDescription = (titleIndex: number) => {
     const newWorkTitles = [...workTitles];
-    newWorkTitles[titleIndex].descriptions.push({ description: "" });
+    newWorkTitles[titleIndex].work_descriptions.push({ description: "" });
     setWorkTitles(newWorkTitles);
   };
 
   const removeDescription = (titleIndex: number, descIndex: number) => {
     const newWorkTitles = [...workTitles];
-    newWorkTitles[titleIndex].descriptions = newWorkTitles[titleIndex].descriptions.filter(
+    newWorkTitles[titleIndex].work_descriptions = newWorkTitles[titleIndex].work_descriptions.filter(
       (_, i) => i !== descIndex
     );
     setWorkTitles(newWorkTitles);
@@ -58,7 +58,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
 
   const updateDescription = (titleIndex: number, descIndex: number, value: string) => {
     const newWorkTitles = [...workTitles];
-    newWorkTitles[titleIndex].descriptions[descIndex].description = value;
+    newWorkTitles[titleIndex].work_descriptions[descIndex].description = value;
     setWorkTitles(newWorkTitles);
   };
 
@@ -69,10 +69,10 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
       setLoading(true);
 
       const filteredWorkTitles = workTitles.filter(
-        title => title.title.trim() !== "" && title.descriptions.some(desc => desc.description.trim() !== "")
+        title => title.title.trim() !== "" && title.work_descriptions.some(desc => desc.description.trim() !== "")
       ).map(title => ({
         ...title,
-        descriptions: title.descriptions.filter(desc => desc.description.trim() !== "")
+        work_descriptions: title.work_descriptions.filter(desc => desc.description.trim() !== "")
       }));
 
       const projectData = {
@@ -86,7 +86,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
       let updatedProject: Project | null = null;
 
       if (mode === "edit" && project) {
-        const { data: projectData, error: updateError } = await supabase
+        const { data: updatedProjectData, error: updateError } = await supabase
           .from("projects")
           .update(projectData)
           .eq("id", project.id)
@@ -94,7 +94,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
           .single();
 
         if (updateError) throw updateError;
-        updatedProject = projectData;
+        updatedProject = updatedProjectData;
 
         // Delete existing work titles (cascade will handle descriptions)
         const { error: deleteError } = await supabase
@@ -129,7 +129,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
 
         if (titleError) throw titleError;
 
-        const descriptionsToInsert = workTitle.descriptions.map(desc => ({
+        const descriptionsToInsert = workTitle.work_descriptions.map(desc => ({
           work_title_id: titleData.id,
           description: desc.description,
         }));
