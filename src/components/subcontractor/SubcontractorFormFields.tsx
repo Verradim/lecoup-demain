@@ -10,14 +10,16 @@ import { Input } from "@/components/ui/input";
 import { FileUpload } from "./FileUpload";
 import { File } from "lucide-react";
 
+interface FormValues {
+  companyName: string;
+  siret: string;
+  companyAddress: string;
+  legalRepresentativeFirstName: string;
+  legalRepresentativeLastName: string;
+}
+
 interface SubcontractorFormFieldsProps {
-  form: UseFormReturn<{
-    companyName: string;
-    siret: string;
-    companyAddress: string;
-    legalRepresentativeFirstName: string;
-    legalRepresentativeLastName: string;
-  }>;
+  form: UseFormReturn<FormValues>;
   vigilanceProof: File | null;
   insuranceProof: File | null;
   onVigilanceProofChange: (file: File | null) => void;
