@@ -35,7 +35,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="border-r pt-16">
+    <Sidebar className="border-r pt-16 w-auto">
      <SidebarContent>
       <SidebarGroup>
          <SidebarGroupContent>
