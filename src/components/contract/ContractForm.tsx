@@ -1,22 +1,14 @@
 
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import { ContractNameField } from "@/components/contract/ContractNameField";
-import { ProfileSelectField } from "@/components/contract/ProfileSelectField";
-import { SubcontractorSelectField } from "@/components/contract/SubcontractorSelectField";
-import { ProjectSelectField } from "@/components/contract/ProjectSelectField";
-import { WorkItemsSelect } from "@/components/contract/WorkItemsSelect";
-import { ProfilePreview } from "@/components/contract/ProfilePreview";
-import { SubcontractorPreview } from "@/components/contract/SubcontractorPreview";
+import { ClientSection } from "@/components/contract/ClientSection";
+import { SubcontractorSection } from "@/components/contract/SubcontractorSection";
+import { WorkTitlesSelect } from "@/components/contract/WorkTitlesSelect";
 import { useContractForm } from "@/hooks/useContractForm";
-import { Profile } from "@/types/profile";
-import { Project, WorkTitle } from "@/pages/project-form/types";
 import { Tables } from "@/integrations/supabase/types";
 
-type Subcontractor = Tables<"subcontractors">;
 type Contract = Tables<"contracts">;
 
 interface ContractFormProps {
@@ -28,173 +20,25 @@ export const ContractForm = ({ mode, contract }: ContractFormProps) => {
   const navigate = useNavigate();
   const { form, onSubmit } = useContractForm({ mode, contract });
 
-  const { data: profiles } = useQuery({
-    queryKey: ["profiles"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("completed", true);
-
-      if (error) throw error;
-      return data as Profile[];
-    },
-  });
-
-  const { data: subcontractors } = useQuery({
-    queryKey: ["subcontractors"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("subcontractors")
-        .select("*");
-
-      if (error) throw error;
-      return data as Subcontractor[];
-    },
-  });
-
-  const { data: projects } = useQuery({
-    queryKey: ["projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*");
-
-      if (error) throw error;
-      return data as Project[];
-    },
-  });
-
-  const selectedProjectId = form.watch("project_id");
-  const selectedDescriptions = form.watch("selected_work_descriptions") || [];
-  const isFullProject = form.watch("is_full_project");
-
-  const { data: workTitles } = useQuery({
-    queryKey: ["workTitles", selectedProjectId],
-    queryFn: async () => {
-      if (!selectedProjectId) return [];
-      
-      const { data, error } = await supabase
-        .from("work_titles")
-        .select(`
-          id,
-          title,
-          work_descriptions (
-            id,
-            description
-          )
-        `)
-        .eq("project_id", selectedProjectId);
-
-      if (error) throw error;
-      return data as WorkTitle[];
-    },
-    enabled: !!selectedProjectId,
-  });
-
-  const handleProfileChange = (profileId: string) => {
-    const selectedProfile = profiles?.find((p) => p.id === profileId);
-    if (selectedProfile) {
-      form.setValue("profile_id", profileId);
-      form.setValue(
-        "legal_representative_first_name",
-        selectedProfile.legal_representative_first_name || ""
-      );
-      form.setValue(
-        "legal_representative_last_name",
-        selectedProfile.legal_representative_last_name || ""
-      );
-      form.setValue("siret", selectedProfile.siret || "");
-      form.setValue("company_name", selectedProfile.company_name || "");
-      form.setValue("company_address", selectedProfile.company_address || "");
-    }
-  };
-
-  const handleSubcontractorChange = (subcontractorId: string) => {
-    form.setValue("subcontractor_id", subcontractorId);
-  };
-
   const handleProjectChange = (projectId: string) => {
     form.setValue("project_id", projectId);
     form.setValue("selected_work_descriptions", []);
     form.setValue("is_full_project", false);
   };
 
-  const handleSelectAll = (checked: boolean) => {
-    form.setValue("is_full_project", checked);
-    if (checked && workTitles) {
-      const allDescriptions = workTitles.flatMap(title => 
-        title.work_descriptions.map(desc => desc.id || '')
-      );
-      form.setValue("selected_work_descriptions", allDescriptions);
-    } else {
-      form.setValue("selected_work_descriptions", []);
-    }
-  };
-
-  const handleSelectDescription = (descriptionId: string, checked: boolean) => {
-    const currentSelections = form.getValues("selected_work_descriptions") || [];
-    const newSelections = checked
-      ? [...currentSelections, descriptionId]
-      : currentSelections.filter(id => id !== descriptionId);
-    
-    form.setValue("selected_work_descriptions", newSelections);
-  };
-
-  const selectedProfileId = form.watch("profile_id");
-  const selectedProfile = profiles?.find((p) => p.id === selectedProfileId);
-
-  const selectedSubcontractorId = form.watch("subcontractor_id");
-  const selectedSubcontractor = subcontractors?.find((s) => s.id === selectedSubcontractorId);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <ContractNameField form={form} />
         
-        <div className="space-y-4">
-          <ProfileSelectField
-            form={form}
-            profiles={profiles}
-            onProfileChange={handleProfileChange}
-          />
+        <ClientSection form={form} />
+        
+        <SubcontractorSection form={form} />
 
-          {selectedProfile && (
-            <ProfilePreview profile={selectedProfile} />
-          )}
-        </div>
-
-        <div className="space-y-4">
-          <SubcontractorSelectField
-            form={form}
-            subcontractors={subcontractors}
-            onSubcontractorChange={handleSubcontractorChange}
-          />
-
-          {selectedSubcontractor && (
-            <SubcontractorPreview subcontractor={selectedSubcontractor} />
-          )}
-        </div>
-
-        <div className="space-y-4">
-          <ProjectSelectField
-            form={form}
-            projects={projects}
-            onProjectChange={handleProjectChange}
-          />
-
-          {selectedProjectId && workTitles && (
-            <div className="border rounded-lg p-4">
-              <WorkItemsSelect
-                workTitles={workTitles}
-                selectedDescriptions={selectedDescriptions}
-                isFullProject={isFullProject}
-                onSelectAll={handleSelectAll}
-                onSelectDescription={handleSelectDescription}
-              />
-            </div>
-          )}
-        </div>
+        <WorkTitlesSelect
+          form={form}
+          onProjectChange={handleProjectChange}
+        />
 
         <div className="flex justify-end space-x-4">
           <Button
