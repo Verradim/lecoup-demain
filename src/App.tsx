@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -16,6 +17,7 @@ import { SubcontractorList } from "@/components/subcontractor/SubcontractorList"
 import SubcontractorFormPage from "@/pages/subcontractor/SubcontractorFormPage";
 import ContractList from "@/pages/ContractList";
 import ContractForm from "@/pages/ContractForm";
+import ContractDetails from "@/pages/ContractDetails";
 
 function App() {
   return (
@@ -37,6 +39,7 @@ function App() {
             <Route path="sous-traitants/nouveau" element={<SubcontractorFormPage />} />
             <Route path="contrats" element={<ContractList />} />
             <Route path="contrats/nouveau" element={<ContractForm />} />
+            <Route path="contrats/:id" element={<ContractDetails />} />
           </Route>
         </Routes>
         <Toaster />
