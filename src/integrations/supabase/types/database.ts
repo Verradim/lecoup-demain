@@ -1,10 +1,17 @@
+import { ContractsTable } from './tables/contracts';
+import { FormSubmissionsTable } from './tables/form-submissions';
+import { ProfilesTable } from './tables/profiles';
+import { ProjectsTable } from './tables/projects';
+import { PropositionsTable } from './tables/propositions';
+import { SubcontractorsTable } from './tables/subcontractors';
+
 export type Json =
   | string
   | number
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[]
+  | Json[];
 
 export interface Database {
   public: {

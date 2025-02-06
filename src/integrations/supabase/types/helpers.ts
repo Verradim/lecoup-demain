@@ -1,3 +1,5 @@
+import { Database } from './database';
+
 export type PublicSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<

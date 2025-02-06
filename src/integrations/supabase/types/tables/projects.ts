@@ -1,3 +1,5 @@
+import { Json } from '../database';
+
 export interface ProjectsTable {
   Row: {
     id: string;
