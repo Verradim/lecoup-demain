@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { ContractNameField } from "@/components/contract/ContractNameField";
 import { ProfileSelectField } from "@/components/contract/ProfileSelectField";
-import { CompanyInfoFields } from "@/components/profile/CompanyInfoFields";
-import { LegalRepresentativeFields } from "@/components/profile/LegalRepresentativeFields";
+import { ProfilePreview } from "@/components/contract/ProfilePreview";
 import { useContractForm } from "@/hooks/useContractForm";
 import { Profile } from "@/types/profile";
 
@@ -45,6 +45,9 @@ const ContractForm = () => {
     }
   };
 
+  const selectedProfileId = form.watch("profile_id");
+  const selectedProfile = profiles?.find((p) => p.id === selectedProfileId);
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
@@ -62,8 +65,10 @@ const ContractForm = () => {
             profiles={profiles}
             onProfileChange={handleProfileChange}
           />
-          <LegalRepresentativeFields form={form} />
-          <CompanyInfoFields form={form} />
+
+          {selectedProfile && (
+            <ProfilePreview profile={selectedProfile} />
+          )}
 
           <div className="flex justify-end space-x-4">
             <Button
