@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Form } from "@/components/ui/form";
@@ -118,7 +117,7 @@ const ContractForm = () => {
     form.setValue("is_full_project", checked);
     if (checked && workTitles) {
       const allDescriptions = workTitles.flatMap(title => 
-        title.descriptions.map(desc => desc.id || '')
+        title.work_descriptions.map(desc => desc.id || '')
       );
       form.setValue("selected_work_descriptions", allDescriptions);
     } else {

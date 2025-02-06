@@ -43,7 +43,7 @@ export const WorkTitleInput = ({
       </div>
 
       <div className="space-y-3 pl-4 border-l-2">
-        {workTitle.descriptions.map((desc, descIndex) => (
+        {workTitle.work_descriptions.map((desc, descIndex) => (
           <div key={descIndex} className="flex gap-2">
             <Input
               value={desc.description}
@@ -51,7 +51,7 @@ export const WorkTitleInput = ({
               placeholder="Ex: Alimentation en eau chaude/froide"
               className="flex-1"
             />
-            {workTitle.descriptions.length > 1 && (
+            {workTitle.work_descriptions.length > 1 && (
               <Button
                 type="button"
                 variant="outline"
