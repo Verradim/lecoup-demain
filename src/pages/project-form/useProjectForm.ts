@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -76,14 +77,13 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
 
       const projectData = {
         name,
-        work_titles: filteredWorkTitles,
         work_location: location,
         start_date: startDate?.toISOString(),
         end_date: endDate?.toISOString(),
         user_id: userId,
       };
 
-      let updatedProject = project;
+      let projectId: string;
 
       if (mode === "edit" && project) {
         const { error: updateError } = await supabase
@@ -92,26 +92,51 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
           .eq("id", project.id);
 
         if (updateError) throw updateError;
+        projectId = project.id;
+
+        // Delete existing work titles and descriptions
+        await supabase
+          .from("work_titles")
+          .delete()
+          .eq("project_id", projectId);
       } else {
-        const { data: newProjectData, error: createError } = await supabase
+        const { data: newProject, error: createError } = await supabase
           .from("projects")
           .insert(projectData)
           .select()
           .single();
 
         if (createError) throw createError;
-
-        const typedProject: Project = {
-          ...newProjectData,
-          work_titles: newProjectData.work_titles ? newProjectData.work_titles.map((wt: any) => ({
-            title: wt.title,
-            descriptions: wt.descriptions
-          })) : null
-        };
-        updatedProject = typedProject;
+        projectId = newProject.id;
       }
 
-      if (quoteFile && updatedProject) {
+      // Insert work titles and descriptions
+      for (const workTitle of filteredWorkTitles) {
+        const { data: newWorkTitle, error: workTitleError } = await supabase
+          .from("work_titles")
+          .insert({
+            project_id: projectId,
+            title: workTitle.title,
+          })
+          .select()
+          .single();
+
+        if (workTitleError) throw workTitleError;
+
+        // Insert descriptions for this work title
+        const descriptionsToInsert = workTitle.descriptions.map(description => ({
+          work_title_id: newWorkTitle.id,
+          description,
+        }));
+
+        const { error: descriptionsError } = await supabase
+          .from("work_descriptions")
+          .insert(descriptionsToInsert);
+
+        if (descriptionsError) throw descriptionsError;
+      }
+
+      if (quoteFile) {
         const fileExt = quoteFile.name.split('.').pop();
         const filePath = `${userId}/${crypto.randomUUID()}.${fileExt}`;
         
@@ -127,7 +152,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
             quote_file_path: filePath,
             quote_file_name: quoteFile.name
           })
-          .eq('id', updatedProject.id);
+          .eq('id', projectId);
 
         if (updateError) throw updateError;
       }
