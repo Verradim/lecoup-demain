@@ -46,7 +46,7 @@ export const WorkTitleInput = ({
         {workTitle.descriptions.map((desc, descIndex) => (
           <div key={descIndex} className="flex gap-2">
             <Input
-              value={desc}
+              value={desc.description}
               onChange={(e) => onUpdateDescription(titleIndex, descIndex, e.target.value)}
               placeholder="Ex: Alimentation en eau chaude/froide"
               className="flex-1"

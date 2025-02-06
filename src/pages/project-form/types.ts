@@ -1,14 +1,20 @@
 
+export interface WorkDescription {
+  id?: string;
+  description: string;
+}
+
 export interface WorkTitle {
+  id?: string;
   title: string;
-  descriptions: string[];
+  descriptions: WorkDescription[];
 }
 
 export interface Project {
   id: string;
   name: string;
   description: string | null;
-  work_titles: WorkTitle[] | null;
+  work_titles?: WorkTitle[];
   work_location: string | null;
   start_date: string | null;
   end_date: string | null;
