@@ -218,6 +218,54 @@ export type Database = {
         }
         Relationships: []
       }
+      subcontractors: {
+        Row: {
+          company_address: string
+          company_name: string
+          created_at: string
+          id: string
+          insurance_proof_name: string | null
+          insurance_proof_path: string | null
+          legal_representative_first_name: string
+          legal_representative_last_name: string
+          siret: string
+          updated_at: string
+          user_id: string
+          vigilance_proof_name: string | null
+          vigilance_proof_path: string | null
+        }
+        Insert: {
+          company_address: string
+          company_name: string
+          created_at?: string
+          id?: string
+          insurance_proof_name?: string | null
+          insurance_proof_path?: string | null
+          legal_representative_first_name: string
+          legal_representative_last_name: string
+          siret: string
+          updated_at?: string
+          user_id: string
+          vigilance_proof_name?: string | null
+          vigilance_proof_path?: string | null
+        }
+        Update: {
+          company_address?: string
+          company_name?: string
+          created_at?: string
+          id?: string
+          insurance_proof_name?: string | null
+          insurance_proof_path?: string | null
+          legal_representative_first_name?: string
+          legal_representative_last_name?: string
+          siret?: string
+          updated_at?: string
+          user_id?: string
+          vigilance_proof_name?: string | null
+          vigilance_proof_path?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

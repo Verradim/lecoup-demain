@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Plus, FileText } from "lucide-react";
+import { SubcontractorList } from "@/components/subcontractor/SubcontractorList";
 
 interface Project {
   id: string;
@@ -82,9 +82,9 @@ const UserDashboard = () => {
         <h1 className="text-3xl font-bold">Mon espace</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8">
         {/* Profile Overview */}
-        <Card className="lg:col-span-1">
+        <Card>
           <CardHeader>
             <CardTitle>Mon Profil</CardTitle>
             <CardDescription>Informations entreprise</CardDescription>
@@ -123,7 +123,7 @@ const UserDashboard = () => {
         </Card>
 
         {/* Recent Projects */}
-        <Card className="lg:col-span-2">
+        <Card>
           <CardHeader>
             <CardTitle>Mes derniers chantiers</CardTitle>
             <CardDescription>Aperçu de vos chantiers récents</CardDescription>
@@ -164,6 +164,13 @@ const UserDashboard = () => {
                 )}
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Subcontractors */}
+        <Card>
+          <CardContent className="pt-6">
+            <SubcontractorList />
           </CardContent>
         </Card>
       </div>
