@@ -21,6 +21,8 @@ export const useContractForm = () => {
       siret: "",
       company_name: "",
       company_address: "",
+      project_id: "",
+      is_full_project: false,
     },
   });
 
@@ -37,6 +39,8 @@ export const useContractForm = () => {
         company_address: values.company_address,
         user_id: user?.id,
         status: "draft",
+        project_id: values.project_id,
+        is_full_project: values.is_full_project,
       });
 
       if (error) throw error;
