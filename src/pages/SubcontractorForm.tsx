@@ -4,7 +4,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Layout } from "@/components/Layout";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -103,11 +102,6 @@ export const SubcontractorForm = () => {
   };
 
   return (
-    <Layout
-      title="Ajouter un sous-traitant - Le Coup de Main"
-      description="Ajoutez un nouveau sous-traitant à votre espace"
-      canonicalUrl="https://lecoup-demain.com/mon-espace/sous-traitants/nouveau"
-    >
       <div className="container max-w-2xl py-8">
         <h1 className="text-3xl font-bold mb-8">Ajouter un sous-traitant</h1>
         
@@ -127,7 +121,6 @@ export const SubcontractorForm = () => {
           </form>
         </Form>
       </div>
-    </Layout>
   );
 };
 
