@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { FileUpload } from "./FileUpload";
 import { File } from "lucide-react";
 
-interface FormValues {
+export interface FormValues {
   companyName: string;
   siret: string;
   companyAddress: string;

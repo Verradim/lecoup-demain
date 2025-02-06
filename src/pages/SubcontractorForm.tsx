@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { SubcontractorFormFields } from "@/components/subcontractor/SubcontractorFormFields";
+import { SubcontractorFormFields, FormValues } from "@/components/subcontractor/SubcontractorFormFields";
 
 const formSchema = z.object({
   companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
@@ -21,8 +21,6 @@ const formSchema = z.object({
   legalRepresentativeFirstName: z.string().min(1, "Le prénom est requis"),
   legalRepresentativeLastName: z.string().min(1, "Le nom est requis"),
 });
-
-type FormValues = z.infer<typeof formSchema>;
 
 export const SubcontractorForm = () => {
   const navigate = useNavigate();
@@ -48,7 +46,6 @@ export const SubcontractorForm = () => {
     try {
       setLoading(true);
 
-      // Upload files if they exist
       let vigilanceProofPath = null;
       let vigilanceProofName = null;
       let insuranceProofPath = null;
@@ -80,7 +77,6 @@ export const SubcontractorForm = () => {
         insuranceProofName = insuranceProof.name;
       }
 
-      // Create subcontractor record
       const { error } = await supabase.from('subcontractors').insert({
         user_id: user.id,
         company_name: values.companyName,
