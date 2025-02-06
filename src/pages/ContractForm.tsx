@@ -13,7 +13,7 @@ import { ProjectPreview } from "@/components/contract/ProjectPreview";
 import { useContractForm } from "@/hooks/useContractForm";
 import { Profile } from "@/types/profile";
 import { Tables } from "@/integrations/supabase/types";
-import { Project } from "@/pages/project-form/types";
+import { Project, WorkTitle } from "@/pages/project-form/types";
 
 type Subcontractor = Tables<"subcontractors">;
 
@@ -54,7 +54,15 @@ const ContractForm = () => {
         .select("*");
 
       if (error) throw error;
-      return data as Project[];
+
+      // Transform the data to match the Project type
+      return data?.map(project => ({
+        ...project,
+        work_titles: project.work_titles?.map((wt: any) => ({
+          title: wt.title,
+          descriptions: wt.descriptions
+        })) as WorkTitle[] | null
+      })) as Project[];
     },
   });
 
