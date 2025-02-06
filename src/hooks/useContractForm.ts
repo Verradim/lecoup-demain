@@ -1,0 +1,44 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { ContractFormValues, contractFormSchema } from "@/types/contract";
+
+export const useContractForm = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const form = useForm<ContractFormValues>({
+    resolver: zodResolver(contractFormSchema),
+    defaultValues: {
+      name: "",
+      profile_id: "",
+      legal_representative_first_name: "",
+      legal_representative_last_name: "",
+      siret: "",
+      company_name: "",
+      company_address: "",
+    },
+  });
+
+  const onSubmit = async (values: ContractFormValues) => {
+    try {
+      const { error } = await supabase.from("contracts").insert({
+        ...values,
+        user_id: user?.id,
+        status: "draft",
+      });
+
+      if (error) throw error;
+
+      toast.success("Contrat créé avec succès");
+      navigate("/mon-espace/contrats");
+    } catch (error: any) {
+      toast.error("Erreur lors de la création du contrat: " + error.message);
+    }
+  };
+
+  return { form, onSubmit };
+};

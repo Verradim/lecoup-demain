@@ -11,46 +11,46 @@ export type Database = {
     Tables: {
       contracts: {
         Row: {
-          id: string
+          company_address: string
+          company_name: string
           created_at: string
+          id: string
+          legal_representative_first_name: string
+          legal_representative_last_name: string
+          name: string
+          profile_id: string
+          siret: string
+          status: string
           updated_at: string
           user_id: string
-          profile_id: string
-          name: string
-          status: string
-          legal_representative_first_name: string
-          legal_representative_last_name: string
-          siret: string
-          company_name: string
-          company_address: string
         }
         Insert: {
-          id?: string
+          company_address: string
+          company_name: string
           created_at?: string
-          updated_at?: string
-          user_id: string
-          profile_id: string
-          name: string
-          status?: string
+          id?: string
           legal_representative_first_name: string
           legal_representative_last_name: string
+          name: string
+          profile_id: string
           siret: string
-          company_name: string
-          company_address: string
+          status?: string
+          updated_at?: string
+          user_id: string
         }
         Update: {
-          id?: string
+          company_address?: string
+          company_name?: string
           created_at?: string
-          updated_at?: string
-          user_id?: string
-          profile_id?: string
-          name?: string
-          status?: string
+          id?: string
           legal_representative_first_name?: string
           legal_representative_last_name?: string
+          name?: string
+          profile_id?: string
           siret?: string
-          company_name?: string
-          company_address?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -60,13 +60,6 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "contracts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
         ]
       }
       form_submissions: {
