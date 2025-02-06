@@ -1,16 +1,19 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { ContractNameField } from "@/components/contract/ContractNameField";
 import { ProfileSelectField } from "@/components/contract/ProfileSelectField";
 import { SubcontractorSelectField } from "@/components/contract/SubcontractorSelectField";
+import { ProjectSelectField } from "@/components/contract/ProjectSelectField";
+import { WorkItemsSelect } from "@/components/contract/WorkItemsSelect";
 import { ProfilePreview } from "@/components/contract/ProfilePreview";
 import { SubcontractorPreview } from "@/components/contract/SubcontractorPreview";
 import { useContractForm } from "@/hooks/useContractForm";
 import { Profile } from "@/types/profile";
+import { Project, WorkTitle } from "@/pages/project-form/types";
 import { Tables } from "@/integrations/supabase/types";
 
 type Subcontractor = Tables<"subcontractors">;
@@ -44,6 +47,45 @@ const ContractForm = () => {
     },
   });
 
+  const { data: projects } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*");
+
+      if (error) throw error;
+      return data as Project[];
+    },
+  });
+
+  const selectedProjectId = form.watch("project_id");
+  const selectedDescriptions = form.watch("selected_work_descriptions") || [];
+  const isFullProject = form.watch("is_full_project");
+
+  const { data: workTitles } = useQuery({
+    queryKey: ["workTitles", selectedProjectId],
+    queryFn: async () => {
+      if (!selectedProjectId) return [];
+      
+      const { data, error } = await supabase
+        .from("work_titles")
+        .select(`
+          id,
+          title,
+          work_descriptions (
+            id,
+            description
+          )
+        `)
+        .eq("project_id", selectedProjectId);
+
+      if (error) throw error;
+      return data as WorkTitle[];
+    },
+    enabled: !!selectedProjectId,
+  });
+
   const handleProfileChange = (profileId: string) => {
     const selectedProfile = profiles?.find((p) => p.id === profileId);
     if (selectedProfile) {
@@ -64,6 +106,33 @@ const ContractForm = () => {
 
   const handleSubcontractorChange = (subcontractorId: string) => {
     form.setValue("subcontractor_id", subcontractorId);
+  };
+
+  const handleProjectChange = (projectId: string) => {
+    form.setValue("project_id", projectId);
+    form.setValue("selected_work_descriptions", []);
+    form.setValue("is_full_project", false);
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    form.setValue("is_full_project", checked);
+    if (checked && workTitles) {
+      const allDescriptions = workTitles.flatMap(title => 
+        title.descriptions.map(desc => desc.id || '')
+      );
+      form.setValue("selected_work_descriptions", allDescriptions);
+    } else {
+      form.setValue("selected_work_descriptions", []);
+    }
+  };
+
+  const handleSelectDescription = (descriptionId: string, checked: boolean) => {
+    const currentSelections = form.getValues("selected_work_descriptions") || [];
+    const newSelections = checked
+      ? [...currentSelections, descriptionId]
+      : currentSelections.filter(id => id !== descriptionId);
+    
+    form.setValue("selected_work_descriptions", newSelections);
   };
 
   const selectedProfileId = form.watch("profile_id");
@@ -106,6 +175,26 @@ const ContractForm = () => {
 
             {selectedSubcontractor && (
               <SubcontractorPreview subcontractor={selectedSubcontractor} />
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <ProjectSelectField
+              form={form}
+              projects={projects}
+              onProjectChange={handleProjectChange}
+            />
+
+            {selectedProjectId && workTitles && (
+              <div className="border rounded-lg p-4">
+                <WorkItemsSelect
+                  workTitles={workTitles}
+                  selectedDescriptions={selectedDescriptions}
+                  isFullProject={isFullProject}
+                  onSelectAll={handleSelectAll}
+                  onSelectDescription={handleSelectDescription}
+                />
+              </div>
             )}
           </div>
 

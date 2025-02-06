@@ -1,3 +1,4 @@
+
 import * as z from "zod";
 
 export const contractFormSchema = z.object({
@@ -9,6 +10,9 @@ export const contractFormSchema = z.object({
   siret: z.string(),
   company_name: z.string(),
   company_address: z.string(),
+  project_id: z.string().optional(),
+  is_full_project: z.boolean().optional(),
+  selected_work_descriptions: z.array(z.string()).optional(),
 });
 
 export type ContractFormValues = z.infer<typeof contractFormSchema>;

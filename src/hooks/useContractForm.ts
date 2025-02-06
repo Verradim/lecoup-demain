@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +22,9 @@ export const useContractForm = () => {
       siret: "",
       company_name: "",
       company_address: "",
+      project_id: "",
+      is_full_project: false,
+      selected_work_descriptions: [],
     },
   });
 
@@ -37,6 +41,9 @@ export const useContractForm = () => {
         company_address: values.company_address,
         user_id: user?.id,
         status: "draft",
+        project_id: values.project_id,
+        is_full_project: values.is_full_project,
+        selected_work_descriptions: values.selected_work_descriptions,
       });
 
       if (error) throw error;
