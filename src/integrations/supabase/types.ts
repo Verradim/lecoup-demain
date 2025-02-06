@@ -21,6 +21,7 @@ export type Database = {
           profile_id: string
           siret: string
           status: string
+          subcontractor_id: string | null
           updated_at: string
           user_id: string
         }
@@ -35,6 +36,7 @@ export type Database = {
           profile_id: string
           siret: string
           status?: string
+          subcontractor_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -49,6 +51,7 @@ export type Database = {
           profile_id?: string
           siret?: string
           status?: string
+          subcontractor_id?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -58,6 +61,13 @@ export type Database = {
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contracts_subcontractor_id_fkey"
+            columns: ["subcontractor_id"]
+            isOneToOne: false
+            referencedRelation: "subcontractors"
             referencedColumns: ["id"]
           },
         ]
