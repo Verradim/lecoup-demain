@@ -1,4 +1,3 @@
-
 import { useLocation, Link } from "react-router-dom";
 import { Building2, User, LogOut, Home } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,9 +35,9 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="border-r pt-16 w-auto">
-     <SidebarContent>
-      <SidebarGroup>
-         <SidebarGroupContent>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
