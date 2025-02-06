@@ -2,16 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { ContractNameField } from "@/components/contract/ContractNameField";
 import { ProfileSelectField } from "@/components/contract/ProfileSelectField";
 import { SubcontractorSelectField } from "@/components/contract/SubcontractorSelectField";
 import { ProfilePreview } from "@/components/contract/ProfilePreview";
 import { SubcontractorPreview } from "@/components/contract/SubcontractorPreview";
+import { ProjectSelectField } from "@/components/contract/ProjectSelectField";
+import { ProjectPreview } from "@/components/contract/ProjectPreview";
 import { useContractForm } from "@/hooks/useContractForm";
 import { Profile } from "@/types/profile";
 import { Tables } from "@/integrations/supabase/types";
+import { Project } from "@/pages/project-form/types";
 
 type Subcontractor = Tables<"subcontractors">;
 
@@ -44,6 +46,18 @@ const ContractForm = () => {
     },
   });
 
+  const { data: projects } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*");
+
+      if (error) throw error;
+      return data as Project[];
+    },
+  });
+
   const handleProfileChange = (profileId: string) => {
     const selectedProfile = profiles?.find((p) => p.id === profileId);
     if (selectedProfile) {
@@ -66,11 +80,25 @@ const ContractForm = () => {
     form.setValue("subcontractor_id", subcontractorId);
   };
 
+  const handleProjectChange = (projectId: string) => {
+    form.setValue("project_id", projectId);
+  };
+
+  const handleFullProjectChange = (checked: boolean) => {
+    form.setValue("is_full_project", checked);
+  };
+
   const selectedProfileId = form.watch("profile_id");
   const selectedProfile = profiles?.find((p) => p.id === selectedProfileId);
 
   const selectedSubcontractorId = form.watch("subcontractor_id");
-  const selectedSubcontractor = subcontractors?.find((s) => s.id === selectedSubcontractorId);
+  const selectedSubcontractor = subcontractors?.find(
+    (s) => s.id === selectedSubcontractorId
+  );
+
+  const selectedProjectId = form.watch("project_id");
+  const selectedProject = projects?.find((p) => p.id === selectedProjectId);
+  const isFullProject = form.watch("is_full_project");
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -84,7 +112,7 @@ const ContractForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <ContractNameField form={form} />
-          
+
           <div className="space-y-4">
             <ProfileSelectField
               form={form}
@@ -92,9 +120,7 @@ const ContractForm = () => {
               onProfileChange={handleProfileChange}
             />
 
-            {selectedProfile && (
-              <ProfilePreview profile={selectedProfile} />
-            )}
+            {selectedProfile && <ProfilePreview profile={selectedProfile} />}
           </div>
 
           <div className="space-y-4">
@@ -106,6 +132,22 @@ const ContractForm = () => {
 
             {selectedSubcontractor && (
               <SubcontractorPreview subcontractor={selectedSubcontractor} />
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <ProjectSelectField
+              form={form}
+              projects={projects}
+              onProjectChange={handleProjectChange}
+            />
+
+            {selectedProject && (
+              <ProjectPreview
+                project={selectedProject}
+                isFullProject={isFullProject}
+                onFullProjectChange={handleFullProjectChange}
+              />
             )}
           </div>
 
