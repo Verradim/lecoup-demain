@@ -15,12 +15,10 @@ export type Database = {
           company_name: string
           created_at: string
           id: string
-          is_full_project: boolean | null
           legal_representative_first_name: string
           legal_representative_last_name: string
           name: string
           profile_id: string
-          project_id: string | null
           siret: string
           status: string
           subcontractor_id: string | null
@@ -32,12 +30,10 @@ export type Database = {
           company_name: string
           created_at?: string
           id?: string
-          is_full_project?: boolean | null
           legal_representative_first_name: string
           legal_representative_last_name: string
           name: string
           profile_id: string
-          project_id?: string | null
           siret: string
           status?: string
           subcontractor_id?: string | null
@@ -49,12 +45,10 @@ export type Database = {
           company_name?: string
           created_at?: string
           id?: string
-          is_full_project?: boolean | null
           legal_representative_first_name?: string
           legal_representative_last_name?: string
           name?: string
           profile_id?: string
-          project_id?: string | null
           siret?: string
           status?: string
           subcontractor_id?: string | null
@@ -67,13 +61,6 @@ export type Database = {
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "contracts_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
           {
