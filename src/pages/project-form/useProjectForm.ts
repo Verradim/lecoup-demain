@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -15,9 +15,9 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(project?.name ?? "");
-  const [workTitles, setWorkTitles] = useState<WorkTitle[]>(
-    project?.work_titles ?? [{ title: "", descriptions: ["", ""] }]
-  );
+  const [workTitles, setWorkTitles] = useState<WorkTitle[]>([
+    { title: "", descriptions: ["", ""] }
+  ]);
   const [location, setLocation] = useState(project?.work_location ?? "");
   const [startDate, setStartDate] = useState<Date | undefined>(
     project?.start_date ? new Date(project.start_date) : undefined
@@ -26,6 +26,44 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
     project?.end_date ? new Date(project.end_date) : undefined
   );
   const [quoteFile, setQuoteFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    const fetchWorkTitlesAndDescriptions = async () => {
+      if (mode === "edit" && project) {
+        try {
+          // Fetch work titles for this project
+          const { data: workTitlesData, error: workTitlesError } = await supabase
+            .from("work_titles")
+            .select(`
+              id,
+              title,
+              work_descriptions (
+                description
+              )
+            `)
+            .eq("project_id", project.id);
+
+          if (workTitlesError) throw workTitlesError;
+
+          if (workTitlesData) {
+            const formattedWorkTitles: WorkTitle[] = workTitlesData.map((wt: any) => ({
+              title: wt.title,
+              descriptions: wt.work_descriptions.map((wd: any) => wd.description)
+            }));
+            
+            if (formattedWorkTitles.length > 0) {
+              setWorkTitles(formattedWorkTitles);
+            }
+          }
+        } catch (error: any) {
+          console.error("Error fetching work titles:", error);
+          toast.error("Erreur lors du chargement des intitulés de travaux");
+        }
+      }
+    };
+
+    fetchWorkTitlesAndDescriptions();
+  }, [mode, project]);
 
   const addWorkTitle = () => {
     setWorkTitles([...workTitles, { title: "", descriptions: ["", ""] }]);
