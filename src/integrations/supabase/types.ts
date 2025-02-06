@@ -9,6 +9,66 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      contracts: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          user_id: string
+          profile_id: string
+          name: string
+          status: string
+          legal_representative_first_name: string
+          legal_representative_last_name: string
+          siret: string
+          company_name: string
+          company_address: string
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          user_id: string
+          profile_id: string
+          name: string
+          status?: string
+          legal_representative_first_name: string
+          legal_representative_last_name: string
+          siret: string
+          company_name: string
+          company_address: string
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+          profile_id?: string
+          name?: string
+          status?: string
+          legal_representative_first_name?: string
+          legal_representative_last_name?: string
+          siret?: string
+          company_name?: string
+          company_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracts_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contracts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       form_submissions: {
         Row: {
           company_description: string
