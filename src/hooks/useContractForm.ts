@@ -21,31 +21,33 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
 
   const form = useForm<ContractFormValues>({
     resolver: zodResolver(contractFormSchema),
-    defaultValues: contract ? {
-      name: contract.name,
-      profile_id: contract.profile_id,
-      subcontractor_id: contract.subcontractor_id,
-      legal_representative_first_name: contract.legal_representative_first_name,
-      legal_representative_last_name: contract.legal_representative_last_name,
-      siret: contract.siret,
-      company_name: contract.company_name,
-      company_address: contract.company_address,
-      project_id: contract.project_id || undefined,
-      is_full_project: contract.is_full_project || false,
-      selected_work_descriptions: contract.selected_work_descriptions || [],
-    } : {
-      name: "",
-      profile_id: "",
-      subcontractor_id: "",
-      legal_representative_first_name: "",
-      legal_representative_last_name: "",
-      siret: "",
-      company_name: "",
-      company_address: "",
-      project_id: "",
-      is_full_project: false,
-      selected_work_descriptions: [],
-    },
+    defaultValues: contract
+      ? {
+          name: contract.name,
+          profile_id: contract.profile_id,
+          subcontractor_id: contract.subcontractor_id,
+          legal_representative_first_name: contract.legal_representative_first_name,
+          legal_representative_last_name: contract.legal_representative_last_name,
+          siret: contract.siret,
+          company_name: contract.company_name,
+          company_address: contract.company_address,
+          project_id: contract.project_id || undefined,
+          is_full_project: contract.is_full_project || false,
+          selected_work_descriptions: contract.selected_work_descriptions || [],
+        }
+      : {
+          name: "",
+          profile_id: "",
+          subcontractor_id: "",
+          legal_representative_first_name: "",
+          legal_representative_last_name: "",
+          siret: "",
+          company_name: "",
+          company_address: "",
+          project_id: "",
+          is_full_project: false,
+          selected_work_descriptions: [],
+        },
   });
 
   const onSubmit = async (values: ContractFormValues) => {
@@ -70,7 +72,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         if (error) throw error;
 
         toast.success("Contrat créé avec succès");
-      } else if (contract?.id) {
+      } else if (mode === "edit" && contract?.id) {
         const { error } = await supabase
           .from("contracts")
           .update({
@@ -93,9 +95,12 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         toast.success("Contrat modifié avec succès");
       }
 
+      // Rediriger vers la liste des contrats après la création ou la modification
       navigate("/mon-espace/contrats");
     } catch (error: any) {
-      toast.error("Erreur lors de l'enregistrement du contrat: " + error.message);
+      toast.error(
+        "Erreur lors de l'enregistrement du contrat: " + error.message
+      );
     }
   };
 
