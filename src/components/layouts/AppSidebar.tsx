@@ -96,7 +96,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={handleSignOut}>
-                  <LogOut className="w-4 h-4 mr-2 text-gray-800" />
+                  <LogOut className="w-4 h-4 mr-2" />
                   <span>Déconnexion</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
