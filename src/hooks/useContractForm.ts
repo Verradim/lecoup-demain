@@ -63,7 +63,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
           company_name: values.company_name,
           company_address: values.company_address,
           user_id: user?.id,
-          status: "brouillon",
+          status: "draft",
           project_id: values.project_id,
           is_full_project: values.is_full_project,
           selected_work_descriptions: values.selected_work_descriptions,
