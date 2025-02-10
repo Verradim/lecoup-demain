@@ -52,6 +52,20 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
 
   const onSubmit = async (values: ContractFormValues) => {
     try {
+      // Si un project_id est défini, on récupère d'abord le montant HT du projet
+      let projectAmountHt = null;
+      if (values.project_id) {
+        const { data: project } = await supabase
+          .from("projects")
+          .select("amount_ht")
+          .eq("id", values.project_id)
+          .single();
+        
+        if (project) {
+          projectAmountHt = project.amount_ht;
+        }
+      }
+
       if (mode === "create") {
         const { error } = await supabase.from("contracts").insert({
           name: values.name,
@@ -67,6 +81,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
           project_id: values.project_id,
           is_full_project: values.is_full_project,
           selected_work_descriptions: values.selected_work_descriptions,
+          amount_ht: projectAmountHt,
         });
 
         if (error) throw error;
@@ -87,6 +102,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
             project_id: values.project_id,
             is_full_project: values.is_full_project,
             selected_work_descriptions: values.selected_work_descriptions,
+            amount_ht: projectAmountHt,
           })
           .eq("id", contract.id);
 

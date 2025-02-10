@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(session?.user ?? null);
       setLoading(false);
 
-      if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+      if (event === 'SIGNED_OUT') {
         navigate('/auth');
       } else if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
         // Rediriger vers la page précédente ou la page d'accueil
