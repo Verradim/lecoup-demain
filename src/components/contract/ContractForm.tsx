@@ -44,6 +44,8 @@ export const ContractForm = ({ mode, contract }: ContractFormProps) => {
     form.setValue("project_id", projectId);
     form.setValue("selected_work_descriptions", []);
     form.setValue("is_full_project", false);
+    // Reset payment milestones when project changes
+    form.setValue("payment_milestones", []);
   };
 
   return (

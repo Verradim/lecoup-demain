@@ -167,4 +167,3 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
 
   return { form, onSubmit };
 };
-

@@ -14,6 +14,11 @@ import {
 import { ContractFormValues, PaymentMilestone } from "@/types/contract";
 import { cn } from "@/lib/utils";
 import { UseFormReturn } from "react-hook-form";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
 
 interface PaymentScheduleProps {
   form: UseFormReturn<ContractFormValues>;
@@ -89,7 +94,9 @@ export const PaymentSchedule = ({
       milestone_type: "custom",
       order_index: milestones.length,
     };
-    form.setValue("payment_milestones", [...milestones, newMilestone]);
+
+    const updatedMilestones = [...milestones, newMilestone];
+    form.setValue("payment_milestones", updatedMilestones);
   };
 
   const removeMilestone = (index: number) => {
@@ -103,11 +110,30 @@ export const PaymentSchedule = ({
   const updateMilestone = (index: number, field: keyof PaymentMilestone, value: any) => {
     const updatedMilestones = milestones.map((milestone, i) => {
       if (i === index) {
-        return { ...milestone, [field]: value };
+        const updatedMilestone = { ...milestone, [field]: value };
+        return updatedMilestone;
       }
       return milestone;
     });
-    form.setValue("payment_milestones", updatedMilestones);
+
+    // Si une date a été mise à jour, on réordonne les étapes
+    if (field === 'milestone_date') {
+      const sortedMilestones = [...updatedMilestones].sort((a, b) => {
+        if (!a.milestone_date) return -1;
+        if (!b.milestone_date) return 1;
+        return new Date(a.milestone_date).getTime() - new Date(b.milestone_date).getTime();
+      });
+
+      // Mise à jour des order_index
+      const reorderedMilestones = sortedMilestones.map((m, idx) => ({
+        ...m,
+        order_index: idx
+      }));
+
+      form.setValue("payment_milestones", reorderedMilestones);
+    } else {
+      form.setValue("payment_milestones", updatedMilestones);
+    }
   };
 
   return (
@@ -194,6 +220,39 @@ export const PaymentSchedule = ({
                                   HT
                                 </div>
                               )}
+                              {(milestone.milestone_type === "custom" || milestone.milestone_type === "start" || milestone.milestone_type === "end") && (
+                                <div>
+                                  <Label>Date</Label>
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <Button
+                                        variant="outline"
+                                        className={cn(
+                                          "w-[200px] justify-start text-left font-normal",
+                                          !milestone.milestone_date && "text-muted-foreground"
+                                        )}
+                                      >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {milestone.milestone_date ? (
+                                          format(milestone.milestone_date, "PPP", { locale: fr })
+                                        ) : (
+                                          <span>Choisir une date</span>
+                                        )}
+                                      </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                      <Calendar
+                                        mode="single"
+                                        selected={milestone.milestone_date}
+                                        onSelect={(date) =>
+                                          updateMilestone(index, "milestone_date", date)
+                                        }
+                                        initialFocus
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                </div>
+                              )}
                             </div>
                           </div>
                           {milestone.milestone_type === "custom" && (
@@ -242,4 +301,3 @@ export const PaymentSchedule = ({
     </Card>
   );
 };
-
