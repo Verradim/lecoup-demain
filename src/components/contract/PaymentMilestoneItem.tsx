@@ -24,6 +24,8 @@ export const PaymentMilestoneItem = ({
   onUpdate,
   onRemove,
 }: PaymentMilestoneItemProps) => {
+  const isReadOnlyDate = milestone.milestone_type === "start" || milestone.milestone_type === "end";
+
   return (
     <div
       ref={provided.innerRef}
@@ -77,6 +79,8 @@ export const PaymentMilestoneItem = ({
               date={milestone.milestone_date}
               onSelect={(date) => onUpdate(index, "milestone_date", date)}
               label="Date"
+              isOptional={milestone.milestone_type === "custom"}
+              readOnly={isReadOnlyDate}
             />
           )}
         </div>

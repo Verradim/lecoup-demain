@@ -11,20 +11,29 @@ interface DatePickerProps {
   date?: Date;
   onSelect: (date: Date | undefined) => void;
   label?: string;
+  isOptional?: boolean;
+  readOnly?: boolean;
 }
 
-export const DatePicker = ({ date, onSelect, label }: DatePickerProps) => {
+export const DatePicker = ({ date, onSelect, label, isOptional, readOnly }: DatePickerProps) => {
   return (
     <div className="space-y-2">
-      {label && <div className="text-sm font-medium">{label}</div>}
+      {label && (
+        <div className="text-sm font-medium">
+          {label}
+          {isOptional && <span className="text-muted-foreground ml-1">(optionnel)</span>}
+        </div>
+      )}
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             className={cn(
               "w-[200px] justify-start text-left font-normal",
-              !date && "text-muted-foreground"
+              !date && "text-muted-foreground",
+              readOnly && "opacity-50 cursor-not-allowed"
             )}
+            disabled={readOnly}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date ? (
@@ -34,14 +43,16 @@ export const DatePicker = ({ date, onSelect, label }: DatePickerProps) => {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={onSelect}
-            initialFocus
-          />
-        </PopoverContent>
+        {!readOnly && (
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={onSelect}
+              initialFocus
+            />
+          </PopoverContent>
+        )}
       </Popover>
     </div>
   );
