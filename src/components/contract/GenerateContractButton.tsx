@@ -47,6 +47,7 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
 
       // Fetch project data if it exists
       let projectData = null;
+      let workTitlesData = [];
       if (contract.project_id) {
         const { data: project } = await supabase
           .from("projects")
@@ -54,7 +55,39 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
           .eq("id", contract.project_id)
           .single();
         projectData = project;
+
+        // Fetch work titles and their descriptions
+        const { data: workTitles } = await supabase
+          .from("work_titles")
+          .select(`
+            id,
+            title,
+            work_descriptions (
+              id,
+              description
+            )
+          `)
+          .eq("project_id", contract.project_id);
+          
+        workTitlesData = workTitles || [];
       }
+
+      // Prepare work titles and descriptions text
+      const selectedDescriptions = contract.selected_work_descriptions || [];
+      const workTitlesDescription = workTitlesData
+        .map(title => {
+          const descriptions = title.work_descriptions
+            .filter(desc => contract.is_full_project || selectedDescriptions.includes(desc.id))
+            .map(desc => desc.description)
+            .join("\n- ");
+          
+          if (descriptions) {
+            return `${title.title}:\n- ${descriptions}`;
+          }
+          return null;
+        })
+        .filter(Boolean)
+        .join("\n\n");
 
       // Insert into generated_contracts
       const { error } = await supabase
@@ -78,6 +111,7 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
           work_location: projectData?.work_location || null,
           start_date: projectData?.start_date || null,
           end_date: projectData?.end_date || null,
+          work_titles_description: workTitlesDescription || null
         });
 
       if (error) throw error;
