@@ -25,6 +25,15 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
     setIsLoading(true);
 
     try {
+      // Fetch profile data to get email
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", contract.profile_id)
+        .single();
+
+      if (!profile) throw new Error("Profile not found");
+
       // Fetch subcontractor data if it exists
       let subcontractorData = null;
       if (contract.subcontractor_id) {
@@ -53,7 +62,7 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
         .insert({
           contract_id: contract.id,
           user_id: user.id,
-          email: contract.email || "",
+          email: profile.email || "",
           siret: contract.siret,
           company_address: contract.company_address,
           company_name: contract.company_name,
