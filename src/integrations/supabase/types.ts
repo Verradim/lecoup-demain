@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       contracts: {
         Row: {
+          amount_ht: number | null
           company_address: string
           company_name: string
           created_at: string
@@ -29,6 +30,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          amount_ht?: number | null
           company_address: string
           company_name: string
           created_at?: string
@@ -47,6 +49,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          amount_ht?: number | null
           company_address?: string
           company_name?: string
           created_at?: string
@@ -156,6 +159,7 @@ export type Database = {
       }
       generated_contracts: {
         Row: {
+          amount_ht: number | null
           company_address: string
           company_name: string
           contract_id: string
@@ -183,6 +187,7 @@ export type Database = {
           work_titles_description: string | null
         }
         Insert: {
+          amount_ht?: number | null
           company_address: string
           company_name: string
           contract_id: string
@@ -210,6 +215,7 @@ export type Database = {
           work_titles_description?: string | null
         }
         Update: {
+          amount_ht?: number | null
           company_address?: string
           company_name?: string
           contract_id?: string
@@ -329,6 +335,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          amount_ht: number | null
           created_at: string
           description: string | null
           end_date: string | null
@@ -342,6 +349,7 @@ export type Database = {
           work_location: string | null
         }
         Insert: {
+          amount_ht?: number | null
           created_at?: string
           description?: string | null
           end_date?: string | null
@@ -355,6 +363,7 @@ export type Database = {
           work_location?: string | null
         }
         Update: {
+          amount_ht?: number | null
           created_at?: string
           description?: string | null
           end_date?: string | null

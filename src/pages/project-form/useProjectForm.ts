@@ -19,6 +19,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
     project?.work_titles ?? [{ title: "", work_descriptions: [{ description: "" }] }]
   );
   const [location, setLocation] = useState(project?.work_location ?? "");
+  const [amountHt, setAmountHt] = useState<string>(project?.amount_ht?.toString() ?? "");
   const [startDate, setStartDate] = useState<Date | undefined>(
     project?.start_date ? new Date(project.start_date) : undefined
   );
@@ -80,6 +81,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
         work_location: location,
         start_date: startDate?.toISOString(),
         end_date: endDate?.toISOString(),
+        amount_ht: amountHt ? parseFloat(amountHt) : null,
         user_id: userId,
       };
 
@@ -176,6 +178,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
       name,
       workTitles,
       location,
+      amountHt,
       startDate,
       endDate,
       quoteFile,
@@ -184,6 +187,7 @@ export const useProjectForm = ({ project, mode = "create", userId }: UseProjectF
     actions: {
       setName,
       setLocation,
+      setAmountHt,
       setStartDate,
       setEndDate,
       setQuoteFile,

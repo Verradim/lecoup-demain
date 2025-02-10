@@ -20,6 +20,7 @@ export interface Project {
   end_date: string | null;
   quote_file_name: string | null;
   quote_file_path: string | null;
+  amount_ht: number | null;
   created_at?: string;
   updated_at?: string;
 }

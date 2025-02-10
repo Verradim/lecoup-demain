@@ -13,6 +13,7 @@ interface FormContentProps {
     name: string;
     workTitles: WorkTitle[];
     location: string;
+    amountHt: string;
     startDate: Date | undefined;
     endDate: Date | undefined;
     quoteFile: File | null;
@@ -21,6 +22,7 @@ interface FormContentProps {
   actions: {
     setName: (name: string) => void;
     setLocation: (location: string) => void;
+    setAmountHt: (amount: string) => void;
     setStartDate: (date: Date | undefined) => void;
     setEndDate: (date: Date | undefined) => void;
     setQuoteFile: (file: File | null) => void;
@@ -38,9 +40,16 @@ interface FormContentProps {
 
 export const FormContent = ({ formState, actions, mode = "create", project }: FormContentProps) => {
   const { 
-    name, workTitles, location, startDate, 
-    endDate, quoteFile, loading 
+    name, workTitles, location, amountHt,
+    startDate, endDate, quoteFile, loading 
   } = formState;
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9.]/g, '');
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      actions.setAmountHt(value);
+    }
+  };
 
   return (
     <form onSubmit={actions.handleSubmit} className="space-y-6">
@@ -92,6 +101,19 @@ export const FormContent = ({ formState, actions, mode = "create", project }: Fo
         />
       </div>
 
+      <div className="space-y-2">
+        <Label htmlFor="amountHt">Montant total de la prestation HT</Label>
+        <Input
+          id="amountHt"
+          type="text"
+          inputMode="decimal"
+          value={amountHt}
+          onChange={handleAmountChange}
+          placeholder="Montant HT en euros"
+          className="w-full"
+        />
+      </div>
+
       <DateInputs
         startDate={startDate}
         endDate={endDate}
@@ -117,4 +139,3 @@ export const FormContent = ({ formState, actions, mode = "create", project }: Fo
     </form>
   );
 };
-
