@@ -1,24 +1,12 @@
 
 import { useEffect, useState } from "react";
-import { GripVertical } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea/dnd";
 import { ContractFormValues, PaymentMilestone } from "@/types/contract";
 import { cn } from "@/lib/utils";
 import { UseFormReturn } from "react-hook-form";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { PaymentMilestoneItem } from "./PaymentMilestoneItem";
 
 interface PaymentScheduleProps {
   form: UseFormReturn<ContractFormValues>;
@@ -34,7 +22,6 @@ export const PaymentSchedule = ({
   totalAmount,
 }: PaymentScheduleProps) => {
   const [totalPercentage, setTotalPercentage] = useState(0);
-
   const milestones = form.watch("payment_milestones") || [];
 
   useEffect(() => {
@@ -78,7 +65,6 @@ export const PaymentSchedule = ({
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    // Update order_index values
     const updatedItems = items.map((item, index) => ({
       ...item,
       order_index: index,
@@ -116,7 +102,6 @@ export const PaymentSchedule = ({
       return milestone;
     });
 
-    // Si une date a été mise à jour, on réordonne les étapes
     if (field === 'milestone_date') {
       const sortedMilestones = [...updatedMilestones].sort((a, b) => {
         if (!a.milestone_date) return -1;
@@ -124,7 +109,6 @@ export const PaymentSchedule = ({
         return new Date(a.milestone_date).getTime() - new Date(b.milestone_date).getTime();
       });
 
-      // Mise à jour des order_index
       const reorderedMilestones = sortedMilestones.map((m, idx) => ({
         ...m,
         order_index: idx
@@ -158,113 +142,14 @@ export const PaymentSchedule = ({
                       index={index}
                     >
                       {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className="flex items-center gap-4 bg-white p-4 rounded-lg border"
-                        >
-                          <div
-                            {...provided.dragHandleProps}
-                            className="cursor-move"
-                          >
-                            <GripVertical className="h-5 w-5 text-gray-500" />
-                          </div>
-                          <div className="flex-1 space-y-2">
-                            {milestone.milestone_type === "custom" ? (
-                              <div>
-                                <Label>Description</Label>
-                                <Input
-                                  value={milestone.description}
-                                  onChange={(e) =>
-                                    updateMilestone(
-                                      index,
-                                      "description",
-                                      e.target.value
-                                    )
-                                  }
-                                  placeholder="Description de l'étape"
-                                />
-                              </div>
-                            ) : (
-                              <div className="font-medium">
-                                {milestone.description}
-                              </div>
-                            )}
-                            <div className="flex items-center gap-4">
-                              <div className="w-32">
-                                <Label>Pourcentage</Label>
-                                <div className="flex items-center">
-                                  <Input
-                                    type="number"
-                                    value={milestone.percentage}
-                                    onChange={(e) =>
-                                      updateMilestone(
-                                        index,
-                                        "percentage",
-                                        parseFloat(e.target.value) || 0
-                                      )
-                                    }
-                                    className="w-20"
-                                  />
-                                  <span className="ml-1">%</span>
-                                </div>
-                              </div>
-                              {totalAmount && (
-                                <div className="text-sm text-gray-500">
-                                  {new Intl.NumberFormat("fr-FR", {
-                                    style: "currency",
-                                    currency: "EUR",
-                                  }).format(
-                                    (totalAmount * milestone.percentage) / 100
-                                  )}{" "}
-                                  HT
-                                </div>
-                              )}
-                              {(milestone.milestone_type === "custom" || milestone.milestone_type === "start" || milestone.milestone_type === "end") && (
-                                <div>
-                                  <Label>Date</Label>
-                                  <Popover>
-                                    <PopoverTrigger asChild>
-                                      <Button
-                                        variant="outline"
-                                        className={cn(
-                                          "w-[200px] justify-start text-left font-normal",
-                                          !milestone.milestone_date && "text-muted-foreground"
-                                        )}
-                                      >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {milestone.milestone_date ? (
-                                          format(milestone.milestone_date, "PPP", { locale: fr })
-                                        ) : (
-                                          <span>Choisir une date</span>
-                                        )}
-                                      </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                      <Calendar
-                                        mode="single"
-                                        selected={milestone.milestone_date}
-                                        onSelect={(date) =>
-                                          updateMilestone(index, "milestone_date", date)
-                                        }
-                                        initialFocus
-                                      />
-                                    </PopoverContent>
-                                  </Popover>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          {milestone.milestone_type === "custom" && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeMilestone(index)}
-                            >
-                              Supprimer
-                            </Button>
-                          )}
-                        </div>
+                        <PaymentMilestoneItem
+                          milestone={milestone}
+                          index={index}
+                          totalAmount={totalAmount}
+                          provided={provided}
+                          onUpdate={updateMilestone}
+                          onRemove={removeMilestone}
+                        />
                       )}
                     </Draggable>
                   ))}
