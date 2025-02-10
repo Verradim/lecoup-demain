@@ -92,14 +92,18 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         if (contractError) throw contractError;
 
         if (contractData) {
+          const milestonesForDB = values.payment_milestones.map(milestone => ({
+            contract_id: contractData.id,
+            description: milestone.description,
+            percentage: milestone.percentage,
+            milestone_date: milestone.milestone_date ? milestone.milestone_date.toISOString() : null,
+            milestone_type: milestone.milestone_type,
+            order_index: milestone.order_index
+          }));
+
           const { error: milestonesError } = await supabase
             .from("payment_milestones")
-            .insert(
-              values.payment_milestones.map((milestone) => ({
-                ...milestone,
-                contract_id: contractData.id,
-              }))
-            );
+            .insert(milestonesForDB);
 
           if (milestonesError) throw milestonesError;
         }
@@ -135,14 +139,18 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         if (deleteError) throw deleteError;
 
         // Insert new milestones
+        const milestonesForDB = values.payment_milestones.map(milestone => ({
+          contract_id: contract.id,
+          description: milestone.description,
+          percentage: milestone.percentage,
+          milestone_date: milestone.milestone_date ? milestone.milestone_date.toISOString() : null,
+          milestone_type: milestone.milestone_type,
+          order_index: milestone.order_index
+        }));
+
         const { error: milestonesError } = await supabase
           .from("payment_milestones")
-          .insert(
-            values.payment_milestones.map((milestone) => ({
-              ...milestone,
-              contract_id: contract.id,
-            }))
-          );
+          .insert(milestonesForDB);
 
         if (milestonesError) throw milestonesError;
 
@@ -159,3 +167,4 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
 
   return { form, onSubmit };
 };
+

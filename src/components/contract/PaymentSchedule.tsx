@@ -1,8 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { UseFormReturn } from "react-hook-form";
-import { format } from "date-fns";
-import { DragHandleDots2Icon } from "@radix-ui/react-icons";
+import { GripVertical } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +13,7 @@ import {
 } from "@hello-pangea/dnd";
 import { ContractFormValues, PaymentMilestone } from "@/types/contract";
 import { cn } from "@/lib/utils";
+import { UseFormReturn } from "react-hook-form";
 
 interface PaymentScheduleProps {
   form: UseFormReturn<ContractFormValues>;
@@ -142,7 +141,7 @@ export const PaymentSchedule = ({
                             {...provided.dragHandleProps}
                             className="cursor-move"
                           >
-                            <DragHandleDots2Icon className="h-5 w-5 text-gray-500" />
+                            <GripVertical className="h-5 w-5 text-gray-500" />
                           </div>
                           <div className="flex-1 space-y-2">
                             {milestone.milestone_type === "custom" ? (
@@ -243,3 +242,4 @@ export const PaymentSchedule = ({
     </Card>
   );
 };
+
