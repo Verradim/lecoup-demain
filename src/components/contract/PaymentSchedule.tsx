@@ -96,8 +96,7 @@ export const PaymentSchedule = ({
   const updateMilestone = (index: number, field: keyof PaymentMilestone, value: any) => {
     const updatedMilestones = milestones.map((milestone, i) => {
       if (i === index) {
-        const updatedMilestone = { ...milestone, [field]: value };
-        return updatedMilestone;
+        return { ...milestone, [field]: value };
       }
       return milestone;
     });
