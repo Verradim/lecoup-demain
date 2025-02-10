@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ContractFormValues, PaymentMilestone } from "@/types/contract";
+import { ContractFormValues } from "@/types/contract";
 import { cn } from "@/lib/utils";
 import { UseFormReturn } from "react-hook-form";
 import { PaymentMilestoneList } from "./PaymentMilestoneList";
