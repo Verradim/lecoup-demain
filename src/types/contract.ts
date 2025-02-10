@@ -13,6 +13,23 @@ export const contractFormSchema = z.object({
   project_id: z.string().optional(),
   is_full_project: z.boolean().optional(),
   selected_work_descriptions: z.array(z.string()).optional(),
+  payment_milestones: z.array(z.object({
+    id: z.string().optional(),
+    description: z.string(),
+    percentage: z.number(),
+    milestone_date: z.date().optional(),
+    milestone_type: z.enum(['signature', 'start', 'end', 'custom']),
+    order_index: z.number()
+  }))
 });
 
 export type ContractFormValues = z.infer<typeof contractFormSchema>;
+
+export type PaymentMilestone = {
+  id?: string;
+  description: string;
+  percentage: number;
+  milestone_date?: Date;
+  milestone_type: 'signature' | 'start' | 'end' | 'custom';
+  order_index: number;
+};

@@ -280,6 +280,50 @@ export type Database = {
           },
         ]
       }
+      payment_milestones: {
+        Row: {
+          contract_id: string | null
+          created_at: string
+          description: string
+          id: string
+          milestone_date: string | null
+          milestone_type: string
+          order_index: number
+          percentage: number
+          updated_at: string
+        }
+        Insert: {
+          contract_id?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          milestone_date?: string | null
+          milestone_type?: string
+          order_index: number
+          percentage: number
+          updated_at?: string
+        }
+        Update: {
+          contract_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          milestone_date?: string | null
+          milestone_type?: string
+          order_index?: number
+          percentage?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_milestones_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           company_address: string | null

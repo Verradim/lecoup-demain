@@ -34,6 +34,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
           project_id: contract.project_id || undefined,
           is_full_project: contract.is_full_project || false,
           selected_work_descriptions: contract.selected_work_descriptions || [],
+          payment_milestones: [],
         }
       : {
           name: "",
@@ -47,12 +48,12 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
           project_id: "",
           is_full_project: false,
           selected_work_descriptions: [],
+          payment_milestones: [],
         },
   });
 
   const onSubmit = async (values: ContractFormValues) => {
     try {
-      // Si un project_id est défini, on récupère d'abord le montant HT du projet
       let projectAmountHt = null;
       if (values.project_id) {
         const { data: project } = await supabase
@@ -67,28 +68,45 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
       }
 
       if (mode === "create") {
-        const { error } = await supabase.from("contracts").insert({
-          name: values.name,
-          profile_id: values.profile_id,
-          subcontractor_id: values.subcontractor_id,
-          legal_representative_first_name: values.legal_representative_first_name,
-          legal_representative_last_name: values.legal_representative_last_name,
-          siret: values.siret,
-          company_name: values.company_name,
-          company_address: values.company_address,
-          user_id: user?.id,
-          status: "draft",
-          project_id: values.project_id,
-          is_full_project: values.is_full_project,
-          selected_work_descriptions: values.selected_work_descriptions,
-          amount_ht: projectAmountHt,
-        });
+        const { data: contractData, error: contractError } = await supabase
+          .from("contracts")
+          .insert({
+            name: values.name,
+            profile_id: values.profile_id,
+            subcontractor_id: values.subcontractor_id,
+            legal_representative_first_name: values.legal_representative_first_name,
+            legal_representative_last_name: values.legal_representative_last_name,
+            siret: values.siret,
+            company_name: values.company_name,
+            company_address: values.company_address,
+            user_id: user?.id,
+            status: "draft",
+            project_id: values.project_id,
+            is_full_project: values.is_full_project,
+            selected_work_descriptions: values.selected_work_descriptions,
+            amount_ht: projectAmountHt,
+          })
+          .select()
+          .single();
 
-        if (error) throw error;
+        if (contractError) throw contractError;
+
+        if (contractData) {
+          const { error: milestonesError } = await supabase
+            .from("payment_milestones")
+            .insert(
+              values.payment_milestones.map((milestone) => ({
+                ...milestone,
+                contract_id: contractData.id,
+              }))
+            );
+
+          if (milestonesError) throw milestonesError;
+        }
 
         toast.success("Contrat créé avec succès");
       } else if (mode === "edit" && contract?.id) {
-        const { error } = await supabase
+        const { error: contractError } = await supabase
           .from("contracts")
           .update({
             name: values.name,
@@ -106,12 +124,31 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
           })
           .eq("id", contract.id);
 
-        if (error) throw error;
+        if (contractError) throw contractError;
+
+        // Delete existing milestones
+        const { error: deleteError } = await supabase
+          .from("payment_milestones")
+          .delete()
+          .eq("contract_id", contract.id);
+
+        if (deleteError) throw deleteError;
+
+        // Insert new milestones
+        const { error: milestonesError } = await supabase
+          .from("payment_milestones")
+          .insert(
+            values.payment_milestones.map((milestone) => ({
+              ...milestone,
+              contract_id: contract.id,
+            }))
+          );
+
+        if (milestonesError) throw milestonesError;
 
         toast.success("Contrat modifié avec succès");
       }
 
-      // Rediriger vers la liste des contrats après la création ou la modification
       navigate("/mon-espace/contrats");
     } catch (error: any) {
       toast.error(
