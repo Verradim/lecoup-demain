@@ -25,6 +25,8 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
     setIsLoading(true);
 
     try {
+      console.log("Starting contract generation for contract:", contract);
+
       // Fetch profile data to get email
       const { data: profile } = await supabase
         .from("profiles")
@@ -49,6 +51,8 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
       let projectData = null;
       let workTitlesData = [];
       if (contract.project_id) {
+        console.log("Fetching project data for project_id:", contract.project_id);
+        
         const { data: project } = await supabase
           .from("projects")
           .select("*")
@@ -57,7 +61,7 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
         projectData = project;
 
         // Fetch work titles and their descriptions
-        const { data: workTitles } = await supabase
+        const { data: workTitles, error: workTitlesError } = await supabase
           .from("work_titles")
           .select(`
             id,
@@ -68,16 +72,29 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
             )
           `)
           .eq("project_id", contract.project_id);
+
+        if (workTitlesError) {
+          console.error("Error fetching work titles:", workTitlesError);
+        }
           
         workTitlesData = workTitles || [];
+        console.log("Fetched work titles:", workTitlesData);
       }
 
       // Prepare work titles and descriptions text
       const selectedDescriptions = contract.selected_work_descriptions || [];
+      console.log("Selected descriptions:", selectedDescriptions);
+      console.log("Is full project:", contract.is_full_project);
+
       const workTitlesDescription = workTitlesData
         .map(title => {
+          console.log("Processing title:", title);
           const descriptions = title.work_descriptions
-            .filter(desc => contract.is_full_project || selectedDescriptions.includes(desc.id))
+            .filter(desc => {
+              const include = contract.is_full_project || selectedDescriptions.includes(desc.id);
+              console.log("Description:", desc, "Include:", include);
+              return include;
+            })
             .map(desc => desc.description)
             .join("\n- ");
           
@@ -88,6 +105,8 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
         })
         .filter(Boolean)
         .join("\n\n");
+
+      console.log("Final work titles description:", workTitlesDescription);
 
       // Insert into generated_contracts
       const { error } = await supabase
@@ -114,7 +133,10 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
           work_titles_description: workTitlesDescription || null
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error inserting generated contract:", error);
+        throw error;
+      }
 
       // Update contract status
       const { error: updateError } = await supabase
