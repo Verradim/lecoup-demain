@@ -75,7 +75,7 @@ export const PaymentSchedule = ({
 
   const addCustomMilestone = () => {
     const newMilestone: PaymentMilestone = {
-      description: "",
+      description: "Nouvelle étape",  // Default description
       percentage: 0,
       milestone_type: "custom",
       order_index: milestones.length,
@@ -185,3 +185,4 @@ export const PaymentSchedule = ({
     </Card>
   );
 };
+
