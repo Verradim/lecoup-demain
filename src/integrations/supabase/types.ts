@@ -154,6 +154,126 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_contracts: {
+        Row: {
+          company_address: string
+          company_name: string
+          contract_id: string
+          created_at: string
+          email: string
+          end_date: string | null
+          generated_at: string
+          id: string
+          legal_representative_first_name: string
+          legal_representative_last_name: string
+          project_id: string | null
+          siret: string
+          start_date: string | null
+          subcontractor_company_address: string | null
+          subcontractor_company_name: string | null
+          subcontractor_id: string | null
+          subcontractor_legal_representative_first_name: string | null
+          subcontractor_legal_representative_last_name: string | null
+          subcontractor_siret: string | null
+          user_id: string
+          work_descriptions: string | null
+          work_descriptions_id: string | null
+          work_location: string | null
+          work_title_id: string | null
+          work_titles_description: string | null
+        }
+        Insert: {
+          company_address: string
+          company_name: string
+          contract_id: string
+          created_at?: string
+          email: string
+          end_date?: string | null
+          generated_at?: string
+          id?: string
+          legal_representative_first_name: string
+          legal_representative_last_name: string
+          project_id?: string | null
+          siret: string
+          start_date?: string | null
+          subcontractor_company_address?: string | null
+          subcontractor_company_name?: string | null
+          subcontractor_id?: string | null
+          subcontractor_legal_representative_first_name?: string | null
+          subcontractor_legal_representative_last_name?: string | null
+          subcontractor_siret?: string | null
+          user_id: string
+          work_descriptions?: string | null
+          work_descriptions_id?: string | null
+          work_location?: string | null
+          work_title_id?: string | null
+          work_titles_description?: string | null
+        }
+        Update: {
+          company_address?: string
+          company_name?: string
+          contract_id?: string
+          created_at?: string
+          email?: string
+          end_date?: string | null
+          generated_at?: string
+          id?: string
+          legal_representative_first_name?: string
+          legal_representative_last_name?: string
+          project_id?: string | null
+          siret?: string
+          start_date?: string | null
+          subcontractor_company_address?: string | null
+          subcontractor_company_name?: string | null
+          subcontractor_id?: string | null
+          subcontractor_legal_representative_first_name?: string | null
+          subcontractor_legal_representative_last_name?: string | null
+          subcontractor_siret?: string | null
+          user_id?: string
+          work_descriptions?: string | null
+          work_descriptions_id?: string | null
+          work_location?: string | null
+          work_title_id?: string | null
+          work_titles_description?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_contracts_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_contracts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_contracts_subcontractor_id_fkey"
+            columns: ["subcontractor_id"]
+            isOneToOne: false
+            referencedRelation: "subcontractors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_contracts_work_descriptions_id_fkey"
+            columns: ["work_descriptions_id"]
+            isOneToOne: false
+            referencedRelation: "work_descriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_contracts_work_title_id_fkey"
+            columns: ["work_title_id"]
+            isOneToOne: false
+            referencedRelation: "work_titles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           company_address: string | null
