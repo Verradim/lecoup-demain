@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ContractFormValues, contractFormSchema, PaymentMilestone } from "@/types/contract";
+import { ContractFormValues, contractFormSchema } from "@/types/contract";
 import { Tables } from "@/integrations/supabase/types";
 
 type Contract = Tables<"contracts">;
@@ -18,18 +18,6 @@ interface UseContractFormProps {
 export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
-
-  const parseMilestones = (jsonMilestones: any): PaymentMilestone[] => {
-    if (!jsonMilestones || !Array.isArray(jsonMilestones)) return [];
-    return jsonMilestones.map(m => ({
-      id: m.id,
-      description: m.description,
-      percentage: m.percentage,
-      milestone_date: m.milestone_date,
-      milestone_type: m.milestone_type,
-      order_index: m.order_index
-    }));
-  };
 
   const defaultValues: ContractFormValues = contract
     ? {
@@ -44,7 +32,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         project_id: contract.project_id || undefined,
         is_full_project: contract.is_full_project || false,
         selected_work_descriptions: contract.selected_work_descriptions || [],
-        payment_milestones: parseMilestones(contract.payment_milestones),
+        payment_milestones: [],
         billing_method: contract.billing_method as ContractFormValues["billing_method"] || undefined,
       }
     : {
@@ -83,49 +71,99 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         }
       }
 
-      // Filter out milestones with 0%
+      // Filter out milestones with 0% before saving
       const validMilestones = values.payment_milestones.filter(
         (milestone) => milestone.percentage > 0
       );
-
-      const commonData = {
-        name: values.name,
-        profile_id: values.profile_id,
-        subcontractor_id: values.subcontractor_id,
-        legal_representative_first_name: values.legal_representative_first_name,
-        legal_representative_last_name: values.legal_representative_last_name,
-        siret: values.siret,
-        company_name: values.company_name,
-        company_address: values.company_address,
-        project_id: values.project_id,
-        is_full_project: values.is_full_project,
-        selected_work_descriptions: values.selected_work_descriptions,
-        amount_ht: projectAmountHt,
-        billing_method: values.billing_method,
-        payment_milestones: validMilestones
-      };
 
       if (mode === "create") {
         const { data: contractData, error: contractError } = await supabase
           .from("contracts")
           .insert({
-            ...commonData,
+            name: values.name,
+            profile_id: values.profile_id,
+            subcontractor_id: values.subcontractor_id,
+            legal_representative_first_name: values.legal_representative_first_name,
+            legal_representative_last_name: values.legal_representative_last_name,
+            siret: values.siret,
+            company_name: values.company_name,
+            company_address: values.company_address,
             user_id: user?.id,
             status: "draft",
+            project_id: values.project_id,
+            is_full_project: values.is_full_project,
+            selected_work_descriptions: values.selected_work_descriptions,
+            amount_ht: projectAmountHt,
+            billing_method: values.billing_method,
           })
           .select()
           .single();
 
         if (contractError) throw contractError;
 
+        if (contractData) {
+          const milestonesForDB = validMilestones.map(milestone => ({
+            contract_id: contractData.id,
+            description: milestone.description,
+            percentage: milestone.percentage,
+            milestone_date: milestone.milestone_date ? milestone.milestone_date.toISOString() : null,
+            milestone_type: milestone.milestone_type,
+            order_index: milestone.order_index
+          }));
+
+          const { error: milestonesError } = await supabase
+            .from("payment_milestones")
+            .insert(milestonesForDB);
+
+          if (milestonesError) throw milestonesError;
+        }
+
         toast.success("Contrat créé avec succès");
       } else if (mode === "edit" && contract?.id) {
         const { error: contractError } = await supabase
           .from("contracts")
-          .update(commonData)
+          .update({
+            name: values.name,
+            profile_id: values.profile_id,
+            subcontractor_id: values.subcontractor_id,
+            legal_representative_first_name: values.legal_representative_first_name,
+            legal_representative_last_name: values.legal_representative_last_name,
+            siret: values.siret,
+            company_name: values.company_name,
+            company_address: values.company_address,
+            project_id: values.project_id,
+            is_full_project: values.is_full_project,
+            selected_work_descriptions: values.selected_work_descriptions,
+            amount_ht: projectAmountHt,
+            billing_method: values.billing_method,
+          })
           .eq("id", contract.id);
 
         if (contractError) throw contractError;
+
+        // Delete existing milestones
+        const { error: deleteError } = await supabase
+          .from("payment_milestones")
+          .delete()
+          .eq("contract_id", contract.id);
+
+        if (deleteError) throw deleteError;
+
+        // Insert new milestones
+        const milestonesForDB = validMilestones.map(milestone => ({
+          contract_id: contract.id,
+          description: milestone.description,
+          percentage: milestone.percentage,
+          milestone_date: milestone.milestone_date ? milestone.milestone_date.toISOString() : null,
+          milestone_type: milestone.milestone_type,
+          order_index: milestone.order_index
+        }));
+
+        const { error: milestonesError } = await supabase
+          .from("payment_milestones")
+          .insert(milestonesForDB);
+
+        if (milestonesError) throw milestonesError;
 
         toast.success("Contrat modifié avec succès");
       }
