@@ -132,6 +132,7 @@ export const GenerateContractButton = ({ contract }: GenerateContractButtonProps
           end_date: projectData?.end_date || null,
           work_titles_description: workTitlesDescription || null,
           amount_ht: contract.amount_ht || projectData?.amount_ht || null,
+          payment_milestones: contract.payment_milestones || [],
           billing_method: contract.billing_method || null
         });
 
