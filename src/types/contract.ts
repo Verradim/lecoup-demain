@@ -20,7 +20,17 @@ export const contractFormSchema = z.object({
     milestone_date: z.date().optional(),
     milestone_type: z.enum(['signature', 'start', 'end', 'custom']),
     order_index: z.number()
-  }))
+  })),
+  billing_method: z.enum([
+    'immediate',
+    '15_days_invoice',
+    '30_days_invoice',
+    '30_days_end_month',
+    '45_days_end_month',
+    '60_days_end_month'
+  ], {
+    required_error: "Veuillez sélectionner une méthode de facturation"
+  })
 });
 
 export type ContractFormValues = z.infer<typeof contractFormSchema>;
@@ -33,3 +43,12 @@ export type PaymentMilestone = {
   milestone_type: 'signature' | 'start' | 'end' | 'custom';
   order_index: number;
 };
+
+export const billingMethodOptions = [
+  { value: 'immediate', label: 'À réception de facture (paiement immédiat)' },
+  { value: '15_days_invoice', label: '15 jours - date de facture' },
+  { value: '30_days_invoice', label: '30 jours - date de facture' },
+  { value: '30_days_end_month', label: '30 jours - fin de mois' },
+  { value: '45_days_end_month', label: '45 jours - fin de mois' },
+  { value: '60_days_end_month', label: '60 jours - fin de mois' }
+];

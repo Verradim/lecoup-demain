@@ -12,6 +12,7 @@ export type Database = {
       contracts: {
         Row: {
           amount_ht: number | null
+          billing_method: string | null
           company_address: string
           company_name: string
           created_at: string
@@ -31,6 +32,7 @@ export type Database = {
         }
         Insert: {
           amount_ht?: number | null
+          billing_method?: string | null
           company_address: string
           company_name: string
           created_at?: string
@@ -50,6 +52,7 @@ export type Database = {
         }
         Update: {
           amount_ht?: number | null
+          billing_method?: string | null
           company_address?: string
           company_name?: string
           created_at?: string
@@ -160,6 +163,7 @@ export type Database = {
       generated_contracts: {
         Row: {
           amount_ht: number | null
+          billing_method: string | null
           company_address: string
           company_name: string
           contract_id: string
@@ -188,6 +192,7 @@ export type Database = {
         }
         Insert: {
           amount_ht?: number | null
+          billing_method?: string | null
           company_address: string
           company_name: string
           contract_id: string
@@ -216,6 +221,7 @@ export type Database = {
         }
         Update: {
           amount_ht?: number | null
+          billing_method?: string | null
           company_address?: string
           company_name?: string
           contract_id?: string

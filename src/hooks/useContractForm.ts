@@ -35,6 +35,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
           is_full_project: contract.is_full_project || false,
           selected_work_descriptions: contract.selected_work_descriptions || [],
           payment_milestones: [],
+          billing_method: contract.billing_method || undefined,
         }
       : {
           name: "",
@@ -49,6 +50,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
           is_full_project: false,
           selected_work_descriptions: [],
           payment_milestones: [],
+          billing_method: undefined,
         },
   });
 
@@ -90,6 +92,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
             is_full_project: values.is_full_project,
             selected_work_descriptions: values.selected_work_descriptions,
             amount_ht: projectAmountHt,
+            billing_method: values.billing_method,
           })
           .select()
           .single();
@@ -130,6 +133,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
             is_full_project: values.is_full_project,
             selected_work_descriptions: values.selected_work_descriptions,
             amount_ht: projectAmountHt,
+            billing_method: values.billing_method,
           })
           .eq("id", contract.id);
 
@@ -172,4 +176,3 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
 
   return { form, onSubmit };
 };
-

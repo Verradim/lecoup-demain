@@ -7,6 +7,7 @@ import { ClientSection } from "@/components/contract/ClientSection";
 import { SubcontractorSection } from "@/components/contract/SubcontractorSection";
 import { WorkTitlesSelect } from "@/components/contract/WorkTitlesSelect";
 import { PaymentSchedule } from "@/components/contract/PaymentSchedule";
+import { BillingMethodSelect } from "@/components/contract/BillingMethodSelect";
 import { useContractForm } from "@/hooks/useContractForm";
 import { Tables } from "@/integrations/supabase/types";
 import { useQuery } from "@tanstack/react-query";
@@ -70,6 +71,8 @@ export const ContractForm = ({ mode, contract }: ContractFormProps) => {
             totalAmount={project.amount_ht}
           />
         )}
+
+        <BillingMethodSelect form={form} />
 
         <div className="flex justify-end space-x-4">
           <Button
