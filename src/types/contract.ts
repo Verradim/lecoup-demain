@@ -17,7 +17,7 @@ export const contractFormSchema = z.object({
     id: z.string().optional(),
     description: z.string(),
     percentage: z.number(),
-    milestone_date: z.date().optional(),
+    milestone_date: z.string().optional(),
     milestone_type: z.enum(['signature', 'start', 'end', 'custom']),
     order_index: z.number()
   })),
@@ -39,7 +39,7 @@ export type PaymentMilestone = {
   id?: string;
   description: string;
   percentage: number;
-  milestone_date?: Date;
+  milestone_date?: string;
   milestone_type: 'signature' | 'start' | 'end' | 'custom';
   order_index: number;
 };

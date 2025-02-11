@@ -29,14 +29,14 @@ export const usePaymentSchedule = (
         {
           description: "Date de début des travaux",
           percentage: 40,
-          milestone_date: projectStartDate,
+          milestone_date: projectStartDate?.toISOString(),
           milestone_type: "start",
           order_index: 1,
         },
         {
           description: "Date de fin du chantier",
           percentage: 30,
-          milestone_date: projectEndDate,
+          milestone_date: projectEndDate?.toISOString(),
           milestone_type: "end",
           order_index: 2,
         },
@@ -55,7 +55,7 @@ export const usePaymentSchedule = (
     const updatedItems = items.map((item, index) => ({
       ...item,
       order_index: index,
-    }));
+    })) as PaymentMilestone[];
 
     form.setValue("payment_milestones", updatedItems);
   };
@@ -80,6 +80,12 @@ export const usePaymentSchedule = (
   const updateMilestone = (index: number, field: keyof PaymentMilestone, value: any) => {
     const updatedMilestones = milestones.map((milestone, i) => {
       if (i === index) {
+        if (field === 'milestone_date' && value instanceof Date) {
+          return {
+            ...milestone,
+            [field]: value.toISOString(),
+          } as PaymentMilestone;
+        }
         return {
           ...milestone,
           [field]: value,
@@ -98,7 +104,7 @@ export const usePaymentSchedule = (
       const reorderedMilestones = sortedMilestones.map((m, idx) => ({
         ...m,
         order_index: idx,
-      }));
+      })) as PaymentMilestone[];
 
       form.setValue("payment_milestones", reorderedMilestones);
     } else {
