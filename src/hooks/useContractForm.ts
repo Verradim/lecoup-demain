@@ -19,39 +19,41 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const defaultValues: ContractFormValues = contract
+    ? {
+        name: contract.name,
+        profile_id: contract.profile_id,
+        subcontractor_id: contract.subcontractor_id,
+        legal_representative_first_name: contract.legal_representative_first_name,
+        legal_representative_last_name: contract.legal_representative_last_name,
+        siret: contract.siret,
+        company_name: contract.company_name,
+        company_address: contract.company_address,
+        project_id: contract.project_id || undefined,
+        is_full_project: contract.is_full_project || false,
+        selected_work_descriptions: contract.selected_work_descriptions || [],
+        payment_milestones: [],
+        billing_method: contract.billing_method as ContractFormValues["billing_method"] || undefined,
+      }
+    : {
+        name: "",
+        profile_id: "",
+        subcontractor_id: "",
+        legal_representative_first_name: "",
+        legal_representative_last_name: "",
+        siret: "",
+        company_name: "",
+        company_address: "",
+        project_id: undefined,
+        is_full_project: false,
+        selected_work_descriptions: [],
+        payment_milestones: [],
+        billing_method: undefined,
+      };
+
   const form = useForm<ContractFormValues>({
     resolver: zodResolver(contractFormSchema),
-    defaultValues: contract
-      ? {
-          name: contract.name,
-          profile_id: contract.profile_id,
-          subcontractor_id: contract.subcontractor_id,
-          legal_representative_first_name: contract.legal_representative_first_name,
-          legal_representative_last_name: contract.legal_representative_last_name,
-          siret: contract.siret,
-          company_name: contract.company_name,
-          company_address: contract.company_address,
-          project_id: contract.project_id || undefined,
-          is_full_project: contract.is_full_project || false,
-          selected_work_descriptions: contract.selected_work_descriptions || [],
-          payment_milestones: [],
-          billing_method: contract.billing_method || undefined,
-        }
-      : {
-          name: "",
-          profile_id: "",
-          subcontractor_id: "",
-          legal_representative_first_name: "",
-          legal_representative_last_name: "",
-          siret: "",
-          company_name: "",
-          company_address: "",
-          project_id: "",
-          is_full_project: false,
-          selected_work_descriptions: [],
-          payment_milestones: [],
-          billing_method: undefined,
-        },
+    defaultValues,
   });
 
   const onSubmit = async (values: ContractFormValues) => {
