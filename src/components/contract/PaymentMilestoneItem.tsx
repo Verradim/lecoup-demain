@@ -85,11 +85,10 @@ export const PaymentMilestoneItem = ({
           )}
         </div>
       </div>
-      {milestone.milestone_type === "custom" && (
-        <Button variant="ghost" size="sm" onClick={() => onRemove(index)}>
-          Supprimer
-        </Button>
-      )}
+      <Button variant="ghost" size="sm" onClick={() => onRemove(index)}>
+        Supprimer
+      </Button>
     </div>
   );
 };
+

@@ -67,6 +67,11 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         }
       }
 
+      // Filter out milestones with 0% before saving
+      const validMilestones = values.payment_milestones.filter(
+        (milestone) => milestone.percentage > 0
+      );
+
       if (mode === "create") {
         const { data: contractData, error: contractError } = await supabase
           .from("contracts")
@@ -92,7 +97,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         if (contractError) throw contractError;
 
         if (contractData) {
-          const milestonesForDB = values.payment_milestones.map(milestone => ({
+          const milestonesForDB = validMilestones.map(milestone => ({
             contract_id: contractData.id,
             description: milestone.description,
             percentage: milestone.percentage,
@@ -139,7 +144,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         if (deleteError) throw deleteError;
 
         // Insert new milestones
-        const milestonesForDB = values.payment_milestones.map(milestone => ({
+        const milestonesForDB = validMilestones.map(milestone => ({
           contract_id: contract.id,
           description: milestone.description,
           percentage: milestone.percentage,
@@ -167,3 +172,4 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
 
   return { form, onSubmit };
 };
+
