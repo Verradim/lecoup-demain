@@ -22,12 +22,12 @@ export const contractFormSchema = z.object({
     order_index: z.number()
   })),
   billing_method: z.enum([
-    'À réception de facture',
-    '15 jours - date de facture',
-    '30 jours - date de facture',
-    '30 jours - fin de mois',
-    '45 jours - fin de mois',
-    '60 jours - fin de mois'
+    'immediate',
+    '15_days_invoice',
+    '30_days_invoice',
+    '30_days_end_month',
+    '45_days_end_month',
+    '60_days_end_month'
   ], {
     required_error: "Veuillez sélectionner une méthode de facturation"
   })
@@ -45,10 +45,10 @@ export type PaymentMilestone = {
 };
 
 export const billingMethodOptions = [
-  { value: 'À réception de facture', label: 'À réception de facture (paiement immédiat)' },
-  { value: '15 jours - date de facture', label: '15 jours - date de facture' },
-  { value: '30 jours - date de facture', label: '30 jours - date de facture' },
-  { value: '30 jours - fin de mois', label: '30 jours - fin de mois' },
-  { value: '45 jours - fin de mois', label: '45 jours - fin de mois' },
-  { value: '60 jours - fin de mois', label: '60 jours - fin de mois' }
+  { value: 'immediate', label: 'À réception de facture (paiement immédiat)' },
+  { value: '15_days_invoice', label: '15 jours - date de facture' },
+  { value: '30_days_invoice', label: '30 jours - date de facture' },
+  { value: '30_days_end_month', label: '30 jours - fin de mois' },
+  { value: '45_days_end_month', label: '45 jours - fin de mois' },
+  { value: '60_days_end_month', label: '60 jours - fin de mois' }
 ];
