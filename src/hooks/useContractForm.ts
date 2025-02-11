@@ -19,6 +19,18 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const parseMilestones = (jsonMilestones: any): PaymentMilestone[] => {
+    if (!jsonMilestones || !Array.isArray(jsonMilestones)) return [];
+    return jsonMilestones.map(m => ({
+      id: m.id,
+      description: m.description,
+      percentage: m.percentage,
+      milestone_date: m.milestone_date,
+      milestone_type: m.milestone_type,
+      order_index: m.order_index
+    }));
+  };
+
   const defaultValues: ContractFormValues = contract
     ? {
         name: contract.name,
@@ -32,7 +44,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         project_id: contract.project_id || undefined,
         is_full_project: contract.is_full_project || false,
         selected_work_descriptions: contract.selected_work_descriptions || [],
-        payment_milestones: (contract.payment_milestones || []) as PaymentMilestone[],
+        payment_milestones: parseMilestones(contract.payment_milestones),
         billing_method: contract.billing_method as ContractFormValues["billing_method"] || undefined,
       }
     : {
@@ -76,26 +88,30 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
         (milestone) => milestone.percentage > 0
       );
 
+      const commonData = {
+        name: values.name,
+        profile_id: values.profile_id,
+        subcontractor_id: values.subcontractor_id,
+        legal_representative_first_name: values.legal_representative_first_name,
+        legal_representative_last_name: values.legal_representative_last_name,
+        siret: values.siret,
+        company_name: values.company_name,
+        company_address: values.company_address,
+        project_id: values.project_id,
+        is_full_project: values.is_full_project,
+        selected_work_descriptions: values.selected_work_descriptions,
+        amount_ht: projectAmountHt,
+        billing_method: values.billing_method,
+        payment_milestones: validMilestones
+      };
+
       if (mode === "create") {
         const { data: contractData, error: contractError } = await supabase
           .from("contracts")
           .insert({
-            name: values.name,
-            profile_id: values.profile_id,
-            subcontractor_id: values.subcontractor_id,
-            legal_representative_first_name: values.legal_representative_first_name,
-            legal_representative_last_name: values.legal_representative_last_name,
-            siret: values.siret,
-            company_name: values.company_name,
-            company_address: values.company_address,
+            ...commonData,
             user_id: user?.id,
             status: "draft",
-            project_id: values.project_id,
-            is_full_project: values.is_full_project,
-            selected_work_descriptions: values.selected_work_descriptions,
-            amount_ht: projectAmountHt,
-            billing_method: values.billing_method,
-            payment_milestones: validMilestones
           })
           .select()
           .single();
@@ -106,22 +122,7 @@ export const useContractForm = ({ mode, contract }: UseContractFormProps) => {
       } else if (mode === "edit" && contract?.id) {
         const { error: contractError } = await supabase
           .from("contracts")
-          .update({
-            name: values.name,
-            profile_id: values.profile_id,
-            subcontractor_id: values.subcontractor_id,
-            legal_representative_first_name: values.legal_representative_first_name,
-            legal_representative_last_name: values.legal_representative_last_name,
-            siret: values.siret,
-            company_name: values.company_name,
-            company_address: values.company_address,
-            project_id: values.project_id,
-            is_full_project: values.is_full_project,
-            selected_work_descriptions: values.selected_work_descriptions,
-            amount_ht: projectAmountHt,
-            billing_method: values.billing_method,
-            payment_milestones: validMilestones
-          })
+          .update(commonData)
           .eq("id", contract.id);
 
         if (contractError) throw contractError;
