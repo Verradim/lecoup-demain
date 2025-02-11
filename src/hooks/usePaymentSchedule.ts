@@ -55,7 +55,7 @@ export const usePaymentSchedule = (
     const updatedItems = items.map((item, index) => ({
       ...item,
       order_index: index,
-    }));
+    })) as PaymentMilestone[];
 
     form.setValue("payment_milestones", updatedItems);
   };
@@ -98,7 +98,7 @@ export const usePaymentSchedule = (
       const reorderedMilestones = sortedMilestones.map((m, idx) => ({
         ...m,
         order_index: idx,
-      }));
+      })) as PaymentMilestone[];
 
       form.setValue("payment_milestones", reorderedMilestones);
     } else {

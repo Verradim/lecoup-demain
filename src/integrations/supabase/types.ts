@@ -21,6 +21,7 @@ export type Database = {
           legal_representative_first_name: string
           legal_representative_last_name: string
           name: string
+          payment_milestones: Json | null
           profile_id: string
           project_id: string | null
           selected_work_descriptions: string[] | null
@@ -41,6 +42,7 @@ export type Database = {
           legal_representative_first_name: string
           legal_representative_last_name: string
           name: string
+          payment_milestones?: Json | null
           profile_id: string
           project_id?: string | null
           selected_work_descriptions?: string[] | null
@@ -61,6 +63,7 @@ export type Database = {
           legal_representative_first_name?: string
           legal_representative_last_name?: string
           name?: string
+          payment_milestones?: Json | null
           profile_id?: string
           project_id?: string | null
           selected_work_descriptions?: string[] | null
@@ -174,6 +177,7 @@ export type Database = {
           id: string
           legal_representative_first_name: string
           legal_representative_last_name: string
+          payment_milestones: Json | null
           project_id: string | null
           siret: string
           start_date: string | null
@@ -203,6 +207,7 @@ export type Database = {
           id?: string
           legal_representative_first_name: string
           legal_representative_last_name: string
+          payment_milestones?: Json | null
           project_id?: string | null
           siret: string
           start_date?: string | null
@@ -232,6 +237,7 @@ export type Database = {
           id?: string
           legal_representative_first_name?: string
           legal_representative_last_name?: string
+          payment_milestones?: Json | null
           project_id?: string | null
           siret?: string
           start_date?: string | null
