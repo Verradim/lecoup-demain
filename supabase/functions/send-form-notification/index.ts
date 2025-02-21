@@ -1,6 +1,8 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend@2.0.0";
+
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,8 +15,8 @@ interface FormSubmission {
   full_name: string;
   email: string;
   company_name: string;
-  sponsor: string;
   phone: string;
+  message: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -25,9 +27,9 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     console.log("Starting form notification process...");
-    console.log("RESEND_API_KEY exists:", !!RESEND_API_KEY);
+    console.log("RESEND_API_KEY exists:", !!Deno.env.get("RESEND_API_KEY"));
 
-    if (!RESEND_API_KEY) {
+    if (!Deno.env.get("RESEND_API_KEY")) {
       throw new Error("RESEND_API_KEY is not configured");
     }
 
@@ -47,7 +49,7 @@ const handler = async (req: Request): Promise<Response> => {
         <li>Email: ${submission.email}</li>
         <li>Téléphone: ${submission.phone}</li>
         <li>Entreprise: ${submission.company_name}</li>
-        <li>Message: ${message}</li>
+        <li>Message: ${submission.message}</li>
       </ul>
     `;
 
@@ -93,8 +95,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div class="steps">
                 <h2 class="highlight">Rappel de votre message</h2>
-                <p>{{message}}</p>
-                <p>Envoyé le {{created_at}}</p>
+                <p>${submission.message}</p>
               </div>
               
               <p>On se dépêche de vous répondre ! Notre équipe vous répondra par e-mail ou par téléphone</p>
@@ -115,65 +116,29 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Preparing to send admin notification email...");
     
     // Envoi de l'email à l'administrateur
-    const adminRes = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "Le Coup de Main <contact@email.lecoup-demain.com>",
-        to: ["dimitri.chauchoy@gmail.com"],
-        subject: `Nouvelle candidature de ${submission.full_name}`,
-        html: adminEmailHtml,
-      }),
+    const adminRes = await resend.emails.send({
+      from: "Le Coup de Main <contact@email.lecoup-demain.com>",
+      to: ["dimitri.chauchoy@gmail.com"],
+      subject: `Nouvelle candidature de ${submission.full_name}`,
+      html: adminEmailHtml,
     });
 
-    console.log("Admin email API response status:", adminRes.status);
-    const adminResponseText = await adminRes.text();
-    console.log("Admin email API response:", adminResponseText);
-
-    if (!adminRes.ok) {
-      console.error("Error sending admin email:", adminResponseText);
-      throw new Error(`Failed to send admin email: ${adminResponseText}`);
-    }
-
-    const adminData = JSON.parse(adminResponseText);
-    console.log("Admin email sent successfully:", adminData);
-
-    console.log("Preparing to send confirmation email to user...");
+    console.log("Admin email API response:", adminRes);
 
     // Envoi de l'email au candidat
-    const userRes = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "Le Coup de Main <contact@email.lecoup-demain.com>",
-        to: [submission.email],
-        subject: "Bienvenue dans la communauté Le Coup de Main ! 🎉",
-        html: userEmailHtml,
-      }),
+    const userRes = await resend.emails.send({
+      from: "Le Coup de Main <contact@email.lecoup-demain.com>",
+      to: [submission.email],
+      subject: "Nous avons bien reçu votre message ! 🎉",
+      html: userEmailHtml,
     });
 
-    console.log("User email API response status:", userRes.status);
-    const userResponseText = await userRes.text();
-    console.log("User email API response:", userResponseText);
-
-    if (!userRes.ok) {
-      console.error("Error sending user confirmation email:", userResponseText);
-      throw new Error(`Failed to send user confirmation email: ${userResponseText}`);
-    }
-
-    const userData = JSON.parse(userResponseText);
-    console.log("User confirmation email sent successfully:", userData);
+    console.log("User confirmation email API response:", userRes);
 
     return new Response(JSON.stringify({ 
       success: true,
-      adminEmail: adminData,
-      userEmail: userData
+      adminEmail: adminRes,
+      userEmail: userRes
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
