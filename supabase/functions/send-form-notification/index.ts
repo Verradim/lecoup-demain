@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
         <li>Email: ${submission.email}</li>
         <li>Téléphone: ${submission.phone}</li>
         <li>Entreprise: ${submission.company_name}</li>
-        <li>Parrain: ${submission.sponsor}</li>
+        <li>Message: ${message}</li>
       </ul>
     `;
 
@@ -83,32 +83,21 @@ const handler = async (req: Request): Promise<Response> => {
         <body>
           <div class="container">
             <div class="header">
-              <h1 class="highlight">Bienvenue dans la communauté Le Coup de Main ! 🎉</h1>
+              <h1 class="highlight">Le Coup de Main - Message bien reçu !</h1>
             </div>
             
             <div class="content">
               <p>Bonjour <strong>${submission.full_name}</strong>,</p>
               
-              <p>Nous avons bien reçu votre candidature pour rejoindre <strong>Le Coup de Main</strong>, la communauté qui connecte les artisans indépendants et les entreprises du bâtiment. Merci de votre intérêt ! 🙌</p>
+              <p>Nous avons bien reçu votre message et nous vous en remercions 🙌</p>
               
               <div class="steps">
-                <h2 class="highlight">Les prochaines étapes</h2>
-                <p><strong>1. Étude de votre candidature</strong></p>
-                <p>Notre équipe va étudier votre profil avec attention. Nous veillons à construire une communauté dynamique où chaque membre partage nos valeurs d'entraide et de professionnalisme.</p>
-                
-                <p><strong>2. Validation et intégration</strong></p>
-                <p>Une fois votre candidature validée, vous recevrez un email avec le lien d'invitation pour rejoindre officiellement la communauté WhatsApp.</p>
+                <h2 class="highlight">Rappel de votre message</h2>
+                <p>{{message}}</p>
+                <p>Envoyé le {{created_at}}</p>
               </div>
               
-              <h2 class="highlight">Pourquoi rejoindre Le Coup de Main ?</h2>
-              <ul>
-                <li>✅ Échangez avec d'autres professionnels du bâtiment</li>
-                <li>✅ Partagez vos besoins ou opportunités de collaboration</li>
-                <li>✅ Développez votre réseau professionnel</li>
-                <li>✅ Accédez à des ressources exclusives</li>
-              </ul>
-              
-              <p>Nous avons hâte de vous accueillir dans la communauté !</p>
+              <p>On se dépêche de vous répondre ! Notre équipe vous répondra par e-mail ou par téléphone</p>
             </div>
             
             <div class="footer">
