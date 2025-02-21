@@ -47,8 +47,8 @@ export const Hero = () => {
             <div className="relative hidden md:block">
               <div className="absolute -inset-4 bg-white/5 rounded-2xl blur-2xl" />
               <img 
-                src="/lovable-uploads/c853df75-6c65-4b60-8a19-f9f2bf811c56.png"
-                alt="Interface de génération de contrats"
+                src="/lovable-uploads/29a58e67-540f-431e-b7f6-d21e5face096.png"
+                alt="Interface simplifiée pour les entrepreneurs du bâtiment"
                 className="w-full rounded-xl shadow-2xl relative animate-fade-up delay-200"
               />
             </div>
