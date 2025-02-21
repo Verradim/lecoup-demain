@@ -1,4 +1,6 @@
+
 import { Hero } from "@/components/Hero";
+import { Features } from "@/components/Features";
 import { Benefits } from "@/components/Benefits";
 import { JoinForm } from "@/components/JoinForm";
 import { HowItWorks } from "@/components/HowItWorks";
@@ -8,12 +10,13 @@ import { Layout } from "@/components/Layout";
 const Index = () => {
   return (
     <Layout
-      title="Le Coup de Main - La communauté privée des artisans indépendants et des entreprises du bâtiment"
-      description="Découvrez Le coup de Main : La communauté privée des artisans indépendants et des entreprises du bâtiment. Une initiative dédiée à créer des connexions solides entre professionnels du bâtiment."
+      title="Sous-traitance simplifiée - Gérez vos contrats de sous-traitance en quelques clics"
+      description="Simplifiez la gestion de vos sous-traitants. Générez des contrats conformes, centralisez vos informations et gagnez du temps dans la gestion de vos relations de sous-traitance."
       canonicalUrl="https://lecoup-demain.com"
     >
       <div className="bg-background font-sans">
         <Hero />
+        <Features />
         <Benefits />
         <JoinForm />
         <HowItWorks />
