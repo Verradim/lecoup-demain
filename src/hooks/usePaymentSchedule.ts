@@ -74,7 +74,11 @@ export const usePaymentSchedule = (
 
   const removeMilestone = (index: number) => {
     const updatedMilestones = milestones.filter((_, i) => i !== index);
-    form.setValue("payment_milestones", updatedMilestones);
+    const reorderedMilestones = updatedMilestones.map((milestone, idx) => ({
+      ...milestone,
+      order_index: idx,
+    }));
+    form.setValue("payment_milestones", reorderedMilestones);
   };
 
   const updateMilestone = (index: number, field: keyof PaymentMilestone, value: any) => {
