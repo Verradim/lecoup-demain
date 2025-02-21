@@ -42,17 +42,6 @@ export const Hero = () => {
               </Button>
             </div>
           </div>
-
-          {!isMobile && (
-            <div className="relative hidden md:block">
-              <div className="absolute -inset-4 bg-white/5 rounded-2xl blur-2xl" />
-              <img 
-                src="/lovable-uploads/29a58e67-540f-431e-b7f6-d21e5face096.png"
-                alt="Interface simplifiée pour les entrepreneurs du bâtiment"
-                className="w-full rounded-xl shadow-2xl relative animate-fade-up delay-200"
-              />
-            </div>
-          )}
         </div>
       </div>
     </section>
