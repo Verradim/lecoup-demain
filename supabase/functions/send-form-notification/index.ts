@@ -41,9 +41,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Email de notification pour l'administrateur
     const adminEmailHtml = `
-      <h2>Nouvelle candidature reçue</h2>
-      <p>Une nouvelle candidature a été soumise par ${submission.full_name}.</p>
-      <h3>Détails de la candidature:</h3>
+      <h2>Nouveau message reçu</h2>
+      <p>Un nouveau message a été envoyé par ${submission.full_name}.</p>
+      <h3>Détails du message:</h3>
       <ul>
         <li>Nom: ${submission.full_name}</li>
         <li>Email: ${submission.email}</li>
