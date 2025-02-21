@@ -39,7 +39,7 @@ export type PaymentMilestone = {
   id?: string;
   description: string;
   percentage: number;
-  milestone_date?: string;
+  milestone_date?: string | null;
   milestone_type: 'signature' | 'start' | 'end' | 'custom';
   order_index: number;
 };

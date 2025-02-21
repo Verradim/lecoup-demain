@@ -55,7 +55,7 @@ export const usePaymentSchedule = (
     const updatedItems = items.map((item, index) => ({
       ...item,
       order_index: index,
-    })) as PaymentMilestone[];
+    }));
 
     form.setValue("payment_milestones", updatedItems);
   };
@@ -80,16 +80,10 @@ export const usePaymentSchedule = (
   const updateMilestone = (index: number, field: keyof PaymentMilestone, value: any) => {
     const updatedMilestones = milestones.map((milestone, i) => {
       if (i === index) {
-        if (field === 'milestone_date' && value instanceof Date) {
-          return {
-            ...milestone,
-            [field]: value.toISOString(),
-          } as PaymentMilestone;
-        }
         return {
           ...milestone,
           [field]: value,
-        } as PaymentMilestone;
+        };
       }
       return milestone;
     });
@@ -104,7 +98,7 @@ export const usePaymentSchedule = (
       const reorderedMilestones = sortedMilestones.map((m, idx) => ({
         ...m,
         order_index: idx,
-      })) as PaymentMilestone[];
+      }));
 
       form.setValue("payment_milestones", reorderedMilestones);
     } else {

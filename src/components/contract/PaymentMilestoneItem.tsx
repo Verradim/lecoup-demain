@@ -25,6 +25,10 @@ export const PaymentMilestoneItem = ({
   onRemove,
 }: PaymentMilestoneItemProps) => {
   const isReadOnlyDate = milestone.milestone_type === "start" || milestone.milestone_type === "end";
+  
+  const handleDateChange = (date: Date | undefined) => {
+    onUpdate(index, "milestone_date", date ? date.toISOString() : null);
+  };
 
   return (
     <div
@@ -76,8 +80,8 @@ export const PaymentMilestoneItem = ({
             milestone.milestone_type === "start" ||
             milestone.milestone_type === "end") && (
             <DatePicker
-              date={milestone.milestone_date}
-              onSelect={(date) => onUpdate(index, "milestone_date", date)}
+              date={milestone.milestone_date ? new Date(milestone.milestone_date) : undefined}
+              onSelect={handleDateChange}
               label="Date"
               isOptional={milestone.milestone_type === "custom"}
               readOnly={isReadOnlyDate}
@@ -91,4 +95,3 @@ export const PaymentMilestoneItem = ({
     </div>
   );
 };
-
