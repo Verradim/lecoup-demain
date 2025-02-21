@@ -99,64 +99,67 @@ export type Database = {
       }
       form_submissions: {
         Row: {
-          company_description: string
+          company_description: string | null
           company_name: string
-          company_status: string
+          company_status: string | null
           created_at: string
-          discovery_source: string
+          discovery_source: string | null
           email: string
-          employee_count: string
+          employee_count: string | null
           full_name: string
           id: string
           instagram: string | null
-          join_reason: string
+          join_reason: string | null
           linkedin: string | null
-          other_platform_is_member: string
+          message: string | null
+          other_platform_is_member: string | null
           other_platform_name: string | null
           phone: string
-          region: string
+          region: string | null
           sponsor: string
           terms_accepted: boolean
           website: string | null
         }
         Insert: {
-          company_description: string
+          company_description?: string | null
           company_name: string
-          company_status: string
+          company_status?: string | null
           created_at?: string
-          discovery_source: string
+          discovery_source?: string | null
           email: string
-          employee_count: string
+          employee_count?: string | null
           full_name: string
           id?: string
           instagram?: string | null
-          join_reason: string
+          join_reason?: string | null
           linkedin?: string | null
-          other_platform_is_member: string
+          message?: string | null
+          other_platform_is_member?: string | null
           other_platform_name?: string | null
           phone: string
-          region: string
+          region?: string | null
           sponsor: string
           terms_accepted: boolean
           website?: string | null
         }
         Update: {
-          company_description?: string
+          company_description?: string | null
           company_name?: string
-          company_status?: string
+          company_status?: string | null
           created_at?: string
-          discovery_source?: string
+          discovery_source?: string | null
           email?: string
-          employee_count?: string
+          employee_count?: string | null
           full_name?: string
           id?: string
           instagram?: string | null
-          join_reason?: string
+          join_reason?: string | null
           linkedin?: string | null
-          other_platform_is_member?: string
+          message?: string | null
+          other_platform_is_member?: string | null
           other_platform_name?: string | null
           phone?: string
-          region?: string
+          region?: string | null
           sponsor?: string
           terms_accepted?: boolean
           website?: string | null

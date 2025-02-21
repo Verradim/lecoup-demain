@@ -43,13 +43,15 @@ export const JoinForm = () => {
           email: values.email,
           company_name: values.companyName,
           message: values.message,
-          // Ajout des champs requis avec des valeurs par défaut
+          // Ajout des champs requis avec des valeurs par défaut pour les champs optionnels
+          sponsor: 'N/A',
           company_status: 'N/A',
           employee_count: 'N/A',
           company_description: 'N/A',
           discovery_source: 'N/A',
           join_reason: 'N/A',
-          other_platform_is_member: 'N/A'
+          other_platform_is_member: 'N/A',
+          terms_accepted: true
         })
         .select();
 
