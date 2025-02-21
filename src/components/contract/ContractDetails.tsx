@@ -2,6 +2,7 @@
 import { ContractActions } from "./ContractActions";
 import { GeneralInfoCard } from "./cards/GeneralInfoCard";
 import { ProjectDetailsCard } from "./cards/ProjectDetailsCard";
+import { GeneratedContractCard } from "./cards/GeneratedContractCard";
 import { Tables } from "@/integrations/supabase/types";
 import { GenerateContractButton } from "./GenerateContractButton";
 import { useQuery } from "@tanstack/react-query";
@@ -46,11 +47,14 @@ export const ContractDetails = ({ contract, onDelete }: ContractDetailsProps) =>
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <ContractActions contractId={contract.id} onDelete={onDelete} />
-        <GenerateContractButton contract={contract} />
+        {contract.status !== "generated" && <GenerateContractButton contract={contract} />}
       </div>
       
       <GeneralInfoCard contract={contract} />
       {project && <ProjectDetailsCard project={project} contract={contract} />}
+      {contract.status === "generated" && (
+        <GeneratedContractCard contractId={contract.id} />
+      )}
     </div>
   );
 };
