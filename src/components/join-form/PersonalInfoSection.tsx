@@ -1,3 +1,4 @@
+
 import {
   FormField,
   FormItem,
@@ -17,12 +18,12 @@ const formSchema = z.object({
   fullName: z.string().min(1, "Le nom et prénom sont requis"),
   phone: z.string().min(1, "Le numéro de téléphone est requis"),
   email: z.string().email("Email invalide").min(1, "L'email est requis"),
+  companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
 });
 
 export const PersonalInfoSection = ({ form }: PersonalInfoSectionProps) => {
   return (
     <div className="space-y-6">
-      <h3 className="text-2xl font-semibold text-primary">Informations personnelles</h3>
       <FormField
         control={form.control}
         name="fullName"
@@ -57,6 +58,19 @@ export const PersonalInfoSection = ({ form }: PersonalInfoSectionProps) => {
             <FormLabel>Adresse e-mail *</FormLabel>
             <FormControl>
               <Input placeholder="didierdeschamps@gmail.com" className="bg-white" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="companyName"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Nom de l'entreprise *</FormLabel>
+            <FormControl>
+              <Input className="bg-white" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
