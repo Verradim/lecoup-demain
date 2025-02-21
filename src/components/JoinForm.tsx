@@ -37,15 +37,20 @@ export const JoinForm = () => {
     try {
       const { data, error } = await supabase
         .from('form_submissions')
-        .insert([
-          {
-            full_name: values.fullName,
-            phone: values.phone,
-            email: values.email,
-            company_name: values.companyName,
-            message: values.message,
-          }
-        ])
+        .insert({
+          full_name: values.fullName,
+          phone: values.phone,
+          email: values.email,
+          company_name: values.companyName,
+          message: values.message,
+          // Ajout des champs requis avec des valeurs par défaut
+          company_status: 'N/A',
+          employee_count: 'N/A',
+          company_description: 'N/A',
+          discovery_source: 'N/A',
+          join_reason: 'N/A',
+          other_platform_is_member: 'N/A'
+        })
         .select();
 
       if (error) {
