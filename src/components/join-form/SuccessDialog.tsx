@@ -22,7 +22,7 @@ export const SuccessDialog = ({ open, onOpenChange }: SuccessDialogProps) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center text-xl font-semibold">
-            Merci d'avoir candidaté pour rejoindre Le Coup de Main, la communauté dédiée aux artisans indépendants et aux entreprises du bâtiment. 🙌
+            Merci de nous avoir contacté 🙌
           </DialogTitle>
           <DialogDescription className="text-center pt-4">
             Vous allez recevoir un e-mail de confirmation détaillant les prochaines étapes
