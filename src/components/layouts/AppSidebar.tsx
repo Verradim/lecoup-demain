@@ -1,3 +1,4 @@
+
 import { useLocation, Link } from "react-router-dom";
 import { Building2, User, LogOut, Home, Users, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -53,6 +54,17 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
+                  className={isActive("/mon-espace/profil") ? "bg-accent" : ""}
+                >
+                  <Link to="/mon-espace/profil">
+                    <User className="w-4 h-4 mr-2" />
+                    <span>Mon profil</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
                   className={isActive("/mon-espace/projets") ? "bg-accent" : ""}
                 >
                   <Link to="/mon-espace/projets">
@@ -69,17 +81,6 @@ export function AppSidebar() {
                   <Link to="/mon-espace/contrats">
                     <FileText className="w-4 h-4 mr-2" />
                     <span>Mes contrats</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  className={isActive("/mon-espace/profil") ? "bg-accent" : ""}
-                >
-                  <Link to="/mon-espace/profil">
-                    <User className="w-4 h-4 mr-2" />
-                    <span>Mon profil</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

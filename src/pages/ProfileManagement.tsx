@@ -1,11 +1,10 @@
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Plus, Edit } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,13 +14,10 @@ import {
 } from "@/components/ui/card";
 
 interface Profile {
-  id: string;
-  siret: string | null;
-  company_address: string | null;
   company_name: string | null;
+  siret: string | null;
   legal_representative_first_name: string | null;
   legal_representative_last_name: string | null;
-  completed: boolean | null;
 }
 
 const ProfileManagement = () => {
@@ -38,16 +34,16 @@ const ProfileManagement = () => {
 
     const fetchProfile = async () => {
       try {
-        const { data, error } = await supabase
+        const { data: profileData, error } = await supabase
           .from("profiles")
           .select("*")
           .eq("id", user.id)
           .maybeSingle();
 
         if (error) throw error;
-        setProfile(data);
+        setProfile(profileData);
       } catch (error: any) {
-        toast.error("Erreur lors du chargement du profil : " + error.message);
+        toast.error("Erreur lors du chargement du profil: " + error.message);
       } finally {
         setLoading(false);
       }
@@ -56,57 +52,53 @@ const ProfileManagement = () => {
     fetchProfile();
   }, [user, navigate]);
 
-  const handleCreateProfile = () => {
-    navigate("/mon-espace/profil/nouveau");
-  };
-
-  const handleEditProfile = () => {
-    navigate("/mon-espace/profil/modifier");
-  };
-
   if (!user) return null;
 
   return (
-    <div className="container py-8">
+    <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">Mon profil</h1>
-        {!profile?.completed && (
-          <Button onClick={handleCreateProfile} className="bg-primary hover:bg-primary/90 text-white">
-            <Plus className="w-4 h-4 mr-2" />
-            Créer mon profil
-          </Button>
-        )}
       </div>
 
       {loading ? (
-        <div className="text-center py-8">Chargement du profil...</div>
-      ) : !profile?.completed ? (
-        <div className="text-center py-8">
-          <p className="text-gray-500">Vous n'avez pas encore créé votre profil.</p>
-        </div>
+        <div>Chargement...</div>
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>{profile.company_name || "Sans nom"}</CardTitle>
-            <CardDescription>SIRET: {profile.siret || "Non renseigné"}</CardDescription>
+            <CardTitle>Mon Profil</CardTitle>
+            <CardDescription>Informations entreprise</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <p className="text-sm">
-                Représentant légal: {profile.legal_representative_first_name} {profile.legal_representative_last_name}
-              </p>
-              <p className="text-sm">{profile.company_address}</p>
-              <div className="flex space-x-2 mt-4">
-                <Button
-                  onClick={handleEditProfile}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Edit className="w-4 h-4 mr-2" />
-                  Modifier
-                </Button>
+            {profile ? (
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Entreprise</p>
+                  <p>{profile.company_name || "Non renseigné"}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">SIRET</p>
+                  <p>{profile.siret || "Non renseigné"}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Représentant légal</p>
+                  <p>
+                    {profile.legal_representative_first_name} {profile.legal_representative_last_name}
+                  </p>
+                </div>
+                <Link to="/mon-espace/profil/modifier">
+                  <Button variant="outline" className="w-full">
+                    Modifier mon profil
+                  </Button>
+                </Link>
               </div>
-            </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-gray-500 mb-4">Vous n'avez pas encore créé votre profil</p>
+                <Link to="/mon-espace/profil/nouveau">
+                  <Button>Créer mon profil</Button>
+                </Link>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
