@@ -62,6 +62,13 @@ const ProfileManagement = () => {
 
       {loading ? (
         <div>Chargement...</div>
+      ) : !profile ? (
+        <div className="text-center">
+          <p className="text-gray-500 mb-4">Vous devez d'abord créer votre profil pour accéder à cette section</p>
+          <Link to="/mon-espace/profil/nouveau">
+            <Button>Créer mon profil</Button>
+          </Link>
+        </div>
       ) : (
         <Card>
           <CardHeader>
@@ -69,36 +76,27 @@ const ProfileManagement = () => {
             <CardDescription>Informations entreprise</CardDescription>
           </CardHeader>
           <CardContent>
-            {profile ? (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Entreprise</p>
-                  <p>{profile.company_name || "Non renseigné"}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">SIRET</p>
-                  <p>{profile.siret || "Non renseigné"}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Représentant légal</p>
-                  <p>
-                    {profile.legal_representative_first_name} {profile.legal_representative_last_name}
-                  </p>
-                </div>
-                <Link to="/mon-espace/profil/modifier">
-                  <Button variant="outline" className="w-full">
-                    Modifier mon profil
-                  </Button>
-                </Link>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Entreprise</p>
+                <p>{profile.company_name || "Non renseigné"}</p>
               </div>
-            ) : (
-              <div className="text-center py-4">
-                <p className="text-gray-500 mb-4">Vous n'avez pas encore créé votre profil</p>
-                <Link to="/mon-espace/profil/nouveau">
-                  <Button>Créer mon profil</Button>
-                </Link>
+              <div>
+                <p className="text-sm font-medium text-gray-500">SIRET</p>
+                <p>{profile.siret || "Non renseigné"}</p>
               </div>
-            )}
+              <div>
+                <p className="text-sm font-medium text-gray-500">Représentant légal</p>
+                <p>
+                  {profile.legal_representative_first_name} {profile.legal_representative_last_name}
+                </p>
+              </div>
+              <Link to="/mon-espace/profil/modifier">
+                <Button variant="outline" className="w-full">
+                  Modifier mon profil
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       )}
