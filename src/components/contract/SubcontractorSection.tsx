@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SubcontractorSelectField } from "./SubcontractorSelectField";
 import { SubcontractorPreview } from "./SubcontractorPreview";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Subcontractor = Tables<"subcontractors">;
 
@@ -15,16 +16,22 @@ interface SubcontractorSectionProps {
 }
 
 export const SubcontractorSection = ({ form }: SubcontractorSectionProps) => {
+  const { user } = useAuth();
+
   const { data: subcontractors } = useQuery({
-    queryKey: ["subcontractors"],
+    queryKey: ["subcontractors", user?.id],
     queryFn: async () => {
+      if (!user) return [];
+
       const { data, error } = await supabase
         .from("subcontractors")
-        .select("*");
+        .select("*")
+        .eq("user_id", user.id); // Ne sélectionner que les sous-traitants de l'utilisateur courant
 
       if (error) throw error;
       return data as Subcontractor[];
     },
+    enabled: !!user,
   });
 
   const handleSubcontractorChange = (subcontractorId: string) => {

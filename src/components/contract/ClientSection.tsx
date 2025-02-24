@@ -7,23 +7,30 @@ import { supabase } from "@/integrations/supabase/client";
 import { ProfileSelectField } from "./ProfileSelectField";
 import { ProfilePreview } from "./ProfilePreview";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ClientSectionProps {
   form: UseFormReturn<ContractFormValues>;
 }
 
 export const ClientSection = ({ form }: ClientSectionProps) => {
+  const { user } = useAuth();
+
   const { data: profiles } = useQuery({
-    queryKey: ["profiles"],
+    queryKey: ["profiles", user?.id],
     queryFn: async () => {
+      if (!user) return [];
+      
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("completed", true);
+        .eq("completed", true)
+        .eq("id", user.id); // Ne sélectionner que le profil de l'utilisateur courant
 
       if (error) throw error;
       return data as Profile[];
     },
+    enabled: !!user,
   });
 
   const handleProfileChange = (profileId: string) => {
