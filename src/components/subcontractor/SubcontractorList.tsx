@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Subcontractor {
   id: string;
@@ -14,29 +16,29 @@ interface Subcontractor {
 }
 
 export const SubcontractorList = () => {
-  const [subcontractors, setSubcontractors] = useState<Subcontractor[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchSubcontractors = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('subcontractors')
-          .select('*')
-          .order('created_at', { ascending: false });
+  const { data: subcontractors, isLoading: loading } = useQuery({
+    queryKey: ["subcontractors", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
 
-        if (error) throw error;
-        setSubcontractors(data || []);
-      } catch (error: any) {
+      const { data, error } = await supabase
+        .from('subcontractors')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
         console.error('Error fetching subcontractors:', error);
         toast.error("Erreur lors du chargement des sous-traitants");
-      } finally {
-        setLoading(false);
+        return [];
       }
-    };
-
-    fetchSubcontractors();
-  }, []);
+      
+      return data as Subcontractor[];
+    },
+    enabled: !!user,
+  });
 
   if (loading) {
     return <div className="text-center py-8">Chargement des sous-traitants...</div>;
@@ -54,7 +56,7 @@ export const SubcontractorList = () => {
         </Link>
       </div>
 
-      {subcontractors.length === 0 ? (
+      {!subcontractors || subcontractors.length === 0 ? (
         <div className="text-center py-8">
           <p className="text-gray-500 mb-4">Vous n'avez pas encore ajouté de sous-traitant</p>
           <Link to="/mon-espace/sous-traitants/nouveau">
