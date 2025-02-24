@@ -55,7 +55,7 @@ export const usePaymentSchedule = (
     const updatedItems = items.map((item, index) => ({
       ...item,
       order_index: index,
-    })) as PaymentMilestone[];
+    }));
 
     form.setValue("payment_milestones", updatedItems);
   };
@@ -68,17 +68,17 @@ export const usePaymentSchedule = (
       order_index: milestones.length,
     };
 
-    const updatedMilestones = [...milestones, newMilestone];
-    form.setValue("payment_milestones", updatedMilestones);
+    form.setValue("payment_milestones", [...milestones, newMilestone]);
   };
 
   const removeMilestone = (index: number) => {
-    const updatedMilestones = milestones.filter((_, i) => i !== index);
-    const reorderedMilestones = updatedMilestones.map((milestone, idx) => ({
-      ...milestone,
-      order_index: idx,
-    })) as PaymentMilestone[];
-    form.setValue("payment_milestones", reorderedMilestones);
+    const updatedMilestones = milestones
+      .filter((_, i) => i !== index)
+      .map((milestone, idx) => ({
+        ...milestone,
+        order_index: idx,
+      }));
+    form.setValue("payment_milestones", updatedMilestones);
   };
 
   const updateMilestone = (index: number, field: keyof PaymentMilestone, value: any) => {
@@ -90,7 +90,7 @@ export const usePaymentSchedule = (
         };
       }
       return milestone;
-    }) as PaymentMilestone[];
+    });
 
     if (field === 'milestone_date') {
       const sortedMilestones = [...updatedMilestones].sort((a, b) => {
@@ -102,7 +102,7 @@ export const usePaymentSchedule = (
       const reorderedMilestones = sortedMilestones.map((m, idx) => ({
         ...m,
         order_index: idx,
-      })) as PaymentMilestone[];
+      }));
 
       form.setValue("payment_milestones", reorderedMilestones);
     } else {
