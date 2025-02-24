@@ -12,7 +12,7 @@ export const usePaymentSchedule = (
   const milestones = form.watch("payment_milestones") || [];
 
   useEffect(() => {
-    const total = milestones.reduce((sum, milestone) => sum + milestone.percentage, 0);
+    const total = milestones.reduce((sum, milestone) => sum + (milestone.percentage || 0), 0);
     setTotalPercentage(total);
   }, [milestones]);
 
@@ -55,7 +55,7 @@ export const usePaymentSchedule = (
     const updatedItems = items.map((item, index) => ({
       ...item,
       order_index: index,
-    }));
+    })) as PaymentMilestone[];
 
     form.setValue("payment_milestones", updatedItems);
   };
@@ -77,7 +77,7 @@ export const usePaymentSchedule = (
     const reorderedMilestones = updatedMilestones.map((milestone, idx) => ({
       ...milestone,
       order_index: idx,
-    }));
+    })) as PaymentMilestone[];
     form.setValue("payment_milestones", reorderedMilestones);
   };
 
@@ -90,7 +90,7 @@ export const usePaymentSchedule = (
         };
       }
       return milestone;
-    });
+    }) as PaymentMilestone[];
 
     if (field === 'milestone_date') {
       const sortedMilestones = [...updatedMilestones].sort((a, b) => {
@@ -102,7 +102,7 @@ export const usePaymentSchedule = (
       const reorderedMilestones = sortedMilestones.map((m, idx) => ({
         ...m,
         order_index: idx,
-      }));
+      })) as PaymentMilestone[];
 
       form.setValue("payment_milestones", reorderedMilestones);
     } else {

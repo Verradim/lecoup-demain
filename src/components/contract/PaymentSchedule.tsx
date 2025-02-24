@@ -37,7 +37,7 @@ export const PaymentSchedule = ({
       <CardContent>
         <div className="space-y-4">
           <PaymentMilestoneList
-            milestones={milestones}
+            milestones={milestones || []}
             totalAmount={totalAmount}
             onDragEnd={handleDragEnd}
             onUpdate={updateMilestone}
