@@ -1,6 +1,7 @@
+
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { FileText, Plus } from "lucide-react";
+import { FileText, Plus, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +20,17 @@ interface Contract {
   created_at: string;
 }
 
+const getStatusLabel = (status: string) => {
+  switch (status) {
+    case "draft":
+      return "brouillon";
+    case "generated":
+      return "contrat généré";
+    default:
+      return status;
+  }
+};
+
 const ContractList = () => {
   const navigate = useNavigate();
 
@@ -34,6 +46,18 @@ const ContractList = () => {
       return data as Contract[];
     },
   });
+
+  const handleDownload = async (contractId: string) => {
+    const { data: generatedContract } = await supabase
+      .from("generated_contracts")
+      .select("pdf_url")
+      .eq("contract_id", contractId)
+      .single();
+
+    if (generatedContract?.pdf_url) {
+      window.open(generatedContract.pdf_url, "_blank");
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -74,10 +98,12 @@ const ContractList = () => {
               {contracts?.map((contract) => (
                 <div
                   key={contract.id}
-                  className="flex items-center justify-between p-4 rounded-lg border hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => navigate(`/mon-espace/contrats/${contract.id}`)}
+                  className="flex items-center justify-between p-4 rounded-lg border hover:shadow-md transition-shadow"
                 >
-                  <div className="flex items-center space-x-4">
+                  <div 
+                    className="flex items-center space-x-4 cursor-pointer flex-grow"
+                    onClick={() => navigate(`/mon-espace/contrats/${contract.id}`)}
+                  >
                     <FileText className="w-5 h-5 text-gray-400" />
                     <div>
                       <h3 className="font-medium">{contract.name}</h3>
@@ -86,10 +112,20 @@ const ContractList = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-4">
                     <span className="px-2 py-1 text-xs rounded-full bg-gray-100">
-                      {contract.status}
+                      {getStatusLabel(contract.status)}
                     </span>
+                    {contract.status === "generated" && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDownload(contract.id)}
+                        className="h-8 w-8"
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}

@@ -23,7 +23,7 @@ export const GeneratedContractCard = ({ contractId }: GeneratedContractCardProps
       if (error) throw error;
       return data as Tables<"generated_contracts">;
     },
-    refetchInterval: 5000, // Rafraîchir toutes les 5 secondes jusqu'à ce que les URLs soient disponibles
+    refetchInterval: 5000,
   });
 
   if (!generatedContract?.pdf_url && !generatedContract?.preview_url) {
@@ -68,12 +68,6 @@ export const GeneratedContractCard = ({ contractId }: GeneratedContractCardProps
               Télécharger le PDF
             </Button>
           </div>
-        )}
-        
-        {generatedContract.pdf_url && (
-          <p className="text-xs text-gray-500 text-center mt-2">
-            Le lien de téléchargement est valide pendant 1 heure
-          </p>
         )}
       </CardContent>
     </Card>
