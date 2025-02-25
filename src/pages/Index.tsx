@@ -16,9 +16,9 @@ const Index = () => {
     >
       <div className="bg-background font-sans">
         <Hero />
-        <HowItWorks />
         <Features />
         <Offers />
+        <HowItWorks />
         <JoinForm />
         <Testimonials />
       </div>
