@@ -16,10 +16,10 @@ const Index = () => {
     >
       <div className="bg-background font-sans">
         <Hero />
+        <HowItWorks />
         <Features />
         <Offers />
         <JoinForm />
-        <HowItWorks />
         <Testimonials />
       </div>
     </Layout>
