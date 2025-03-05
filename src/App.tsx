@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -21,6 +21,13 @@ import ContractForm from "@/pages/ContractForm";
 import ContractDetails from "@/pages/ContractDetails";
 import ContractEdit from "@/pages/ContractEdit";
 import { initializeSupabase } from "./supabase-init";
+import { useScrollToTop } from "./hooks/useScrollToTop";
+
+// Component to handle scroll restoration for the entire app
+function ScrollToTop() {
+  useScrollToTop();
+  return null;
+}
 
 function App() {
   useEffect(() => {
@@ -30,6 +37,8 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+        {/* This component will ensure scroll restoration works app-wide */}
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />

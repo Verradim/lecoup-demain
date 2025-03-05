@@ -5,11 +5,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Layout } from "@/components/Layout";
 import { AppSidebar } from "./AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 export function AppLayout() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const location = useLocation();
+  
+  // Use the scroll restoration hook
+  useScrollToTop();
 
   useEffect(() => {
     if (!loading && !user) {
