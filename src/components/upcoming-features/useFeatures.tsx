@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Feature } from "./FeatureCard";
 
@@ -144,11 +144,7 @@ export const useFeatures = () => {
           : f
       ));
       
-      // First vote without email
-      toast({
-        title: "Merci pour votre vote !",
-        description: "Votre vote a été enregistré.",
-      });
+      // No toast message on first vote without email
 
       return true;
     } catch (error) {
