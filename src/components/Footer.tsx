@@ -1,50 +1,19 @@
 import { Link } from "react-router-dom";
-
 export const Footer = () => {
-  return (
-    <footer className="bg-white py-12 px-4">
+  return <footer className="bg-white py-12 px-4">
       <div className="container max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
             <h3 className="font-semibold text-lg mb-4">Le coup de main.</h3>
-            <p className="text-gray-600">
-              Connecter les professionnels pour construire le secteur du bâtiment de demain.
-            </p>
+            <p className="text-gray-600">Simplifier la vie des professionnels pour construire le secteur du bâtiment de demain.</p>
           </div>
-          <div>
-            <h3 className="font-semibold text-lg mb-4">Liens rapides</h3>
-            <ul className="space-y-2">
-              <li>
-                <a 
-                  href="https://calendly.com/lecoupdemain/appel-de-decouverte" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-gray-600 hover:text-primary"
-                >
-                  Prendre rendez-vous pour s'inscrire
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="https://solar-gargoyle-286.notion.site/R-gles-de-la-communaut-CdM-181d8e05d6c9803f9401c9c076a3a3dd" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-gray-600 hover:text-primary"
-                >
-                  Les règles de la communauté
-                </a>
-              </li>
-            </ul>
-          </div>
+          
           <div>
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <p className="text-gray-600">
               Des questions? Contactez-nous à :
               <br />
-              <a
-                href="mailto:contact@lecoup-demain.com"
-                className="text-primary hover:underline"
-              >
+              <a href="mailto:contact@lecoup-demain.com" className="text-primary hover:underline">
                 contact@lecoup-demain.com
               </a>
             </p>
@@ -54,6 +23,5 @@ export const Footer = () => {
           <p>&copy; {new Date().getFullYear()} Lecoup-demain.com. Tous droits reservés.</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
