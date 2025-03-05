@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -7,15 +8,19 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 
 export function AppLayout() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       navigate("/auth");
     }
-  }, [user, navigate]);
+  }, [user, navigate, loading]);
 
+  // Show nothing while checking authentication
+  if (loading) return null;
+  
+  // Redirect if not authenticated
   if (!user) return null;
 
   return (

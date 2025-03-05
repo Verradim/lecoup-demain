@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
 type AuthContextType = {
@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // Check active sessions and sets the user
@@ -31,8 +32,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (!session?.user) {
-          // Si on n'est pas sur la page d'authentification, on redirige
-          if (!window.location.pathname.includes('/auth')) {
+          // Si on n'est pas sur la page d'authentification ou sur la page d'accueil, on redirige
+          if (!location.pathname.includes('/auth') && location.pathname !== '/' && !location.pathname.includes('/trouver-des-artisans')) {
             navigate('/auth');
             toast.error("Veuillez vous connecter pour accéder à cette page");
           }
@@ -55,7 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
 
       if (event === 'SIGNED_OUT') {
-        navigate('/auth');
+        // When signed out, redirect to homepage instead of auth page
+        navigate('/');
       } else if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
         // Rediriger vers la page précédente ou la page d'accueil
         if (window.location.pathname === '/auth') {
@@ -65,7 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
