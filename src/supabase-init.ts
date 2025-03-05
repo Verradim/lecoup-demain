@@ -14,29 +14,9 @@ export const initializeSupabase = async () => {
     const logosBucketExists = buckets?.some(bucket => bucket.name === 'logos');
     
     if (!logosBucketExists) {
-      // Try to create the logos bucket
-      const { error } = await supabase.storage.createBucket('logos', {
-        public: true,
-        fileSizeLimit: 2097152, // 2MB limit
-        allowedMimeTypes: ['image/png', 'image/jpeg', 'image/svg+xml']
-      });
-      
-      if (error) {
-        console.error('Error creating logos bucket:', error);
-        // Even if we can't create the bucket, we should continue as the bucket
-        // might already exist or be created by another process
-      } else {
-        console.log('Logos bucket created successfully');
-        
-        // Set public access for the bucket
-        const { error: policyError } = await supabase.storage
-          .from('logos')
-          .createSignedUrl('dummy-path.txt', 1);
-          
-        if (policyError && policyError.message !== 'The resource was not found') {
-          console.error('Error setting bucket policy:', policyError);
-        }
-      }
+      console.log('Logos bucket does not exist. It should be created manually in the Supabase dashboard.');
+    } else {
+      console.log('Logos bucket exists.');
     }
   } catch (error) {
     console.error('Error initializing Supabase:', error);

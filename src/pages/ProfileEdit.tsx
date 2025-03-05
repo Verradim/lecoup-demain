@@ -90,28 +90,18 @@ const ProfileEdit = () => {
       // Upload new logo if provided
       if (values.company_logo) {
         try {
-          // Check if the logos bucket exists
+          // Check if the logos bucket exists first
           const { data: buckets, error: listError } = await supabase.storage.listBuckets();
           
           if (listError) {
             console.error("Error checking buckets:", listError);
-            throw new Error("Impossible de vérifier le stockage");
+            throw new Error("Erreur lors de la vérification des buckets");
           }
           
           const logosBucketExists = buckets?.some(bucket => bucket.name === 'logos');
           
           if (!logosBucketExists) {
-            // Try to create the bucket
-            const { error: createError } = await supabase.storage.createBucket('logos', {
-              public: true,
-              fileSizeLimit: 2097152,
-              allowedMimeTypes: ['image/png', 'image/jpeg', 'image/svg+xml']
-            });
-            
-            if (createError) {
-              console.error("Error creating bucket:", createError);
-              throw new Error("Impossible de créer l'espace de stockage pour les logos");
-            }
+            throw new Error("Le bucket 'logos' n'existe pas. Veuillez contacter l'administrateur.");
           }
           
           const file = values.company_logo;
