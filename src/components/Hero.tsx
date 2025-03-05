@@ -12,7 +12,7 @@ export const Hero = () => {
       
       <div className="container max-w-6xl mx-auto relative">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="text-center md:text-left space-y-6 animate-fade-up">
+          <div className="text-center md:text-left space-y-6 animate-fade-up mx-auto md:mx-0 max-w-md md:max-w-none">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
               Votre sous-traitance est désormais entre de bonnes mains
             </h1>
@@ -22,7 +22,7 @@ export const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
               <Button 
                 size="lg" 
-                className="bg-white hover:bg-white/90 text-primary text-lg"
+                className="bg-white hover:bg-white/90 text-primary text-lg w-full sm:w-auto"
                 onClick={() => {
                   document.getElementById('join-form')?.scrollIntoView({ behavior: 'smooth' });
                 }}
@@ -33,7 +33,7 @@ export const Hero = () => {
               <Button 
                 size="lg" 
                 variant="outline"
-                className="bg-transparent border-white text-white hover:bg-white/10 text-lg"
+                className="bg-transparent border-white text-white hover:bg-white/10 text-lg w-full sm:w-auto"
                 onClick={() => {
                   document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
                 }}
