@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -79,9 +78,6 @@ const ProfileManagement = () => {
                     {profile.company_name?.[0]?.toUpperCase() || "?"}
                   </AvatarFallback>
                 </Avatar>
-                {profile.company_logo_name && (
-                  <p className="text-sm text-gray-500 mt-1">{profile.company_logo_name}</p>
-                )}
               </div>
 
               <div className="flex-1 space-y-4">
