@@ -357,6 +357,7 @@ export type Database = {
           legal_representative_first_name: string | null
           legal_representative_last_name: string | null
           parent_profile_id: string | null
+          phone: string | null
           siret: string | null
           updated_at: string
         }
@@ -371,6 +372,7 @@ export type Database = {
           legal_representative_first_name?: string | null
           legal_representative_last_name?: string | null
           parent_profile_id?: string | null
+          phone?: string | null
           siret?: string | null
           updated_at?: string
         }
@@ -385,6 +387,7 @@ export type Database = {
           legal_representative_first_name?: string | null
           legal_representative_last_name?: string | null
           parent_profile_id?: string | null
+          phone?: string | null
           siret?: string | null
           updated_at?: string
         }
