@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -55,7 +54,6 @@ const ProfileEdit = () => {
 
         setProfile(data as Profile);
 
-        // Set form values
         form.reset({
           siret: data.siret || "",
           company_address: data.company_address || "",
@@ -87,26 +85,26 @@ const ProfileEdit = () => {
       let company_logo_url = profile?.company_logo_url;
       let company_logo_name = profile?.company_logo_name;
 
-      // Upload new logo if provided
       if (values.company_logo) {
         try {
-          // Check if the Logo bucket exists first
-          const { data: buckets, error: listError } = await supabase.storage.listBuckets();
-          
-          if (listError) {
-            console.error("Error checking buckets:", listError);
-            throw new Error("Erreur lors de la vérification des buckets");
-          }
-          
-          const logoBucketExists = buckets?.some(bucket => bucket.name === 'Logo');
-          
-          if (!logoBucketExists) {
-            throw new Error("Le bucket 'Logo' n'existe pas. Veuillez contacter l'administrateur.");
-          }
-          
           const file = values.company_logo;
           const fileExt = file.name.split('.').pop();
           const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+          
+          try {
+            const { data: buckets } = await supabase.storage.listBuckets();
+            const logoBucketExists = buckets?.some(bucket => bucket.name === 'Logo');
+            
+            if (!logoBucketExists) {
+              await supabase.storage.createBucket('Logo', {
+                public: true,
+                fileSizeLimit: 5242880, // 5MB limit
+              });
+              console.log('Logo bucket created automatically');
+            }
+          } catch (bucketError) {
+            console.error("Error checking/creating bucket:", bucketError);
+          }
           
           const { error: uploadError } = await supabase.storage
             .from('Logo')
@@ -125,7 +123,12 @@ const ProfileEdit = () => {
           company_logo_name = file.name;
         } catch (error: any) {
           console.error("Logo upload error:", error);
-          throw new Error(`Erreur lors du téléchargement du logo: ${error.message}`);
+          
+          if (error.message && error.message.includes("storage.objects")) {
+            throw new Error("Erreur d'accès au stockage. Vérifiez les permissions du bucket Logo.");
+          } else {
+            throw new Error(`Problème lors du téléchargement du logo: ${error.message}`);
+          }
         }
       }
 
