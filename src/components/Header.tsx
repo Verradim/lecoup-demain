@@ -50,16 +50,9 @@ export const Header = () => {
           {isOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
         </button>
 
-        <nav className="hidden flex-1 items-center md:flex">
-          <div className="flex space-x-8">
-            <Link 
-              to="/trouver-des-artisans" 
-              className="whitespace-nowrap text-sm font-medium bg-primary/10 text-primary rounded-full px-4 py-2 hover:bg-primary/20 transition-colors"
-            >
-              Trouver des artisans
-            </Link>
-          </div>
-        </nav>
+        <div className="hidden flex-1 items-center md:flex">
+          {/* Removed "Trouver des artisans" link */}
+        </div>
 
         <div className="hidden md:flex md:items-center md:justify-end md:flex-1 space-x-4">
           {user ? (
@@ -96,4 +89,3 @@ export const Header = () => {
     </header>
   );
 };
-

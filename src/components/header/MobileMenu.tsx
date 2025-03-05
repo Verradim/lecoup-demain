@@ -28,13 +28,7 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
               <span className="ml-3 text-base font-medium text-gray-900">Accueil</span>
             </Link>
 
-            <Link
-              to="/trouver-des-artisans"
-              className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="ml-3 text-base font-medium text-gray-900">Trouver des artisans</span>
-            </Link>
+            {/* Removed "Trouver des artisans" link */}
 
             {user ? (
               <Link
@@ -68,4 +62,3 @@ export const MobileMenu = ({ isOpen, setIsOpen, scrollToForm }: MobileMenuProps)
     </div>
   );
 };
-
