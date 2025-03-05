@@ -1,5 +1,7 @@
 
 import { CheckCircle2 } from "lucide-react";
+import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 type Step = {
   title: string;
@@ -52,6 +54,14 @@ export const HowItWorks = () => {
               )}
             </div>
           ))}
+        </div>
+        
+        <div className="mt-16 flex justify-center">
+          <Link to="/auth">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-medium">
+              Créer mon premier contrat
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
