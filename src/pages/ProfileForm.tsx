@@ -68,22 +68,54 @@ const ProfileForm = () => {
 
       // Upload logo if provided
       if (values.company_logo) {
-        const file = values.company_logo;
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-        
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('logos')
-          .upload(fileName, file);
+        try {
+          // Check if the logos bucket exists
+          const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+          
+          if (listError) {
+            console.error("Error checking buckets:", listError);
+            throw new Error("Impossible de vérifier le stockage");
+          }
+          
+          const logosBucketExists = buckets?.some(bucket => bucket.name === 'logos');
+          
+          if (!logosBucketExists) {
+            // Try to create the bucket
+            const { error: createError } = await supabase.storage.createBucket('logos', {
+              public: true,
+              fileSizeLimit: 2097152,
+              allowedMimeTypes: ['image/png', 'image/jpeg', 'image/svg+xml']
+            });
+            
+            if (createError) {
+              console.error("Error creating bucket:", createError);
+              throw new Error("Impossible de créer l'espace de stockage pour les logos");
+            }
+          }
+          
+          const file = values.company_logo;
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from('logos')
+            .upload(fileName, file);
 
-        if (uploadError) throw uploadError;
+          if (uploadError) {
+            console.error("Upload error:", uploadError);
+            throw uploadError;
+          }
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('logos')
-          .getPublicUrl(fileName);
+          const { data: { publicUrl } } = supabase.storage
+            .from('logos')
+            .getPublicUrl(fileName);
 
-        company_logo_url = publicUrl;
-        company_logo_name = file.name;
+          company_logo_url = publicUrl;
+          company_logo_name = file.name;
+        } catch (error: any) {
+          console.error("Logo upload error:", error);
+          throw new Error(`Erreur lors du téléchargement du logo: ${error.message}`);
+        }
       }
 
       const { error } = await supabase
