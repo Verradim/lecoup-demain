@@ -25,7 +25,7 @@ export const VoteDialog = ({ open, onOpenChange, selectedFeature, onVoteSubmit }
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Voter pour cette fonctionnalité</DialogTitle>
+          <DialogTitle>Merci pour votre vote !</DialogTitle>
           <DialogDescription>
             Laissez votre email pour être informé lorsque la fonctionnalité sera disponible.
           </DialogDescription>
@@ -33,7 +33,7 @@ export const VoteDialog = ({ open, onOpenChange, selectedFeature, onVoteSubmit }
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="email" className="col-span-4">
-              Email (optionnel)
+              Email
             </Label>
             <Input
               id="email"
@@ -46,7 +46,7 @@ export const VoteDialog = ({ open, onOpenChange, selectedFeature, onVoteSubmit }
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Annuler
+            Pas maintenant
           </Button>
           <Button onClick={handleSubmit}>Confirmer</Button>
         </DialogFooter>

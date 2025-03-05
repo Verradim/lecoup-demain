@@ -11,15 +11,29 @@ export const UpcomingFeatures = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { features, loading, handleVote } = useFeatures();
 
-  const handleVoteClick = (feature: Feature) => {
-    setSelectedFeature(feature);
-    setDialogOpen(true);
+  const handleVoteClick = async (feature: Feature) => {
+    if (feature.hasVoted) return;
+    
+    // First, register the vote without email
+    const success = await handleVote(feature.id, null);
+    
+    if (success) {
+      // Then open dialog to ask for email
+      setSelectedFeature(feature);
+      setDialogOpen(true);
+    }
   };
 
   const handleVoteSubmit = async (email: string) => {
-    if (!selectedFeature) return;
+    if (!selectedFeature || !email) {
+      // If no email provided, just close the dialog
+      setDialogOpen(false);
+      setSelectedFeature(null);
+      return;
+    }
 
-    const success = await handleVote(selectedFeature.id, email || null);
+    // Update the existing vote with the email
+    const success = await handleVote(selectedFeature.id, email);
     
     if (success) {
       // Close dialog and reset form

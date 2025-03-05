@@ -72,13 +72,50 @@ export const useFeatures = () => {
 
   const handleVote = async (featureId: string, email: string | null = null) => {
     try {
-      // Save vote to database
-      const { error } = await supabase
+      let voteId: string | null = null;
+      
+      // Check if we have pending votes in localStorage
+      const pendingVotes = JSON.parse(localStorage.getItem('pendingVotes') || '{}');
+      
+      // If this is a vote with email and we have a pending vote ID
+      if (email && pendingVotes[featureId]) {
+        // Update existing vote with email
+        const { error } = await supabase
+          .from('roadmap_votes')
+          .update({ email })
+          .eq('id', pendingVotes[featureId]);
+          
+        if (error) {
+          console.error('Error updating vote with email:', error);
+          toast({
+            variant: "destructive",
+            title: "Erreur",
+            description: "Une erreur est survenue lors de l'enregistrement de votre email.",
+          });
+          return false;
+        }
+        
+        // Remove from pending votes
+        delete pendingVotes[featureId];
+        localStorage.setItem('pendingVotes', JSON.stringify(pendingVotes));
+        
+        toast({
+          title: "Email enregistré !",
+          description: "Vous serez informé lorsque la fonctionnalité sera disponible.",
+        });
+        
+        return true;
+      }
+      
+      // This is a new vote (first click)
+      const { data, error } = await supabase
         .from('roadmap_votes')
         .insert({
           feature_id: featureId,
-          email: email || null
-        });
+          email: null
+        })
+        .select('id')
+        .single();
 
       if (error) {
         console.error('Error submitting vote:', error);
@@ -89,6 +126,11 @@ export const useFeatures = () => {
         });
         return false;
       }
+      
+      // Store the vote ID for potential email update later
+      voteId = data.id;
+      pendingVotes[featureId] = voteId;
+      localStorage.setItem('pendingVotes', JSON.stringify(pendingVotes));
 
       // Save voted feature ID in localStorage
       const votedFeatures = JSON.parse(localStorage.getItem('votedFeatures') || '[]');
@@ -101,13 +143,11 @@ export const useFeatures = () => {
           ? { ...f, voteCount: f.voteCount + 1, hasVoted: true } 
           : f
       ));
-
-      // Show success message
+      
+      // First vote without email
       toast({
         title: "Merci pour votre vote !",
-        description: email 
-          ? "Votre vote a été enregistré avec succès." 
-          : "Votre vote a été enregistré. Pour être informé des avancées, n'hésitez pas à nous laisser votre email.",
+        description: "Votre vote a été enregistré.",
       });
 
       return true;
