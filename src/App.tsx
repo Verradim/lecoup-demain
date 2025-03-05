@@ -1,5 +1,6 @@
 
-import { BrowserRouter as Router, Routes, Route, useEffect } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "@/pages/Index";
