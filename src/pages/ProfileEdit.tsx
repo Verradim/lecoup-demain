@@ -10,13 +10,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CompanyInfoFields } from "@/components/profile/CompanyInfoFields";
 import { LegalRepresentativeFields } from "@/components/profile/LegalRepresentativeFields";
-import { profileFormSchema, type ProfileFormValues } from "@/types/profile";
+import { LogoUploadField } from "@/components/profile/LogoUploadField";
+import { profileFormSchema, type ProfileFormValues, type Profile } from "@/types/profile";
 
 const ProfileEdit = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -28,6 +30,7 @@ const ProfileEdit = () => {
       legal_representative_last_name: "",
       phone: "",
       is_default: false,
+      company_logo: null,
     },
   });
 
@@ -50,6 +53,8 @@ const ProfileEdit = () => {
           return;
         }
 
+        setProfile(data as Profile);
+
         // Set form values
         form.reset({
           siret: data.siret || "",
@@ -59,6 +64,7 @@ const ProfileEdit = () => {
           legal_representative_last_name: data.legal_representative_last_name || "",
           phone: data.phone || "",
           is_default: false,
+          company_logo: null,
         });
       } catch (error: any) {
         toast.error("Erreur lors du chargement du profil : " + error.message);
@@ -78,6 +84,29 @@ const ProfileEdit = () => {
 
     setIsSubmitting(true);
     try {
+      let company_logo_url = profile?.company_logo_url;
+      let company_logo_name = profile?.company_logo_name;
+
+      // Upload new logo if provided
+      if (values.company_logo) {
+        const file = values.company_logo;
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('logos')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('logos')
+          .getPublicUrl(fileName);
+
+        company_logo_url = publicUrl;
+        company_logo_name = file.name;
+      }
+
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -87,6 +116,8 @@ const ProfileEdit = () => {
           legal_representative_first_name: values.legal_representative_first_name,
           legal_representative_last_name: values.legal_representative_last_name,
           phone: values.phone,
+          company_logo_url,
+          company_logo_name,
         })
         .eq("id", user.id);
 
@@ -122,6 +153,10 @@ const ProfileEdit = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <CompanyInfoFields form={form} />
+            <LogoUploadField 
+              form={form} 
+              currentLogoUrl={profile?.company_logo_url || null} 
+            />
             <LegalRepresentativeFields form={form} />
 
             <div className="flex justify-end space-x-4">

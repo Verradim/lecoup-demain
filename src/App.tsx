@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useEffect } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "@/pages/Index";
@@ -19,8 +19,13 @@ import ContractList from "@/pages/ContractList";
 import ContractForm from "@/pages/ContractForm";
 import ContractDetails from "@/pages/ContractDetails";
 import ContractEdit from "@/pages/ContractEdit";
+import { initializeSupabase } from "./supabase-init";
 
 function App() {
+  useEffect(() => {
+    initializeSupabase();
+  }, []);
+
   return (
     <Router>
       <AuthProvider>

@@ -13,6 +13,7 @@ export const profileFormSchema = z.object({
   legal_representative_last_name: z.string().min(1, "Le nom est requis"),
   phone: z.string().min(10, "Le numéro de téléphone doit contenir au moins 10 caractères"),
   is_default: z.boolean().default(false),
+  company_logo: z.instanceof(File).optional().nullable(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -31,4 +32,6 @@ export interface Profile {
   is_default: boolean | null;
   parent_profile_id: string | null;
   completed: boolean | null;
+  company_logo_url: string | null;
+  company_logo_name: string | null;
 }

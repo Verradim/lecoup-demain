@@ -348,6 +348,8 @@ export type Database = {
       profiles: {
         Row: {
           company_address: string | null
+          company_logo_name: string | null
+          company_logo_url: string | null
           company_name: string | null
           completed: boolean | null
           created_at: string
@@ -363,6 +365,8 @@ export type Database = {
         }
         Insert: {
           company_address?: string | null
+          company_logo_name?: string | null
+          company_logo_url?: string | null
           company_name?: string | null
           completed?: boolean | null
           created_at?: string
@@ -378,6 +382,8 @@ export type Database = {
         }
         Update: {
           company_address?: string | null
+          company_logo_name?: string | null
+          company_logo_url?: string | null
           company_name?: string | null
           completed?: boolean | null
           created_at?: string

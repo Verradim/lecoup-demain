@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CompanyInfoFields } from "@/components/profile/CompanyInfoFields";
 import { LegalRepresentativeFields } from "@/components/profile/LegalRepresentativeFields";
+import { LogoUploadField } from "@/components/profile/LogoUploadField";
 import { profileFormSchema, type ProfileFormValues } from "@/types/profile";
 
 const ProfileForm = () => {
@@ -27,6 +28,7 @@ const ProfileForm = () => {
       legal_representative_last_name: "",
       phone: "",
       is_default: false,
+      company_logo: null,
     },
   });
 
@@ -61,6 +63,29 @@ const ProfileForm = () => {
 
     setIsSubmitting(true);
     try {
+      let company_logo_url = null;
+      let company_logo_name = null;
+
+      // Upload logo if provided
+      if (values.company_logo) {
+        const file = values.company_logo;
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('logos')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('logos')
+          .getPublicUrl(fileName);
+
+        company_logo_url = publicUrl;
+        company_logo_name = file.name;
+      }
+
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -71,6 +96,8 @@ const ProfileForm = () => {
           legal_representative_last_name: values.legal_representative_last_name,
           phone: values.phone,
           is_default: values.is_default,
+          company_logo_url,
+          company_logo_name,
           completed: true,
         })
         .eq("id", user.id);
@@ -99,6 +126,7 @@ const ProfileForm = () => {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <CompanyInfoFields form={form} />
+              <LogoUploadField form={form} />
               <LegalRepresentativeFields form={form} />
 
               <div className="flex justify-end space-x-4">
