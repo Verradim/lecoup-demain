@@ -16,6 +16,7 @@ const formSchema = z.object({
   phone: z.string().min(1, "Le numéro de téléphone est requis"),
   email: z.string().email("Email invalide").min(1, "L'email est requis"),
   companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
+  subject: z.string().optional(),
   message: z.string().optional(),
 });
 
@@ -29,6 +30,7 @@ export const JoinForm = () => {
       phone: "",
       email: "",
       companyName: "",
+      subject: "other",
       message: "Bonjour ! Je suis intéressé par vos services, possible de s'appeler pour en discuter ? 😀",
     },
   });
@@ -49,7 +51,7 @@ export const JoinForm = () => {
           employee_count: 'N/A',
           company_description: 'N/A',
           discovery_source: 'N/A',
-          join_reason: 'N/A',
+          join_reason: values.subject || 'N/A',
           other_platform_is_member: 'N/A',
           terms_accepted: true
         })

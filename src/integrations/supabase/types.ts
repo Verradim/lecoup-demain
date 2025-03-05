@@ -497,6 +497,54 @@ export type Database = {
         }
         Relationships: []
       }
+      roadmap_features: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string | null
+          id: string
+          name: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          icon?: string | null
+          id?: string
+          name: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      roadmap_votes: {
+        Row: {
+          created_at: string
+          email: string | null
+          feature_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          feature_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          feature_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
       subcontractors: {
         Row: {
           company_address: string
