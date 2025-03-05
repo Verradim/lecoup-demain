@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -70,50 +69,32 @@ const ProfileForm = () => {
         try {
           const file = values.company_logo;
           const fileExt = file.name.split('.').pop();
-          const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+          const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
           
-          // Check if Logo bucket exists and create it if needed
-          const { data: buckets } = await supabase.storage.listBuckets();
-          const logoBucketExists = buckets?.some(bucket => bucket.name === 'Logo');
-            
-          if (!logoBucketExists) {
-            await supabase.storage.createBucket('Logo', {
-              public: true,
-            });
-            console.log('Logo bucket created automatically');
-          }
+          console.log("Attempting to upload file:", fileName);
           
-          // Upload file with explicit owner metadata
-          const { error: uploadError, data } = await supabase.storage
+          const { error: uploadError } = await supabase.storage
             .from('Logo')
             .upload(fileName, file, {
               upsert: true,
               contentType: file.type,
-              duplex: 'half',
             });
 
           if (uploadError) {
             console.error("Upload error:", uploadError);
-            throw uploadError;
+            throw new Error(`Erreur lors de l'upload: ${uploadError.message}`);
           }
 
-          // Get the public URL after successful upload
           const { data: { publicUrl } } = supabase.storage
             .from('Logo')
             .getPublicUrl(fileName);
 
           company_logo_url = publicUrl;
           company_logo_name = file.name;
+          console.log("File uploaded successfully. Public URL:", publicUrl);
         } catch (error: any) {
           console.error("Logo upload error:", error);
-          
-          if (error.message && error.message.includes("bucket")) {
-            throw new Error("Le bucket 'Logo' n'existe pas. Veuillez contacter l'administrateur.");
-          } else if (error.message && error.message.includes("row-level security policy")) {
-            throw new Error("Erreur de sécurité lors de l'upload. Veuillez contacter l'administrateur.");
-          } else {
-            throw new Error(`Problème lors du téléchargement du logo: ${error.message}`);
-          }
+          throw new Error(`Problème lors du téléchargement du logo: ${error.message}`);
         }
       }
 
