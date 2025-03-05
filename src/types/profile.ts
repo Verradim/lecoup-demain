@@ -1,3 +1,4 @@
+
 import * as z from "zod";
 
 export const profileFormSchema = z.object({
@@ -10,6 +11,7 @@ export const profileFormSchema = z.object({
   company_name: z.string().min(1, "Le nom de l'entreprise est requis"),
   legal_representative_first_name: z.string().min(1, "Le prénom est requis"),
   legal_representative_last_name: z.string().min(1, "Le nom est requis"),
+  phone: z.string().min(10, "Le numéro de téléphone doit contenir au moins 10 caractères"),
   is_default: z.boolean().default(false),
 });
 
@@ -25,6 +27,7 @@ export interface Profile {
   company_name: string | null;
   legal_representative_first_name: string | null;
   legal_representative_last_name: string | null;
+  phone: string | null;
   is_default: boolean | null;
   parent_profile_id: string | null;
   completed: boolean | null;

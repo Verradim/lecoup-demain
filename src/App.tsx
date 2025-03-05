@@ -29,9 +29,9 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/mon-espace" element={<AppLayout />}>
             <Route index element={<UserDashboard />} />
-            <Route path="profil" element={<ProfileForm />} />
+            <Route path="profil" element={<ProfileManagement />} />
+            <Route path="profil/nouveau" element={<ProfileForm />} />
             <Route path="profil/modifier" element={<ProfileEdit />} />
-            <Route path="profil/gestion" element={<ProfileManagement />} />
             <Route path="projets/nouveau" element={<ProjectForm />} />
             <Route path="projets" element={<ProjectList />} />
             <Route path="projets/:id" element={<ProjectDetails />} />

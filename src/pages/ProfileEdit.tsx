@@ -26,6 +26,7 @@ const ProfileEdit = () => {
       company_name: "",
       legal_representative_first_name: "",
       legal_representative_last_name: "",
+      phone: "",
       is_default: false,
     },
   });
@@ -56,6 +57,7 @@ const ProfileEdit = () => {
           company_name: data.company_name || "",
           legal_representative_first_name: data.legal_representative_first_name || "",
           legal_representative_last_name: data.legal_representative_last_name || "",
+          phone: data.phone || "",
           is_default: false,
         });
       } catch (error: any) {
@@ -84,6 +86,7 @@ const ProfileEdit = () => {
           company_name: values.company_name,
           legal_representative_first_name: values.legal_representative_first_name,
           legal_representative_last_name: values.legal_representative_last_name,
+          phone: values.phone,
         })
         .eq("id", user.id);
 

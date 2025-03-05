@@ -16,8 +16,10 @@ import {
 interface Profile {
   company_name: string | null;
   siret: string | null;
+  company_address: string | null;
   legal_representative_first_name: string | null;
   legal_representative_last_name: string | null;
+  phone: string | null;
 }
 
 const ProfileManagement = () => {
@@ -62,7 +64,7 @@ const ProfileManagement = () => {
 
       {loading ? (
         <div>Chargement...</div>
-      ) : !profile ? (
+      ) : !profile?.company_name ? (
         <div className="text-center">
           <p className="text-gray-500 mb-4">Vous devez d'abord créer votre profil pour accéder à cette section</p>
           <Link to="/mon-espace/profil/nouveau">
@@ -84,6 +86,14 @@ const ProfileManagement = () => {
               <div>
                 <p className="text-sm font-medium text-gray-500">SIRET</p>
                 <p>{profile.siret || "Non renseigné"}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Adresse</p>
+                <p>{profile.company_address || "Non renseigné"}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Téléphone</p>
+                <p>{profile.phone || "Non renseigné"}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-500">Représentant légal</p>

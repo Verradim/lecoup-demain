@@ -25,6 +25,7 @@ const ProfileForm = () => {
       company_name: "",
       legal_representative_first_name: "",
       legal_representative_last_name: "",
+      phone: "",
       is_default: false,
     },
   });
@@ -45,7 +46,6 @@ const ProfileForm = () => {
       }
 
       if (data?.completed) {
-        toast.error("Vous avez déjà créé un profil");
         navigate("/mon-espace/profil");
       }
     };
@@ -69,6 +69,7 @@ const ProfileForm = () => {
           company_name: values.company_name,
           legal_representative_first_name: values.legal_representative_first_name,
           legal_representative_last_name: values.legal_representative_last_name,
+          phone: values.phone,
           is_default: values.is_default,
           completed: true,
         })

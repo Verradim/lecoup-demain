@@ -68,6 +68,27 @@ export const CompanyInfoFields = ({ form }: CompanyInfoFieldsProps) => {
           </FormItem>
         )}
       />
+
+      <FormField
+        control={form.control}
+        name="phone"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Téléphone</FormLabel>
+            <FormControl>
+              <Input
+                {...field}
+                placeholder="0612345678"
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9+\s]/g, "");
+                  field.onChange(value);
+                }}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </>
   );
 };
