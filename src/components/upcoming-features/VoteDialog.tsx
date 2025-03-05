@@ -38,7 +38,9 @@ export const VoteDialog = ({
           </div>
         </div>
         <DialogFooter>
-          
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Pas maintenant
+          </Button>
           <Button onClick={handleSubmit}>Confirmer</Button>
         </DialogFooter>
       </DialogContent>
