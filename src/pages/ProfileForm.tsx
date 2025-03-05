@@ -69,7 +69,7 @@ const ProfileForm = () => {
       // Upload logo if provided
       if (values.company_logo) {
         try {
-          // Check if the logos bucket exists first
+          // Check if the Logo bucket exists first
           const { data: buckets, error: listError } = await supabase.storage.listBuckets();
           
           if (listError) {
@@ -77,10 +77,10 @@ const ProfileForm = () => {
             throw new Error("Erreur lors de la vérification des buckets");
           }
           
-          const logosBucketExists = buckets?.some(bucket => bucket.name === 'logos');
+          const logoBucketExists = buckets?.some(bucket => bucket.name === 'Logo');
           
-          if (!logosBucketExists) {
-            throw new Error("Le bucket 'logos' n'existe pas. Veuillez contacter l'administrateur.");
+          if (!logoBucketExists) {
+            throw new Error("Le bucket 'Logo' n'existe pas. Veuillez contacter l'administrateur.");
           }
           
           const file = values.company_logo;
@@ -88,7 +88,7 @@ const ProfileForm = () => {
           const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
           
           const { error: uploadError } = await supabase.storage
-            .from('logos')
+            .from('Logo')
             .upload(fileName, file);
 
           if (uploadError) {
@@ -97,7 +97,7 @@ const ProfileForm = () => {
           }
 
           const { data: { publicUrl } } = supabase.storage
-            .from('logos')
+            .from('Logo')
             .getPublicUrl(fileName);
 
           company_logo_url = publicUrl;
