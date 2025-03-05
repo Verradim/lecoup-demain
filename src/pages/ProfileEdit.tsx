@@ -91,24 +91,23 @@ const ProfileEdit = () => {
           const fileExt = file.name.split('.').pop();
           const fileName = `${user.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
           
-          try {
-            const { data: buckets } = await supabase.storage.listBuckets();
-            const logoBucketExists = buckets?.some(bucket => bucket.name === 'Logo');
+          const { data: buckets } = await supabase.storage.listBuckets();
+          const logoBucketExists = buckets?.some(bucket => bucket.name === 'Logo');
             
-            if (!logoBucketExists) {
-              await supabase.storage.createBucket('Logo', {
-                public: true,
-                fileSizeLimit: 5242880, // 5MB limit
-              });
-              console.log('Logo bucket created automatically');
-            }
-          } catch (bucketError) {
-            console.error("Error checking/creating bucket:", bucketError);
+          if (!logoBucketExists) {
+            await supabase.storage.createBucket('Logo', {
+              public: true,
+            });
+            console.log('Logo bucket created automatically');
           }
           
-          const { error: uploadError } = await supabase.storage
+          const { error: uploadError, data } = await supabase.storage
             .from('Logo')
-            .upload(fileName, file);
+            .upload(fileName, file, {
+              upsert: true,
+              contentType: file.type,
+              duplex: 'half',
+            });
 
           if (uploadError) {
             console.error("Upload error:", uploadError);
@@ -124,8 +123,10 @@ const ProfileEdit = () => {
         } catch (error: any) {
           console.error("Logo upload error:", error);
           
-          if (error.message && error.message.includes("storage.objects")) {
-            throw new Error("Erreur d'accès au stockage. Vérifiez les permissions du bucket Logo.");
+          if (error.message && error.message.includes("bucket")) {
+            throw new Error("Le bucket 'Logo' n'existe pas. Veuillez contacter l'administrateur.");
+          } else if (error.message && error.message.includes("row-level security policy")) {
+            throw new Error("Erreur de sécurité lors de l'upload. Veuillez contacter l'administrateur.");
           } else {
             throw new Error(`Problème lors du téléchargement du logo: ${error.message}`);
           }
