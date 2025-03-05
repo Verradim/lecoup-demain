@@ -13,20 +13,8 @@ export const Header = () => {
 
   const scrollToForm = () => {
     setIsOpen(false);
-    if (location.pathname !== "/") {
-      window.location.href = "/#join-form";
-      return;
-    }
-    const element = document.getElementById("join-form");
-    if (element) {
-      const headerOffset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
+    // Redirect to auth page instead of scrolling to form
+    window.location.href = "/auth";
   };
 
   return (

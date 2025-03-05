@@ -2,6 +2,7 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   const isMobile = useIsMobile();
@@ -20,16 +21,15 @@ export const Hero = () => {
               Gérez, centralisez, pilotez vos sous-traitants au même endroit.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
-              <Button 
-                size="lg" 
-                className="bg-white hover:bg-white/90 text-primary text-lg w-full sm:w-auto"
-                onClick={() => {
-                  document.getElementById('join-form')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                Commencer gratuitement
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link to="/auth">
+                <Button 
+                  size="lg" 
+                  className="bg-white hover:bg-white/90 text-primary text-lg w-full sm:w-auto"
+                >
+                  Commencer gratuitement
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
               <Button 
                 size="lg" 
                 variant="outline"
